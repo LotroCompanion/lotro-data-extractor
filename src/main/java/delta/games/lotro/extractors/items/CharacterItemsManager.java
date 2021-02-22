@@ -10,6 +10,7 @@ import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
 import delta.games.lotro.common.effects.Effect;
+import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.lore.items.CountedItemInstance;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
@@ -72,6 +73,37 @@ public class CharacterItemsManager
         }
       }
     }
+    return null;
+  }
+
+  /**
+   * Find an item instance using its identifier.
+   * @param itemIid Item instance identifier to search.
+   * @return an item instance or <code>null</code> if not found.
+   */
+  public ItemInstance<? extends Item> findItemByIid(long itemIid)
+  {
+    // Gear
+    for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+    {
+      SlotContents contents=_gear.getSlotContents(slot,false);
+      if (contents!=null)
+      {
+        ItemInstance<? extends Item> itemInstance=contents.getItem();
+        if (itemInstance!=null)
+        {
+          InternalGameId instanceId=itemInstance.getInstanceId();
+          if (instanceId!=null)
+          {
+            if (InternalGameId.lightMatch(instanceId.asLong(),itemIid))
+            {
+              return itemInstance;
+            }
+          }
+        }
+      }
+    }
+    // TODO Bags?
     return null;
   }
 

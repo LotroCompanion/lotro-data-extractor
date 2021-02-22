@@ -43,7 +43,7 @@ public class LegendaryDataExtractor
 
   /**
    * Extract legendary data.
-   * @param legendaryData WSL legendary data.
+   * @param legendaryData WSL legendary data (ItemAdvancementRegistry).
    * @return A legendary data manager.
    */
   @SuppressWarnings("unchecked")
