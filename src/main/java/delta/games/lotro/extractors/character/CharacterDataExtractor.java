@@ -253,6 +253,5 @@ public class CharacterDataExtractor
     File characterDir=toon.getRootDir();
     File virtuesFile=new File(characterDir,"virtues.xml");
     VirtuesStatusXMLWriter.write(virtuesFile,status);
-    // TODO Add a log when this will be displayed!
   }
 }
