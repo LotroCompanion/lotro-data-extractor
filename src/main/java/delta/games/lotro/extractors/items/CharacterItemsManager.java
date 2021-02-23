@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.id.InternalGameId;
+import delta.games.lotro.extractors.effects.EffectRecord;
 import delta.games.lotro.lore.items.CountedItemInstance;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
@@ -30,8 +33,11 @@ import delta.games.lotro.lore.items.legendary.relics.RelicsSet;
  */
 public class CharacterItemsManager
 {
+  private static final Logger LOGGER=Logger.getLogger(CharacterItemsManager.class);
+
   private Map<Integer,CountedItemInstance> _bag;
   private CharacterEquipment _gear;
+  private Map<Long,List<EffectRecord>> _mapItemIIDToEffects;
 
   /**
    * Constructor.
@@ -41,6 +47,7 @@ public class CharacterItemsManager
   {
     _bag=new HashMap<Integer,CountedItemInstance>();
     _gear=gear;
+    _mapItemIIDToEffects=new HashMap<Long,List<EffectRecord>>();
   }
 
   /**
@@ -211,5 +218,70 @@ public class CharacterItemsManager
       CountedItemInstance itemInstance=_bag.get(position);
       System.out.println("\t"+position+" => "+itemInstance);
     }
+  }
+
+  /**
+   * Merge effects data on item instances.
+   */
+  public void mergeEffects()
+  {
+    for(Long itemIid : _mapItemIIDToEffects.keySet())
+    {
+      mergeItemEffect(itemIid.longValue());
+    }
+  }
+
+  private void mergeItemEffect(long itemIid)
+  {
+    ItemInstance<? extends Item> itemInstance=findItemByIid(itemIid);
+    if (itemInstance==null)
+    {
+      return;
+    }
+    List<EffectRecord> effects=_mapItemIIDToEffects.get(Long.valueOf(itemIid));
+    if (effects==null)
+    {
+      return;
+    }
+    // Ignore items with multiple effects
+    int nbEffects=effects.size();
+    if (nbEffects!=1)
+    {
+      return;
+    }
+    mergeItemAndEffect(itemInstance,effects.get(0));
+  }
+
+  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, EffectRecord effect)
+  {
+    String itemName=itemInstance.getName();
+    Integer itemLevel=itemInstance.getEffectiveItemLevel();
+    if (itemLevel==null)
+    {
+      return;
+    }
+    int spellCraft=(int)effect.getSpellCraft();
+    if (spellCraft!=itemLevel.intValue())
+    {
+      LOGGER.info("Updating the item level for item name="+itemName+", itemLevel="+itemLevel+", spellcraft="+spellCraft);
+      itemInstance.setItemLevel(Integer.valueOf(spellCraft));
+      itemInstance.updateAutoStats();
+    }
+  }
+
+  /**
+   * Add an item effect.
+   * @param effect Effect to add.
+   */
+  public void addEffect(EffectRecord effect)
+  {
+    Long itemIid=Long.valueOf(effect.getItemIid());
+    List<EffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
+    if (effects==null)
+    {
+      effects=new ArrayList<EffectRecord>();
+      _mapItemIIDToEffects.put(itemIid,effects);
+    }
+    effects.add(effect);
   }
 }
