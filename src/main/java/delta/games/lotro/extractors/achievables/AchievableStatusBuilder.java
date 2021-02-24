@@ -81,6 +81,11 @@ public class AchievableStatusBuilder
       //System.out.println("\t\t\tquestCondition index#"+condIndex);
 
       List<ClassInstance> dynamicQuestEvents=(List<ClassInstance>)questCondition.getAttributeValue("m_eventList");
+      if (dynamicQuestEvents==null)
+      {
+        LOGGER.warn("dynamicQuestEvents is null!");
+        continue;
+      }
       //int j=0;
       for(ClassInstance dynamicQuestEvent : dynamicQuestEvents)
       {
@@ -88,6 +93,11 @@ public class AchievableStatusBuilder
         conditionIndex++;
         //System.out.println("\t\t\t\tdynamicQuestEvent #"+j);
         //j++;
+        if (dynamicQuestEvent==null)
+        {
+          LOGGER.warn("dynamicQuestEvent is null!");
+          continue;
+        }
         Integer questEventId=(Integer)dynamicQuestEvent.getAttributeValue("m_questEventID");
         if ((questEventId==null) || (questEventId.intValue()<1))
         {
