@@ -112,6 +112,10 @@ public class CharacterSessionStartExtractor
     List<Integer> sortedIds2=new ArrayList<Integer>();
     for(ClassInstance earnedTraitInfo : earnedTraitInfos)
     {
+      if (earnedTraitInfo==null)
+      {
+        continue;
+      }
       int traitId=((Integer)earnedTraitInfo.getAttributeValue("m_didTrait")).intValue();
       sortedIds2.add(Integer.valueOf(traitId));
       handleTrait(traitId);
