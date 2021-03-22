@@ -10,6 +10,7 @@ import delta.games.lotro.character.achievables.AchievableObjectiveStatus;
 import delta.games.lotro.character.achievables.AchievableStatus;
 import delta.games.lotro.character.achievables.ObjectiveConditionStatus;
 import delta.games.lotro.dat.wlib.ClassInstance;
+import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.Objective;
 import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
 
@@ -30,6 +31,12 @@ public class AchievableStatusBuilder
   public void handleAchievable(AchievableStatus achievableStatus, ClassInstance questData)
   {
     // questData is a QuestRecord
+    if (questData==null)
+    {
+      Achievable achievable=achievableStatus.getAchievable();
+      LOGGER.warn("Could not use status for achievable: "+achievable.getIdentifier());
+      return;
+    }
     // State
     Integer statusCode=(Integer)questData.getAttributeValue("180500243");
     AchievableElementState state=getStateFromCode(statusCode);

@@ -2,6 +2,7 @@ package delta.games.lotro.extractors;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -129,6 +130,10 @@ public class CharacterSessionStartExtractor
     // Attribute 242459635 contains a list of earned trait identifiers
     // We check that is has the same contents as the previous list
     Set<Integer> ids=(Set<Integer>)traitPool.getAttributeValue("242459635");
+    if (ids==null)
+    {
+      ids=new HashSet<Integer>();
+    }
     List<Integer> sortedIds1=new ArrayList<Integer>(ids);
     Collections.sort(sortedIds1);
     Collections.sort(sortedIds2);
