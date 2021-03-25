@@ -96,7 +96,7 @@ public class CharacterItemsExtractor
       }
       return itemInstance;
     }
-    LOGGER.warn("Unmanaged item location! "+slotCode);
+    LOGGER.warn("Unmanaged item location! "+slotCode+" => "+props.dump());
     return null;
   }
 }
