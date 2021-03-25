@@ -87,6 +87,11 @@ public class AchievableStatusBuilder
       //System.out.println("\t\t\t- questCondition #"+i);
       //System.out.println("\t\t\tquestCondition index#"+condIndex);
 
+      if (questCondition==null)
+      {
+        LOGGER.warn("questCondition is null!");
+        continue;
+      }
       List<ClassInstance> dynamicQuestEvents=(List<ClassInstance>)questCondition.getAttributeValue("m_eventList");
       if (dynamicQuestEvents==null)
       {
