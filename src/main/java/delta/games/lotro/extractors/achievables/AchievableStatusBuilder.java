@@ -61,6 +61,10 @@ public class AchievableStatusBuilder
   @SuppressWarnings("unchecked")
   private void handleAchievableObjective(AchievableObjectiveStatus objectiveStatus, ClassInstance objectiveData)
   {
+    if (objectiveData==null)
+    {
+      return;
+    }
     Objective objective=objectiveStatus.getObjective();
     List<ClassInstance> questConditions=(List<ClassInstance>)objectiveData.getAttributeValue("m_conditionList");
     int nbQuestConditions=questConditions.size();
