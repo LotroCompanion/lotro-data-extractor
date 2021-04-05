@@ -92,7 +92,7 @@ public class CharacterItemsExtractor
         CountedItemInstance countedItemInstance=new CountedItemInstance(itemInstance,quantity);
         int index=slotCode.intValue()&0xFFFF;
         LOGGER.debug("Index: "+index+" => "+countedItemInstance);
-        _itemsMgr.addBagItem(countedItemInstance,index);
+        _itemsMgr.getBagsManager().addBagItem(countedItemInstance,index);
       }
       return itemInstance;
     }

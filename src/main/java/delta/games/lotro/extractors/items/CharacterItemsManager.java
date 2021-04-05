@@ -1,7 +1,6 @@
 package delta.games.lotro.extractors.items;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +10,10 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
+import delta.games.lotro.character.storage.bags.BagsManager;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.extractors.effects.EffectRecord;
-import delta.games.lotro.lore.items.CountedItemInstance;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.legendary.LegendaryInstance;
@@ -35,7 +34,7 @@ public class CharacterItemsManager
 {
   private static final Logger LOGGER=Logger.getLogger(CharacterItemsManager.class);
 
-  private Map<Integer,CountedItemInstance> _bag;
+  private BagsManager _bags;
   private CharacterEquipment _gear;
   private Map<Long,List<EffectRecord>> _mapItemIIDToEffects;
 
@@ -45,9 +44,18 @@ public class CharacterItemsManager
    */
   public CharacterItemsManager(CharacterEquipment gear)
   {
-    _bag=new HashMap<Integer,CountedItemInstance>();
+    _bags=new BagsManager();
     _gear=gear;
     _mapItemIIDToEffects=new HashMap<Long,List<EffectRecord>>();
+  }
+
+  /**
+   * Get the bags manager.
+   * @return the bags manager.
+   */
+  public BagsManager getBagsManager()
+  {
+    return _bags;
   }
 
   /**
@@ -110,12 +118,11 @@ public class CharacterItemsManager
         }
       }
     }
-    // TODO Bags?
-    return null;
+    return _bags.findItemByIid(itemIid);
   }
 
   /**
-   * Merge legenday data.
+   * Merge legendary data.
    * @param itemInstance Targeted item instance.
    * @param from Legenday data to use.
    */
@@ -181,16 +188,6 @@ public class CharacterItemsManager
   }
 
   /**
-   * Add a bag item.
-   * @param itemInstance Item to add in bag.
-   * @param index Position in bag.
-   */
-  public void addBagItem(CountedItemInstance itemInstance, int index)
-  {
-    _bag.put(Integer.valueOf(index),itemInstance);
-  }
-
-  /**
    * Dump the contents of this aggregator.
    */
   public void dumpContents()
@@ -210,14 +207,7 @@ public class CharacterItemsManager
     }
     //System.out.println("Legendary data: "+_mapItemIIDToLegendaryData);
     //System.out.println("Slot data: "+_mapSlotToItemIID);
-    System.out.println("Bags:");
-    List<Integer> positions=new ArrayList<Integer>(_bag.keySet());
-    Collections.sort(positions);
-    for(Integer position : positions)
-    {
-      CountedItemInstance itemInstance=_bag.get(position);
-      System.out.println("\t"+position+" => "+itemInstance);
-    }
+    _bags.dumpContents();
   }
 
   /**
