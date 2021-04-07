@@ -2,7 +2,6 @@ package delta.games.lotro.extractors.items;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.ColorsManager;
 import delta.games.lotro.common.id.InternalGameId;
@@ -11,7 +10,6 @@ import delta.games.lotro.common.stats.CustomStatsMergeMode;
 import delta.games.lotro.common.stats.StatsManager;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.lore.items.EquipmentLocation;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemFactory;
 import delta.games.lotro.lore.items.ItemInstance;
@@ -25,7 +23,6 @@ import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManage
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryInstanceAttrs;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.StringUtils;
-import delta.games.lotro.utils.dat.DatEnumsUtils;
 
 /**
  * Extracts item instances descriptions from properties.
@@ -61,7 +58,8 @@ public class ItemInstancesExtractor
   private void decodeShared(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
   {
     Item ref=itemInstance.getReference();
-    // Slot
+    // Slot (ignored)
+    /*
     Integer containerSlot=(Integer)props.getProperty("Container_Slot");
     if (containerSlot!=null)
     {
@@ -72,6 +70,7 @@ public class ItemInstancesExtractor
         LOGGER.debug("Container slots: "+containerSlot+" => "+slot);
       }
     }
+    */
     // Crafter name
     String crafterName=(String)props.getProperty("CrafterName");
     if (crafterName!=null)
