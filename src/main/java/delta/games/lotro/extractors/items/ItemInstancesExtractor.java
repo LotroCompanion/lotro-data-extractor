@@ -60,11 +60,11 @@ public class ItemInstancesExtractor
 
   private void decodeShared(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
   {
+    Item ref=itemInstance.getReference();
     // Slot
     Integer containerSlot=(Integer)props.getProperty("Container_Slot");
     if (containerSlot!=null)
     {
-      Item ref=itemInstance.getReference();
       EquipmentLocation loc=ref.getEquipmentLocation();
       if (loc!=null)
       {
@@ -137,7 +137,7 @@ public class ItemInstancesExtractor
 
     // Essences
     Object[] essenceObjs=(Object[])props.getProperty("Item_Socket_Gem_Array");
-    EssencesSet essences=decodeEssences(essenceObjs);
+    EssencesSet essences=decodeEssences(ref,essenceObjs);
     itemInstance.setEssences(essences);
 
     // Clothing color
@@ -268,19 +268,28 @@ public class ItemInstancesExtractor
     return new Money(gold,silver,copper);
   }
 
-  private EssencesSet decodeEssences(Object[] essences)
+  private EssencesSet decodeEssences(Item item, Object[] essences)
   {
-    if ((essences==null) || (essences.length==0))
+    ItemsManager itemMgr=ItemsManager.getInstance();
+    int nbEssencesMax=item.getEssenceSlots();
+    if (nbEssencesMax==0)
     {
       return null;
     }
-    int nbEssences=essences.length;
-    ItemsManager itemMgr=ItemsManager.getInstance();
-    EssencesSet ret=new EssencesSet(nbEssences);
+    EssencesSet ret=new EssencesSet(nbEssencesMax);
+    int nbEssences=0;
+    if ((essences!=null) && (essences.length>0))
+    {
+      nbEssences=essences.length;
+    }
     LOGGER.debug("Nb essences: "+nbEssences);
     for(int i=0;i<nbEssences;i++)
     {
       PropertiesSet essenceProps=(PropertiesSet)essences[i];
+      if (essenceProps==null)
+      {
+        continue;
+      }
       Integer essenceId=(Integer)essenceProps.getProperty("Item_Socket_GemDID");
       Integer essenceLevel=(Integer)essenceProps.getProperty("Item_Socket_GemLevel");
       if ((essenceId!=null) && (essenceLevel!=null))
