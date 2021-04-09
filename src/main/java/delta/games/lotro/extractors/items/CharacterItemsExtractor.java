@@ -53,7 +53,7 @@ public class CharacterItemsExtractor
       return null;
     }
     Integer slotCode=(Integer)props.getProperty("Container_Slot");
-    if (slotCode==null)
+    if ((slotCode==null) || (slotCode.intValue()==0))
     {
       return null;
     }
