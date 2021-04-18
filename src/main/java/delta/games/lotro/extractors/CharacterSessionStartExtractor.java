@@ -99,6 +99,10 @@ public class CharacterSessionStartExtractor
     {
       int key=entry.getKey().intValue();
       ClassInstance persistentTraitPool=entry.getValue();
+      if (persistentTraitPool==null)
+      {
+        continue;
+      }
       handleTraitPool(key,persistentTraitPool);
     }
   }
@@ -106,7 +110,12 @@ public class CharacterSessionStartExtractor
   @SuppressWarnings("unchecked")
   private void handleTraitPool(int key, ClassInstance traitPool)
   {
-    int nature=((Integer)traitPool.getAttributeValue("m_eNature")).intValue();
+    Integer natureCode=(Integer)traitPool.getAttributeValue("m_eNature");
+    if (natureCode==null)
+    {
+      return;
+    }
+    int nature=natureCode.intValue();
     String natureLabel=_traitNature.getString(nature);
     LOGGER.debug("Pool: key="+key+", nature="+nature+", name="+natureLabel);
     List<ClassInstance> earnedTraitInfos=(List<ClassInstance>)traitPool.getAttributeValue("m_rlTraitInfo");
