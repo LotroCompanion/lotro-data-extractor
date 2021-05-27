@@ -1,12 +1,12 @@
 package delta.games.lotro.extractors.storage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.storage.vaults.Chest;
 import delta.games.lotro.character.storage.vaults.Vault;
+import delta.games.lotro.character.storage.vaults.VaultType;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -27,8 +27,6 @@ public class VaultDataExtractor
 {
   private static final Logger LOGGER=Logger.getLogger(VaultDataExtractor.class);
 
-  private VaultDescriptor _vault;
-  private List<VaultItemDescriptor> _items;
   private ItemInstancesExtractor _itemInstancesExtractor;
 
   /**
@@ -37,32 +35,15 @@ public class VaultDataExtractor
   public VaultDataExtractor()
   {
     _itemInstancesExtractor=new ItemInstancesExtractor();
-    _items=new ArrayList<VaultItemDescriptor>();
   }
 
   /**
-   * Set the vault descriptor.
-   * @param vault VAult descriptor to set.
-   */
-  public void setVault(VaultDescriptor vault)
-  {
-    _vault=vault;
-  }
-
-  /**
-   * Register a vault item.
-   * @param vaultItem Vault item to add.
-   */
-  public void addVaultItem(VaultItemDescriptor vaultItem)
-  {
-    _items.add(vaultItem);
-  }
-
-  /**
-   * Build the result Vault.
-   * @return a Vault or <code>null</code> if not enough data.
-   */
-  public Vault buildVault()
+  * Build the result Vault.
+  * @param vaultDescriptor Vault descriptor.
+  * @param vaultItems Vault items.
+  * @return a Vault or <code>null</code> if not enough data.
+  */
+  public Vault buildVault(VaultDescriptor vaultDescriptor, List<VaultItemDescriptor> vaultItems)
   {
     if (_vault==null)
     {
@@ -71,17 +52,23 @@ public class VaultDataExtractor
     }
     Vault ret=new Vault();
     // Chests
-    List<Integer> chestIds=_vault.getChestIds();
+    List<Integer> chestIds=vaultDescriptor.getChestIds();
     for(Integer chestId : chestIds)
     {
       Chest chest=new Chest(chestId.intValue());
-      String chestName=_vault.getChestName(chestId.intValue());
+      String chestName=vaultDescriptor.getChestName(chestId.intValue());
       chest.setName(chestName);
       ret.addChest(chest);
     }
     // Items
-    for(VaultItemDescriptor vaultItem : _items)
+    for(VaultItemDescriptor vaultItem : vaultItems)
     {
+      Integer bankType=vaultItem.getBankType();
+      if (bankType!=null)
+      {
+        if (bankType.intValue()==1) ret.setVaultType(VaultType.OWN_VAULT);
+        if (bankType.intValue()==2) ret.setVaultType(VaultType.SHARED_VAULT);
+      }
       CountedItemInstance countedItemInstance=decodeVaultItem(vaultItem);
       if (countedItemInstance==null)
       {
@@ -117,11 +104,6 @@ public class VaultDataExtractor
       LOGGER.warn("Item not found: ID="+itemId);
       return null;
     }
-    //Integer chestId=(Integer)vaultProps.getProperty("Bank_Repository_ChestType");
-    //Integer bankType=(Integer)vaultProps.getProperty("BankRepository_BankType");
-    //System.out.println("\tBank type: "+bankType);
-    //System.out.println("\tChest ID: "+chestId);
-
     PropertiesSet tooltipProps=getTooltipProps(vaultItem);
     ItemInstance<? extends Item> itemInstance=_itemInstancesExtractor.buildItemInstanceFromProps(tooltipProps,item);
     if (itemInstance==null)
@@ -165,7 +147,7 @@ public class VaultDataExtractor
    * @param vaultItem Source item.
    * @return the tooltip properties.
    */
-  public PropertiesSet getTooltipProps(VaultItemDescriptor vaultItem)
+  private PropertiesSet getTooltipProps(VaultItemDescriptor vaultItem)
   {
     PropertyValue tooltipHelper=vaultItem.getTooltipHelper();
     PropertiesSet tooltipProps=(PropertiesSet)tooltipHelper.getValue();
