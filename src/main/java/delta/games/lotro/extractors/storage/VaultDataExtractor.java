@@ -45,7 +45,7 @@ public class VaultDataExtractor
   */
   public Vault buildVault(VaultDescriptor vaultDescriptor, List<VaultItemDescriptor> vaultItems)
   {
-    if (_vault==null)
+    if (vaultDescriptor==null)
     {
       LOGGER.warn("No vault descriptor!");
       return null;
