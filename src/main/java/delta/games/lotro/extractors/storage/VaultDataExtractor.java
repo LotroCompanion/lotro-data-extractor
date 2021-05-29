@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.storage.vaults.Chest;
 import delta.games.lotro.character.storage.vaults.Vault;
-import delta.games.lotro.character.storage.vaults.VaultType;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -63,12 +62,6 @@ public class VaultDataExtractor
     // Items
     for(VaultItemDescriptor vaultItem : vaultItems)
     {
-      Integer bankType=vaultItem.getBankType();
-      if (bankType!=null)
-      {
-        if (bankType.intValue()==1) ret.setVaultType(VaultType.OWN_VAULT);
-        if (bankType.intValue()==2) ret.setVaultType(VaultType.SHARED_VAULT);
-      }
       CountedItemInstance countedItemInstance=decodeVaultItem(vaultItem);
       if (countedItemInstance==null)
       {
