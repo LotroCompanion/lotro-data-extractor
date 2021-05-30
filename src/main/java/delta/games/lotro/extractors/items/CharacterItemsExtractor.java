@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.lore.items.CountedItemInstance;
+import delta.games.lotro.lore.items.CountedItem;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -89,7 +89,7 @@ public class CharacterItemsExtractor
           LOGGER.debug("Quantity: "+quantityValue);
         }
         int quantity=(quantityValue!=null)?quantityValue.intValue():1;
-        CountedItemInstance countedItemInstance=new CountedItemInstance(itemInstance,quantity);
+        CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,quantity);
         int index=slotCode.intValue()&0xFFFF;
         LOGGER.debug("Index: "+index+" => "+countedItemInstance);
         _itemsMgr.getBagsManager().addBagItem(countedItemInstance,index);

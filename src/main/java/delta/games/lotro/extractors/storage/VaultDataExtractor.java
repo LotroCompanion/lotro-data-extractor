@@ -13,7 +13,7 @@ import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.bank.VaultDescriptor;
 import delta.games.lotro.dat.data.bank.VaultItemDescriptor;
 import delta.games.lotro.extractors.items.ItemInstancesExtractor;
-import delta.games.lotro.lore.items.CountedItemInstance;
+import delta.games.lotro.lore.items.CountedItem;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.ItemsManager;
@@ -62,7 +62,7 @@ public class VaultDataExtractor
     // Items
     for(VaultItemDescriptor vaultItem : vaultItems)
     {
-      CountedItemInstance countedItemInstance=decodeVaultItem(vaultItem);
+      CountedItem<ItemInstance<? extends Item>> countedItemInstance=decodeVaultItem(vaultItem);
       if (countedItemInstance==null)
       {
         continue;
@@ -81,7 +81,7 @@ public class VaultDataExtractor
     return ret;
   }
 
-  private CountedItemInstance decodeVaultItem(VaultItemDescriptor vaultItem)
+  private CountedItem<ItemInstance<? extends Item>> decodeVaultItem(VaultItemDescriptor vaultItem)
   {
     PropertiesSet vaultProps=vaultItem.getProps();
     if (LOGGER.isDebugEnabled())
@@ -118,7 +118,7 @@ public class VaultDataExtractor
       LOGGER.warn("Quantities differ: vault="+vaultQuantityValue+", inventory="+quantity+" for IID="+itemIID);
     }
 
-    CountedItemInstance countedItemInstance=new CountedItemInstance(itemInstance,vaultQuantityValue);
+    CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,vaultQuantityValue);
     Integer slotCode=(Integer)vaultProps.getProperty("Container_Slot");
     if (slotCode!=null)
     {
