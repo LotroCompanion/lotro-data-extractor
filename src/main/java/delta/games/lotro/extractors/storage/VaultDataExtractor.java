@@ -50,6 +50,8 @@ public class VaultDataExtractor
       return null;
     }
     Vault ret=new Vault();
+    ret.setUsed(vaultDescriptor.getCurrentQuantity());
+    ret.setCapacity(vaultDescriptor.getMaxCapacity());
     // Chests
     List<Integer> chestIds=vaultDescriptor.getChestIds();
     for(Integer chestId : chestIds)
