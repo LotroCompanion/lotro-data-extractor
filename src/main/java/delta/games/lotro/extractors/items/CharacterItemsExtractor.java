@@ -21,6 +21,7 @@ public class CharacterItemsExtractor
 
   private ItemInstancesExtractor _itemExtractor;
   private CharacterItemsManager _itemsMgr;
+  private CharacterGearRegistry _gearRegistry;
 
   /**
    * Constructor.
@@ -33,13 +34,39 @@ public class CharacterItemsExtractor
   }
 
   /**
+   * Set the associated gear registry, if any.
+   * @param gearRegistry Registry to set.
+   */
+  public void setGearRegistry(CharacterGearRegistry gearRegistry)
+  {
+    _gearRegistry=gearRegistry;
+  }
+
+  /**
    * Use an item entity.
+   * @param did Item DID.
+   * @param iid Instance identifier.
+   * @param props Entity properties.
+   * @return the new instance or <code>null</code> if not used.
+   */
+  public ItemInstance<? extends Item> useItemEntity(int did, long iid, PropertiesSet props)
+  {
+    ItemInstance<? extends Item> itemInstance=extractItemInstance(did,iid,props);
+    if (itemInstance!=null)
+    {
+      return useItem(itemInstance,props);
+    }
+    return null;
+  }
+
+  /**
+   * Extract an item instance from an entity.
    * @param did Item DID.
    * @param iid Instance identifier.
    * @param props Entity properties.
    * @return the new instance or <code>null</code> if none.
    */
-  public ItemInstance<? extends Item> useItemEntity(int did, long iid, PropertiesSet props)
+  public ItemInstance<? extends Item> extractItemInstance(int did, long iid, PropertiesSet props)
   {
     Item item=ItemsManager.getInstance().getItem(did);
     if (item==null)
@@ -52,6 +79,22 @@ public class CharacterItemsExtractor
     {
       return null;
     }
+    ItemInstance<? extends Item> itemInstance=_itemExtractor.buildItemInstanceFromProps(props,item);
+    if (itemInstance!=null)
+    {
+      itemInstance.setInstanceId(new InternalGameId(iid));
+    }
+    return itemInstance;
+  }
+
+  /**
+   * Use an item.
+   * @param itemInstance Item instance.
+   * @param props Entity properties.
+   * @return the used item or <code>null</code> if not used.
+   */
+  public ItemInstance<? extends Item> useItem(ItemInstance<? extends Item> itemInstance, PropertiesSet props)
+  {
     Integer slotCode=(Integer)props.getProperty("Container_Slot");
     if ((slotCode==null) || (slotCode.intValue()==0))
     {
@@ -60,15 +103,14 @@ public class CharacterItemsExtractor
     boolean isEquipped=DatEnumsUtils.isEquipped(slotCode.intValue());
     if (isEquipped)
     {
-      ItemInstance<? extends Item> itemInstance=null;
       EQUIMENT_SLOT slot=DatEnumsUtils.getEquipmentSlot(slotCode.intValue());
       if (slot!=null)
       {
         LOGGER.debug("\t"+slot);
-        itemInstance=_itemExtractor.buildItemInstanceFromProps(props,item);
-        if (itemInstance!=null)
+        long iid=itemInstance.getInstanceId().asLong();
+        System.out.println("Testing IID "+iid+" for slot "+slot);
+        if (shallUseItem(iid))
         {
-          itemInstance.setInstanceId(new InternalGameId(iid));
           _itemsMgr.setGearSlot(slot,itemInstance);
         }
       }
@@ -78,25 +120,29 @@ public class CharacterItemsExtractor
     if (isInBags)
     {
       LOGGER.debug("\tIn Bags");
-      ItemInstance<? extends Item> itemInstance=_itemExtractor.buildItemInstanceFromProps(props,item);
-      if (itemInstance!=null)
+      // Quantity
+      Integer quantityValue=(Integer)props.getProperty("Inventory_Quantity");
+      if (quantityValue!=null)
       {
-        itemInstance.setInstanceId(new InternalGameId(iid));
-        // Quantity
-        Integer quantityValue=(Integer)props.getProperty("Inventory_Quantity");
-        if (quantityValue!=null)
-        {
-          LOGGER.debug("Quantity: "+quantityValue);
-        }
-        int quantity=(quantityValue!=null)?quantityValue.intValue():1;
-        CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,quantity);
-        int index=slotCode.intValue()&0xFFFF;
-        LOGGER.debug("Index: "+index+" => "+countedItemInstance);
-        _itemsMgr.getBagsManager().addBagItem(countedItemInstance,index);
+        LOGGER.debug("Quantity: "+quantityValue);
       }
+      int quantity=(quantityValue!=null)?quantityValue.intValue():1;
+      CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,quantity);
+      int index=slotCode.intValue()&0xFFFF;
+      LOGGER.debug("Index: "+index+" => "+countedItemInstance);
+      _itemsMgr.getBagsManager().addBagItem(countedItemInstance,index);
       return itemInstance;
     }
     LOGGER.warn("Unmanaged item location! "+slotCode+" => "+props.dump());
     return null;
+  }
+
+  private boolean shallUseItem(long iid)
+  {
+    if (_gearRegistry==null)
+    {
+      return true;
+    }
+    return _gearRegistry.hasIID(iid);
   }
 }
