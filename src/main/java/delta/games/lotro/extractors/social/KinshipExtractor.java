@@ -1,16 +1,21 @@
 package delta.games.lotro.extractors.social;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.CharacterClass;
+import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
+import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.extractors.TimeUtils;
+import delta.games.lotro.kinship.Kinship;
+import delta.games.lotro.kinship.KinshipCharacterSummary;
+import delta.games.lotro.kinship.KinshipMember;
+import delta.games.lotro.kinship.KinshipRank;
+import delta.games.lotro.kinship.KinshipRoster;
+import delta.games.lotro.kinship.KinshipSummary;
 import delta.games.lotro.utils.StringUtils;
 import delta.games.lotro.utils.dat.DatEnumsUtils;
 
@@ -22,69 +27,133 @@ public class KinshipExtractor
 {
   private static final Logger LOGGER=Logger.getLogger(KinshipExtractor.class);
 
-  private DateFormat _dateFormat=new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-
   /**
    * Extract kinship data.
    * @param guild Guild WSL description.
+   * @return the loaded kinship.
    */
-  @SuppressWarnings({"unused","unchecked"})
-  public void extract(ClassInstance guild)
+  @SuppressWarnings("unchecked")
+  public Kinship extract(ClassInstance guild)
   {
-    Long leaderId=(Long)guild.getAttributeValue("m_iidLeader");
-    String name=(String)guild.getAttributeValue("m_name");
-    LOGGER.debug("Guild: "+name);
-    Map<Integer,ClassInstance> ranks=(Map<Integer,ClassInstance>)guild.getAttributeValue("m_rcRanks");
-    for(Map.Entry<Integer,ClassInstance> rankEntry : ranks.entrySet())
+    Kinship kinship=new Kinship();
+    // Summary
+    KinshipSummary summary=kinship.getSummary();
+    // - kinship ID
+    Long kinshipId=(Long)guild.getAttributeValue("m_id");
+    if (kinshipId!=null)
     {
-      ClassInstance rank=rankEntry.getValue();
-      Integer rankId=rankEntry.getKey();
-      String rankName=(String)rank.getAttributeValue("m_siName");
-      LOGGER.debug("Rank "+rankId+" => "+rankName);
+      summary.setKinshipID(new InternalGameId(kinshipId.longValue()));
     }
-    LOGGER.debug("ID\tName\tRank\tLevel\tRace\tClass\tVocation\tLogout\tJoin\tNote");
-    Map<Long,ClassInstance> members=(Map<Long,ClassInstance>)guild.getAttributeValue("m_rcMemberData");
-    for(ClassInstance member : members.values())
+    // - leader ID
+    Long leaderId=(Long)guild.getAttributeValue("m_iidLeader");
+    if (leaderId!=null)
     {
-      if (member==null)
+      summary.setLeaderID(new InternalGameId(leaderId.longValue()));
+    }
+    // - name
+    String name=(String)guild.getAttributeValue("m_name");
+    summary.setName(name);
+    // Roster
+    KinshipRoster roster=kinship.getRoster();
+    // - ranks
+    Map<Integer,ClassInstance> ranks=(Map<Integer,ClassInstance>)guild.getAttributeValue("m_rcRanks");
+    for(Map.Entry<Integer,ClassInstance> rankEntry:ranks.entrySet())
+    {
+      ClassInstance rankInstance=rankEntry.getValue();
+      Integer rankId=rankEntry.getKey();
+      String rankName=(String)rankInstance.getAttributeValue("m_siName");
+      LOGGER.debug("Rank "+rankId+" => "+rankName);
+      if (rankId!=null)
+      {
+        KinshipRank rank=new KinshipRank(rankId.intValue(),rankName);
+        roster.addRank(rank);
+      }
+    }
+    // - members
+    Map<Long,ClassInstance> members=(Map<Long,ClassInstance>)guild.getAttributeValue("m_rcMemberData");
+    for(ClassInstance memberInstance:members.values())
+    {
+      if (memberInstance==null)
       {
         continue;
       }
-      Long charId=(Long)member.getAttributeValue("m_iid");
-      String charIdStr=String.format("0x%08x",charId);
-      String charName=(String)member.getAttributeValue("m_name");
-      boolean male;
-      if (charName.contains(" [M")) male=true; 
-      else if (charName.contains(" [F")) male=false;
-      else
-      {
-        LOGGER.warn("Unknown sex: "+charName);
-        male=true;
-      }
-      charName=StringUtils.fixName(charName);
-      Integer vocation=(Integer)member.getAttributeValue("m_didVocation");
-      Integer raceCode=(Integer)member.getAttributeValue("m_species");
-      Race race=DatEnumsUtils.getRaceFromRaceId(raceCode.intValue());
-      Integer classCode=(Integer)member.getAttributeValue("m_class");
-      CharacterClass charClass=DatEnumsUtils.getCharacterClassFromId(classCode.intValue());
-      Integer level=(Integer)member.getAttributeValue("m_uiLevel");
-      //Integer areaId=(Integer)member.getAttributeValue("m_didArea");
-      Integer rankId=(Integer)member.getAttributeValue("m_uiRankID");
-      String rankName=(String)ranks.get(rankId).getAttributeValue("m_siName");
-      if ((rankName!=null) && (rankName.contains("Kinsman")))
-      {
-        rankName=male?"Kinsman":"Kinswoman";
-      }
-      Integer lastLogout=(Integer)member.getAttributeValue("m_ttLastLogout");
-      //String durationStr=(lastLogout!=null)?Duration.getDurationString(lastLogout.intValue()):"-";
-      Integer joinDateInt=(Integer)member.getAttributeValue("m_ttJoinDate");
-      Date joinDate=TimeUtils.getDate(joinDateInt);
-      String joinDataStr=(joinDate!=null)?_dateFormat.format(joinDate):"-";
-      //String accountName=(String)member.getAttributeValue("m_accountName");
-      String note=(String)member.getAttributeValue("212812885");
-      if (note==null) note="";
-      //String sex=male?"Male":"Female";
-      LOGGER.debug(charIdStr+"\t"+charName+/*"\t"+sex+*/"\t"+rankName+"\t"+level+"\t"+race+"\t"+charClass+"\t"+vocation+"\t"+lastLogout+"\t"+joinDataStr+/*"\t"+areaId+"\t"+accountName+*/"\t"+note);
+      KinshipMember member=extractMember(roster,memberInstance);
+      roster.addMember(member);
     }
+    return kinship;
+  }
+
+  private KinshipMember extractMember(KinshipRoster roster, ClassInstance memberInstance)
+  {
+    KinshipMember member=new KinshipMember();
+    KinshipCharacterSummary characterSummary=member.getSummary();
+    // ID
+    Long charId=(Long)memberInstance.getAttributeValue("m_iid");
+    if (charId!=null)
+    {
+      characterSummary.setId(new InternalGameId(charId.longValue()));
+    }
+    // Name
+    String charName=(String)memberInstance.getAttributeValue("m_name");
+    // Sex
+    boolean male;
+    if (charName.contains(" [M"))
+      male=true;
+    else if (charName.contains(" [F"))
+      male=false;
+    else
+    {
+      LOGGER.warn("Unknown sex: "+charName);
+      male=true;
+    }
+    characterSummary.setCharacterSex(male?CharacterSex.MALE:CharacterSex.FEMALE);
+    charName=StringUtils.fixName(charName);
+    characterSummary.setName(charName);
+    // Vocation
+    Integer vocationID=(Integer)memberInstance.getAttributeValue("m_didVocation");
+    characterSummary.setVocationID(vocationID);
+    // Race
+    Integer raceCode=(Integer)memberInstance.getAttributeValue("m_species");
+    Race race=DatEnumsUtils.getRaceFromRaceId(raceCode.intValue());
+    characterSummary.setRace(race);
+    // Class
+    Integer classCode=(Integer)memberInstance.getAttributeValue("m_class");
+    CharacterClass charClass=DatEnumsUtils.getCharacterClassFromId(classCode.intValue());
+    characterSummary.setCharacterClass(charClass);
+    // Level
+    Integer level=(Integer)memberInstance.getAttributeValue("m_uiLevel");
+    characterSummary.setLevel(level!=null?level.intValue():1);
+    // Area ID
+    Integer areaId=(Integer)memberInstance.getAttributeValue("m_didArea");
+    characterSummary.setAreaID(areaId);
+    // Rank
+    Integer rankId=(Integer)memberInstance.getAttributeValue("m_uiRankID");
+    if (rankId!=null)
+    {
+      KinshipRank memberRank=roster.getRankByCode(rankId.intValue());
+      member.setRank(memberRank);
+    }
+    // Last logout
+    Long lastLogoutTimestamp=null;
+    Integer lastLogout=(Integer)memberInstance.getAttributeValue("m_ttLastLogout");
+    Long logoutDuration=TimeUtils.getDateAsMs(lastLogout);
+    if (logoutDuration!=null)
+    {
+      long now=System.currentTimeMillis();
+      lastLogoutTimestamp=Long.valueOf(now-logoutDuration.longValue());
+    }
+    characterSummary.setLastLogoutDate(lastLogoutTimestamp);
+    // Join date
+    Integer joinDateInt=(Integer)memberInstance.getAttributeValue("m_ttJoinDate");
+    Long joinTimestamp=TimeUtils.getDateAsMs(joinDateInt);
+    member.setJoinDate(joinTimestamp);
+    // Account name
+    String accountName=(String)memberInstance.getAttributeValue("m_accountName");
+    characterSummary.setAccountName(accountName);
+    // Notes
+    String notes=(String)memberInstance.getAttributeValue("212812885");
+    if (notes==null) notes="";
+    member.setNotes(notes);
+    return member;
   }
 }

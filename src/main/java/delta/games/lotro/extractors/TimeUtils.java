@@ -28,4 +28,24 @@ public class TimeUtils
     Date date=new Date(timestamp);
     return date;
   }
+
+  /**
+   * Get a Java timestamp from an integer timestamp (s).
+   * @param time Timestamp.
+   * @return A timestamp or <code>null</code> if no time.
+   */
+  public static Long getDateAsMs(Integer time)
+  {
+    if (time==null)
+    {
+      return null;
+    }
+    if (time.intValue()==0)
+    {
+      return null;
+    }
+    long timestamp=time.intValue();
+    timestamp=timestamp*1000;
+    return Long.valueOf(timestamp);
+  }
 }
