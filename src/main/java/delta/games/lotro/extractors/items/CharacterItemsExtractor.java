@@ -106,9 +106,8 @@ public class CharacterItemsExtractor
       EQUIMENT_SLOT slot=DatEnumsUtils.getEquipmentSlot(slotCode.intValue());
       if (slot!=null)
       {
-        LOGGER.debug("\t"+slot);
         long iid=itemInstance.getInstanceId().asLong();
-        System.out.println("Testing IID "+iid+" for slot "+slot);
+        LOGGER.debug("\t"+slot+" => "+iid);
         if (shallUseItem(iid))
         {
           _itemsMgr.setGearSlot(slot,itemInstance);

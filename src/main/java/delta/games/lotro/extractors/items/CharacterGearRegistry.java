@@ -3,6 +3,8 @@ package delta.games.lotro.extractors.items;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -13,6 +15,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class CharacterGearRegistry
 {
+  private static final Logger LOGGER=Logger.getLogger(CharacterGearRegistry.class);
+
   private Map<EQUIMENT_SLOT,Long> _iidsMap;
   private Map<Long,EQUIMENT_SLOT> _slotsMap;
 
@@ -77,7 +81,7 @@ public class CharacterGearRegistry
       Long iid=(Long)value;
       _iidsMap.put(slot,iid);
       _slotsMap.put(iid,slot);
-      System.out.println("Registering "+iid+" for slot "+slot);
+      LOGGER.debug("Registering "+iid+" for slot "+slot);
     }
   }
 
