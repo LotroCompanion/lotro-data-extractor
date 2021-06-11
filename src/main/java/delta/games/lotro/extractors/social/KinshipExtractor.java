@@ -50,9 +50,22 @@ public class KinshipExtractor
     {
       summary.setLeaderID(new InternalGameId(leaderId.longValue()));
     }
+    // - founder ID
+    Long founderId=(Long)guild.getAttributeValue("m_iidFounder");
+    if (founderId!=null)
+    {
+      summary.setFounderID(new InternalGameId(founderId.longValue()));
+    }
     // - name
     String name=(String)guild.getAttributeValue("m_name");
     summary.setName(name);
+    // - Creation date
+    Integer creationDateInt=(Integer)guild.getAttributeValue("m_timeCreated");
+    Long creationDate=TimeUtils.getDateAsMs(creationDateInt);
+    summary.setCreationDate(creationDate);
+    // - MOTD
+    String motd=(String)guild.getAttributeValue("m_motd");
+    summary.setMotd(motd);
     // Roster
     KinshipRoster roster=kinship.getRoster();
     // - ranks
