@@ -67,6 +67,10 @@ public class AchievableStatusBuilder
     }
     Objective objective=objectiveStatus.getObjective();
     List<ClassInstance> questConditions=(List<ClassInstance>)objectiveData.getAttributeValue("m_conditionList");
+    if (questConditions==null)
+    {
+      return;
+    }
     int nbQuestConditions=questConditions.size();
     // Checks
     Integer index=(Integer)objectiveData.getAttributeValue("125031076");
