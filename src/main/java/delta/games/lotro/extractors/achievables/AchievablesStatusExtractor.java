@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.achievables.AchievableStatus;
-import delta.games.lotro.character.achievables.DeedsStatusManager;
+import delta.games.lotro.character.achievables.AchievablesStatusManager;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.extractors.TimeUtils;
@@ -26,25 +26,30 @@ public class AchievablesStatusExtractor
   private static final Logger LOGGER=Logger.getLogger(AchievablesStatusExtractor.class);
 
   private AchievableStatusBuilder _builder;
+  private AchievablesStatusManager _deedsMgr;
+  private AchievablesStatusManager _questsMgr;
 
   /**
    * Constructor.
+   * @param deedsMgr Deeds status manager.
+   * @param questsMgr Quests status manager.
    */
-  public AchievablesStatusExtractor()
+  public AchievablesStatusExtractor(AchievablesStatusManager deedsMgr, AchievablesStatusManager questsMgr)
   {
+    _deedsMgr=deedsMgr;
+    _questsMgr=questsMgr;
     _builder=new AchievableStatusBuilder();
   }
 
   /**
    * Extract deeds.
-   * @param statusManager Deeds status manager.
    * @param completedAchievableIds Identifiers of the completed achievables.
    * @param activeAchievables Map of active achievables status.
    */
-  public void extract(DeedsStatusManager statusManager, List<Integer> completedAchievableIds, Map<Integer,ClassInstance> activeAchievables)
+  public void extract(List<Integer> completedAchievableIds, Map<Integer,ClassInstance> activeAchievables)
   {
-    handleCompletedAchievables(statusManager,completedAchievableIds);
-    handleActiveAchievables(statusManager,activeAchievables);
+    handleCompletedAchievables(completedAchievableIds);
+    handleActiveAchievables(activeAchievables);
   }
 
   @SuppressWarnings({"unchecked","unused"})
@@ -94,23 +99,36 @@ public class AchievablesStatusExtractor
     }
   }
 
-  private void handleActiveAchievables(DeedsStatusManager statusManager, Map<Integer,ClassInstance> activeAchievables)
+  private void handleActiveAchievables(Map<Integer,ClassInstance> activeAchievables)
   {
     int size=activeAchievables.size();
     LOGGER.debug("Nb entries: "+size);
-    DeedsManager deedsMgr=DeedsManager.getInstance();
     for(Map.Entry<Integer,ClassInstance> entry : activeAchievables.entrySet())
     {
       int achievableId=entry.getKey().intValue();
-      DeedDescription deed=deedsMgr.getDeed(achievableId);
-      if (deed==null)
+      if (_deedsMgr!=null)
       {
-        // Ignore quests
-        continue;
+        DeedsManager deedsMgr=DeedsManager.getInstance();
+        DeedDescription deed=deedsMgr.getDeed(achievableId);
+        if (deed!=null)
+        {
+          AchievableStatus status=_deedsMgr.get(deed,true);
+          ClassInstance questData=entry.getValue();
+          handleActiveAchievable(status,deed,questData);
+          continue;
+        }
       }
-      AchievableStatus deedStatus=statusManager.get(deed,true);
-      ClassInstance questData=entry.getValue();
-      handleActiveAchievable(deedStatus,deed,questData);
+      if (_questsMgr!=null)
+      {
+        QuestsManager questsMgr=QuestsManager.getInstance();
+        QuestDescription quest=questsMgr.getQuest(achievableId);
+        if (quest!=null)
+        {
+          AchievableStatus status=_questsMgr.get(quest,true);
+          ClassInstance questData=entry.getValue();
+          handleActiveAchievable(status,quest,questData);
+        }
+      }
     }
   }
 
@@ -121,39 +139,47 @@ public class AchievablesStatusExtractor
     _builder.handleAchievable(deedStatus,questData);
    }
 
-  private void handleCompletedAchievables(DeedsStatusManager statusManager, List<Integer> completedAchievableIds)
+  private void handleCompletedAchievables(List<Integer> completedAchievableIds)
   {
     int size=completedAchievableIds.size();
     LOGGER.debug("Nb entries: "+size);
-    QuestsManager questsMgr=QuestsManager.getInstance();
-    DeedsManager deedsMgr=DeedsManager.getInstance();
     for(Integer achievableId : completedAchievableIds)
     {
       LOGGER.debug("ID: "+achievableId);
-      QuestDescription quest=questsMgr.getQuest(achievableId.intValue());
-      if (quest!=null)
+      boolean done=false;
+      if (_questsMgr!=null)
       {
-        LOGGER.debug("Quest name: "+quest.getName());
-        //System.out.println("\tQuest name: "+quest.getName());
+        QuestsManager questsMgr=QuestsManager.getInstance();
+        QuestDescription quest=questsMgr.getQuest(achievableId.intValue());
+        if (quest!=null)
+        {
+          LOGGER.debug("Quest name: "+quest.getName());
+          //System.out.println("\tQuest name: "+quest.getName());
+          AchievableStatus status=_questsMgr.get(quest,true);
+          status.setCompleted(true);
+          status.updateInternalState();
+          done=true;
+        }
       }
-      else
+      if ((!done) && (_deedsMgr!=null))
       {
+        DeedsManager deedsMgr=DeedsManager.getInstance();
         DeedDescription deed=deedsMgr.getDeed(achievableId.intValue());
         if (deed!=null)
         {
           LOGGER.debug("Deed name: "+deed.getName());
           //System.out.println("\tDeed name: "+deed.getName());
-          AchievableStatus deedStatus=statusManager.get(deed,true);
-          deedStatus.setCompleted(true);
-          deedStatus.updateInternalState();
-        }
-        else
-        {
-          LOGGER.warn("Deed/quest not found: "+achievableId);
+          AchievableStatus status=_deedsMgr.get(deed,true);
+          status.setCompleted(true);
+          status.updateInternalState();
+          done=true;
         }
       }
+      if (!done)
+      {
+        LOGGER.warn("Deed/quest not found: "+achievableId);
+      }
     }
-    // We get the same number of completed deeds as in the DeedsExtractor
   }
 
   @SuppressWarnings("unused")
