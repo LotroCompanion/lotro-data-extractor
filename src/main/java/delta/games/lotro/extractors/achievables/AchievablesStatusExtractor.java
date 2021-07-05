@@ -1,6 +1,5 @@
 package delta.games.lotro.extractors.achievables;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import delta.games.lotro.character.achievables.AchievableStatus;
 import delta.games.lotro.character.achievables.AchievablesStatusManager;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.wlib.ClassInstance;
-import delta.games.lotro.extractors.TimeUtils;
 import delta.games.lotro.lore.deeds.DeedDescription;
 import delta.games.lotro.lore.deeds.DeedsManager;
 import delta.games.lotro.lore.quests.Achievable;
@@ -43,12 +41,12 @@ public class AchievablesStatusExtractor
 
   /**
    * Extract deeds.
-   * @param completedAchievableIds Identifiers of the completed achievables.
-   * @param activeAchievables Map of active achievables status.
+   * @param completedAchievables Map of the completed achievables.
+   * @param activeAchievables Map of the active achievables status.
    */
-  public void extract(List<Integer> completedAchievableIds, Map<Integer,ClassInstance> activeAchievables)
+  public void extract(Map<Integer,ClassInstance> completedAchievables, Map<Integer,ClassInstance> activeAchievables)
   {
-    handleCompletedAchievables(completedAchievableIds);
+    handleCompletedAchievables(completedAchievables);
     handleActiveAchievables(activeAchievables);
   }
 
@@ -139,18 +137,26 @@ public class AchievablesStatusExtractor
     _builder.handleAchievable(deedStatus,questData);
    }
 
-  private void handleCompletedAchievables(List<Integer> completedAchievableIds)
+  private void handleCompletedAchievables(Map<Integer,ClassInstance> completedAchievables)
   {
-    int size=completedAchievableIds.size();
+    int size=completedAchievables.size();
     LOGGER.debug("Nb entries: "+size);
-    for(Integer achievableId : completedAchievableIds)
+    for(Map.Entry<Integer,ClassInstance> entry : completedAchievables.entrySet())
     {
+      int achievableId=entry.getKey().intValue();
+      ClassInstance questData=entry.getValue();
       LOGGER.debug("ID: "+achievableId);
+      int achievableId2=((Integer)questData.getAttributeValue("262113540")).intValue();
+      if (achievableId!=achievableId2)
+      {
+        LOGGER.warn("Achievable ID mismatch: got "+achievableId2+", expected "+achievableId);
+        continue;
+      }
       boolean done=false;
       if (_questsMgr!=null)
       {
         QuestsManager questsMgr=QuestsManager.getInstance();
-        QuestDescription quest=questsMgr.getQuest(achievableId.intValue());
+        QuestDescription quest=questsMgr.getQuest(achievableId);
         if (quest!=null)
         {
           LOGGER.debug("Quest name: "+quest.getName());
@@ -158,13 +164,26 @@ public class AchievablesStatusExtractor
           AchievableStatus status=_questsMgr.get(quest,true);
           status.setCompleted(true);
           status.updateInternalState();
+          // Completion count
+          Integer count=(Integer)questData.getAttributeValue("240034292");
+          if (count!=null)
+          {
+            if (count.intValue()>1)
+            {
+              status.setCompletionCount(count);
+            }
+            // Date: of first or last? completion
+            //Integer timestamp=(Integer)questData.getAttributeValue("212351221");
+            //Date date=TimeUtils.getDate(timestamp);
+            //System.out.println("Quest: "+quest+" => x"+count+", date="+date);
+          }
           done=true;
         }
       }
       if ((!done) && (_deedsMgr!=null))
       {
         DeedsManager deedsMgr=DeedsManager.getInstance();
-        DeedDescription deed=deedsMgr.getDeed(achievableId.intValue());
+        DeedDescription deed=deedsMgr.getDeed(achievableId);
         if (deed!=null)
         {
           LOGGER.debug("Deed name: "+deed.getName());
@@ -179,50 +198,6 @@ public class AchievablesStatusExtractor
       {
         LOGGER.warn("Deed/quest not found: "+achievableId);
       }
-    }
-  }
-
-  @SuppressWarnings("unused")
-  private void handleQuestsCount(WStateDataSet data)
-  {
-    List<Integer> orphanRefs=data.getOrphanReferences();
-    if (orphanRefs.size()!=1)
-    {
-      LOGGER.warn("Bad number of orphan references: "+orphanRefs.size());
-      return;
-    }
-    QuestsManager questsMgr=QuestsManager.getInstance();
-    @SuppressWarnings("unchecked")
-    Map<Integer,ClassInstance> dataMap=(Map<Integer,ClassInstance>)data.getValueForReference(orphanRefs.get(0).intValue());
-    int size=dataMap.size();
-    LOGGER.debug("Nb entries: "+size);
-    //System.out.println("Nb entries: "+size);
-    for(Map.Entry<Integer,ClassInstance> entry : dataMap.entrySet())
-    {
-      int questId=entry.getKey().intValue();
-      ClassInstance questData=entry.getValue();
-      //int questId2=((Integer)questData.getAttributeValue("262113540")).intValue();
-      // Completion counts
-      int count=((Integer)questData.getAttributeValue("240034292")).intValue();
-      // Date: of first or last? completion
-      Integer timestamp=(Integer)questData.getAttributeValue("212351221");
-      Date date=TimeUtils.getDate(timestamp);
-      QuestDescription quest=questsMgr.getQuest(questId);
-      if (quest!=null)
-      {
-        LOGGER.debug("Quest name: "+quest.getName()+" ID="+questId+", count="+count+", date="+date);
-        //System.out.println("\tQuest name: "+quest.getName()+" ID="+questId+", count="+count+", date="+date);
-      }
-      else
-      {
-        LOGGER.warn("Quest not found: "+questId);
-      }
-      /*
-      if (questId!=questId2)
-      {
-        LOGGER.warn("ID mismatch");
-      }
-      */
     }
   }
 }
