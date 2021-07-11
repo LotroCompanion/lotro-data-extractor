@@ -59,14 +59,18 @@ public class TitlesExtractor
     }
     LOGGER.debug("Title name: "+title.getName());
     LOGGER.debug(titleAcquisitionData);
+    TitleStatus titleStatus=_titlesStatusMgr.get(title,true);
     // Time of acquisition
     Double ttAcquired=(Double)titleAcquisitionData.getAttributeValue("m_ttAcquired");
+    if (ttAcquired!=null)
+    {
+      titleStatus.setAcquisitionTimeStamp(ttAcquired);
+    }
     // Acquisition type
     Integer acquisitionType=(Integer)titleAcquisitionData.getAttributeValue("m_eAcquisitionType");
-    TitleStatus titleStatus=_titlesStatusMgr.get(title,true);
   }
 
-  private void mapAcquisitionType(int acquisitionTypeCode)
+  void mapAcquisitionType(int acquisitionTypeCode)
   {
     /*
 Enum: TitleAcquisitionType, (id=587202681)
