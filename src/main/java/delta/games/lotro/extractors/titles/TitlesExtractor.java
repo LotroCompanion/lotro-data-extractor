@@ -60,6 +60,8 @@ public class TitlesExtractor
     LOGGER.debug("Title name: "+title.getName());
     LOGGER.debug(titleAcquisitionData);
     TitleStatus titleStatus=_titlesStatusMgr.get(title,true);
+    // Acquired
+    titleStatus.setAcquired(true);
     // Time of acquisition
     Double ttAcquired=(Double)titleAcquisitionData.getAttributeValue("m_ttAcquired");
     if (ttAcquired!=null)
