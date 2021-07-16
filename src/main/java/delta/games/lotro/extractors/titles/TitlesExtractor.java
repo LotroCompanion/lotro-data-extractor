@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.titles.TitleState;
 import delta.games.lotro.character.titles.TitleStatus;
 import delta.games.lotro.character.titles.TitlesStatusManager;
 import delta.games.lotro.dat.wlib.ClassInstance;
@@ -61,7 +62,7 @@ public class TitlesExtractor
     LOGGER.debug(titleAcquisitionData);
     TitleStatus titleStatus=_titlesStatusMgr.get(title,true);
     // Acquired
-    titleStatus.setAcquired(true);
+    titleStatus.setState(TitleState.ACQUIRED);
     // Time of acquisition
     Double ttAcquired=(Double)titleAcquisitionData.getAttributeValue("m_ttAcquired");
     if (ttAcquired!=null)
