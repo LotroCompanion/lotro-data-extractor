@@ -146,12 +146,14 @@ public class AchievablesStatusExtractor
       int achievableId=entry.getKey().intValue();
       ClassInstance questData=entry.getValue();
       LOGGER.debug("ID: "+achievableId);
+      /*
       int achievableId2=((Integer)questData.getAttributeValue("262113540")).intValue();
       if (achievableId!=achievableId2)
       {
         LOGGER.warn("Achievable ID mismatch: got "+achievableId2+", expected "+achievableId);
         continue;
       }
+      */
       boolean done=false;
       if (_questsMgr!=null)
       {
