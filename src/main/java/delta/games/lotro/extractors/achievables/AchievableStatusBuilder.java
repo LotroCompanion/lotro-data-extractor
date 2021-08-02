@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.achievables.AchievableElementState;
-import delta.games.lotro.character.achievables.AchievableObjectiveStatus;
-import delta.games.lotro.character.achievables.AchievableStatus;
-import delta.games.lotro.character.achievables.ObjectiveConditionStatus;
+import delta.games.lotro.character.status.achievables.AchievableElementState;
+import delta.games.lotro.character.status.achievables.AchievableObjectiveStatus;
+import delta.games.lotro.character.status.achievables.AchievableStatus;
+import delta.games.lotro.character.status.achievables.ObjectiveConditionStatus;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.quests.Achievable;
 import delta.games.lotro.lore.quests.objectives.Objective;

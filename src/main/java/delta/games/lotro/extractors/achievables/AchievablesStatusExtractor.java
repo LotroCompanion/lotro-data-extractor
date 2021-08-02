@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.achievables.AchievableStatus;
-import delta.games.lotro.character.achievables.AchievablesStatusManager;
+import delta.games.lotro.character.status.achievables.AchievableStatus;
+import delta.games.lotro.character.status.achievables.AchievablesStatusManager;
 import delta.games.lotro.dat.loaders.wstate.WStateDataSet;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.deeds.DeedDescription;

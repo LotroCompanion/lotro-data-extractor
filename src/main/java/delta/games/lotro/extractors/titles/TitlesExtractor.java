@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.titles.TitleState;
-import delta.games.lotro.character.titles.TitleStatus;
-import delta.games.lotro.character.titles.TitlesStatusManager;
+import delta.games.lotro.character.status.titles.TitleState;
+import delta.games.lotro.character.status.titles.TitleStatus;
+import delta.games.lotro.character.status.titles.TitlesStatusManager;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.titles.TitleDescription;
 import delta.games.lotro.lore.titles.TitlesManager;
