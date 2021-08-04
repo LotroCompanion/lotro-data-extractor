@@ -50,6 +50,10 @@ public class TitlesExtractor
   @SuppressWarnings("unused")
   private void handleTitleStatus(int titleId, ClassInstance titleAcquisitionData)
   {
+    if (titleAcquisitionData==null)
+    {
+      return;
+    }
     // titleAcquisitionData is a TitleAcquisitionData
     TitlesManager titlesMgr=TitlesManager.getInstance();
     TitleDescription title=titlesMgr.getTitle(titleId);
