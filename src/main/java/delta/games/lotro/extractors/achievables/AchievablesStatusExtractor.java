@@ -40,7 +40,7 @@ public class AchievablesStatusExtractor
   }
 
   /**
-   * Extract deeds.
+   * Extract deeds and/or quests.
    * @param completedAchievables Map of the completed achievables.
    * @param activeAchievables Map of the active achievables status.
    */
