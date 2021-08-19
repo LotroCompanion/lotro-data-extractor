@@ -8,6 +8,7 @@ import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.id.InternalGameId;
+import delta.games.lotro.dat.loaders.wstate.WSLUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.extractors.TimeUtils;
 import delta.games.lotro.kinship.Kinship;
@@ -30,10 +31,11 @@ public class KinshipExtractor
   /**
    * Extract kinship data.
    * @param guild Guild WSL description.
+   * @param loginTimestamp Login time (seconds since Epoch).
    * @return the loaded kinship.
    */
   @SuppressWarnings("unchecked")
-  public Kinship extract(ClassInstance guild)
+  public Kinship extract(ClassInstance guild, Integer loginTimestamp)
   {
     Kinship kinship=new Kinship();
     // Summary
@@ -90,13 +92,13 @@ public class KinshipExtractor
       {
         continue;
       }
-      KinshipMember member=extractMember(roster,memberInstance);
+      KinshipMember member=extractMember(roster,memberInstance,loginTimestamp);
       roster.addMember(member);
     }
     return kinship;
   }
 
-  private KinshipMember extractMember(KinshipRoster roster, ClassInstance memberInstance)
+  private KinshipMember extractMember(KinshipRoster roster, ClassInstance memberInstance, Integer loginTimestamp)
   {
     KinshipMember member=new KinshipMember();
     KinshipCharacterSummary characterSummary=member.getSummary();
@@ -152,8 +154,8 @@ public class KinshipExtractor
     Long logoutDuration=TimeUtils.getDateAsMs(lastLogout);
     if (logoutDuration!=null)
     {
-      long now=System.currentTimeMillis();
-      lastLogoutTimestamp=Long.valueOf(now-logoutDuration.longValue());
+      long base=(loginTimestamp!=null)?loginTimestamp.longValue()*1000:System.currentTimeMillis();
+      lastLogoutTimestamp=Long.valueOf(base-logoutDuration.longValue());
     }
     characterSummary.setLastLogoutDate(lastLogoutTimestamp);
     // Join date
