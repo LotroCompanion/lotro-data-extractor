@@ -8,7 +8,6 @@ import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.Race;
 import delta.games.lotro.common.id.InternalGameId;
-import delta.games.lotro.dat.loaders.wstate.WSLUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.extractors.TimeUtils;
 import delta.games.lotro.kinship.Kinship;
