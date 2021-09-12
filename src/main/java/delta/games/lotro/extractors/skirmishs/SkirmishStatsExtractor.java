@@ -8,10 +8,11 @@ import delta.games.lotro.character.status.skirmishes.SingleSkirmishStats;
 import delta.games.lotro.character.status.skirmishes.SkirmishLevel;
 import delta.games.lotro.character.status.skirmishes.SkirmishStats;
 import delta.games.lotro.character.status.skirmishes.SkirmishStatsManager;
+import delta.games.lotro.common.groupSize.GroupSize;
+import delta.games.lotro.common.groupSize.GroupSizesManager;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.PrivateEncountersManager;
-import delta.games.lotro.lore.instances.SkirmishGroupSize;
 import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
 
 /**
@@ -64,7 +65,7 @@ public class SkirmishStatsExtractor
 
   private void handleSkirmishProps(SingleSkirmishStats stats, PropertiesSet props)
   {
-    for(SkirmishGroupSize size : SkirmishGroupSize.values())
+    for(GroupSize size : GroupSizesManager.getInstance().getAll())
     {
       for(SkirmishLevel level : SkirmishLevel.values())
       {
@@ -74,7 +75,7 @@ public class SkirmishStatsExtractor
     }
   }
 
-  private SkirmishStats handleSkirmishProps(SkirmishGroupSize size, SkirmishLevel level, PropertiesSet props)
+  private SkirmishStats handleSkirmishProps(GroupSize size, SkirmishLevel level, PropertiesSet props)
   {
     SkirmishStats ret=new SkirmishStats();
     // Skirmishes attempted
@@ -148,21 +149,22 @@ public class SkirmishStatsExtractor
     return ret;
   }
 
-  private String getPropertyName(String seed, SkirmishGroupSize size, SkirmishLevel level)
+  private String getPropertyName(String seed, GroupSize size, SkirmishLevel level)
   {
     String sizeKey=getSizeKey(size);
     String levelKey=getLevelKey(level);
     return "SkirmishStats_"+seed+"_"+sizeKey+"_"+levelKey;
   }
 
-  private String getSizeKey(SkirmishGroupSize size)
+  private String getSizeKey(GroupSize size)
   {
-    if (size==SkirmishGroupSize.SOLO) return "Solo";
-    if (size==SkirmishGroupSize.DUO) return "Duo";
-    if (size==SkirmishGroupSize.SMALL_FELLOWSHIP) return "3man";
-    if (size==SkirmishGroupSize.FELLOWSHIP) return "6man";
-    if (size==SkirmishGroupSize.RAID12) return "12man";
-    if (size==SkirmishGroupSize.RAID24) return "24man";
+    String key=size.getLegacyKey();
+    if ("SOLO".equals(key)) return "Solo";
+    if ("DUO".equals(key)) return "Duo";
+    if ("SMALL_FELLOWSHIP".equals(key)) return "3man";
+    if ("FELLOWSHIP".equals(key)) return "6man";
+    if ("RAID12".equals(key)) return "12man";
+    if ("RAID24".equals(key)) return "24man";
     return null;
   }
 
