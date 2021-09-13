@@ -196,7 +196,7 @@ public class AchievablesStatusExtractor
           done=true;
         }
       }
-      if (!done)
+      if ((_questsMgr!=null) && (_deedsMgr!=null) && (!done))
       {
         LOGGER.warn("Deed/quest not found: "+achievableId);
       }
