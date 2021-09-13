@@ -24,8 +24,6 @@ import delta.games.lotro.character.virtues.VirtuesManager;
 import delta.games.lotro.dat.data.DataFacade;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.wlib.ClassInstance;
-import delta.games.lotro.lore.titles.TitleDescription;
-import delta.games.lotro.lore.titles.TitlesManager;
 
 /**
  * Character session start extractor.
@@ -38,7 +36,6 @@ public class CharacterSessionStartExtractor
   private DataFacade _facade;
   private EnumMapper _traitAcquisitionType;
   private EnumMapper _traitNature;
-  private EnumMapper _titleAcquisitionType;
   private CharacterData _storage;
 
   /**
@@ -51,38 +48,7 @@ public class CharacterSessionStartExtractor
     _facade=facade;
     _traitAcquisitionType=_facade.getEnumsManager().getEnumMapper(587202676);
     _traitNature=_facade.getEnumsManager().getEnumMapper(587202647);
-    _titleAcquisitionType=_facade.getEnumsManager().getEnumMapper(587202681);
     _storage=storage;
-  }
-
-  /**
-   * Extract titles.
-   * @param titlesRegistry WSL titles registry.
-   */
-  public void handleTitles(ClassInstance titlesRegistry)
-  {
-    @SuppressWarnings("unchecked")
-    Map<Integer,ClassInstance> titlesStatus=(Map<Integer,ClassInstance>)titlesRegistry.getAttributeValue("m_rhTitles");
-    int size=titlesStatus.size();
-    LOGGER.debug("Nb entries: "+size);
-    for(Map.Entry<Integer,ClassInstance> entry : titlesStatus.entrySet())
-    {
-      int titleId=entry.getKey().intValue();
-      ClassInstance titleAcquisitionData=entry.getValue();
-      handleTitleStatus(titleId,titleAcquisitionData);
-    }
-  }
-
-  private void handleTitleStatus(int titleId, ClassInstance titleAcquisitionData)
-  {
-    TitlesManager titles=TitlesManager.getInstance();
-    TitleDescription title=titles.getTitle(titleId);
-    LOGGER.debug("Title name: "+title.getName());
-    int acquisitionDate=((Double)titleAcquisitionData.getAttributeValue("m_ttAcquired")).intValue();
-    //Date date=TimeUtils.getDate((int)(acquisitionDate*3.6));
-    LOGGER.debug("\tDate: raw="+acquisitionDate);
-    int acquisitionType=((Integer)titleAcquisitionData.getAttributeValue("m_eAcquisitionType")).intValue();
-    LOGGER.debug("\tAcquisition type: "+_titleAcquisitionType.getString(acquisitionType));
   }
 
   /**
