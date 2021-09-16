@@ -109,12 +109,21 @@ public class KinshipExtractor
     }
     // Name
     String charName=(String)memberInstance.getAttributeValue("m_name");
+    if (charName==null)
+    {
+      charName="?";
+      LOGGER.warn("Character name was null!");
+    }
     // Sex
     boolean male;
     if (charName.contains(" [M"))
+    {
       male=true;
+    }
     else if (charName.contains(" [F"))
+    {
       male=false;
+    }
     else
     {
       LOGGER.warn("Unknown sex: "+charName);
