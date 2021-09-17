@@ -170,9 +170,6 @@ public class KinshipExtractor
     Integer joinDateInt=(Integer)memberInstance.getAttributeValue("m_ttJoinDate");
     Long joinTimestamp=TimeUtils.getDateAsMs(joinDateInt);
     member.setJoinDate(joinTimestamp);
-    // Account name
-    String accountName=(String)memberInstance.getAttributeValue("m_accountName");
-    characterSummary.setAccountName(accountName);
     // Notes
     String notes=(String)memberInstance.getAttributeValue("212812885");
     if (notes==null) notes="";
