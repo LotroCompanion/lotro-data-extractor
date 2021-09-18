@@ -8,8 +8,9 @@ import delta.games.lotro.character.status.skirmishes.SingleSkirmishStats;
 import delta.games.lotro.character.status.skirmishes.SkirmishLevel;
 import delta.games.lotro.character.status.skirmishes.SkirmishStats;
 import delta.games.lotro.character.status.skirmishes.SkirmishStatsManager;
-import delta.games.lotro.common.groupSize.GroupSize;
-import delta.games.lotro.common.groupSize.GroupSizesManager;
+import delta.games.lotro.common.enums.GroupSize;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.instances.PrivateEncounter;
 import delta.games.lotro.lore.instances.PrivateEncountersManager;
@@ -65,7 +66,8 @@ public class SkirmishStatsExtractor
 
   private void handleSkirmishProps(SingleSkirmishStats stats, PropertiesSet props)
   {
-    for(GroupSize size : GroupSizesManager.getInstance().getAll())
+    LotroEnum<GroupSize> groupSizesMgr=LotroEnumsRegistry.getInstance().get(GroupSize.class);
+    for(GroupSize size : groupSizesMgr.getAll())
     {
       for(SkirmishLevel level : SkirmishLevel.values())
       {
@@ -158,7 +160,7 @@ public class SkirmishStatsExtractor
 
   private String getSizeKey(GroupSize size)
   {
-    String key=size.getLegacyKey();
+    String key=size.getKey();
     if ("SOLO".equals(key)) return "Solo";
     if ("DUO".equals(key)) return "Duo";
     if ("SMALL_FELLOWSHIP".equals(key)) return "3man";
