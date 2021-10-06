@@ -21,6 +21,14 @@ import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacyInstance;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManager;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryInstanceAttrs;
+import delta.games.lotro.lore.items.legendary2.Legendary2;
+import delta.games.lotro.lore.items.legendary2.LegendaryInstance2;
+import delta.games.lotro.lore.items.legendary2.LegendaryInstanceAttrs2;
+import delta.games.lotro.lore.items.legendary2.SocketEntryInstance;
+import delta.games.lotro.lore.items.legendary2.SocketsSetup;
+import delta.games.lotro.lore.items.legendary2.SocketsSetupInstance;
+import delta.games.lotro.lore.items.legendary2.TraceriesManager;
+import delta.games.lotro.lore.items.legendary2.Tracery;
 import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.StringUtils;
 
@@ -134,10 +142,9 @@ public class ItemInstancesExtractor
       itemInstance.setValue(money);
     }
 
-    // Essences
-    Object[] essenceObjs=(Object[])props.getProperty("Item_Socket_Gem_Array");
-    EssencesSet essences=decodeEssences(ref,essenceObjs);
-    itemInstance.setEssences(essences);
+    // Sockets (essences and traceries)
+    Object[] socketEntries=(Object[])props.getProperty("Item_Socket_Gem_Array");
+    decodeSockets(ref,itemInstance,socketEntries);
 
     // Clothing color
     Float colorCode=(Float)props.getProperty("Item_ClothingColor");
@@ -265,6 +272,54 @@ public class ItemInstancesExtractor
     int silver=itemValue%1000;
     int gold=itemValue/1000;
     return new Money(gold,silver,copper);
+  }
+
+  private void decodeSockets(Item item, ItemInstance<? extends Item> itemInstance, Object[] sockets)
+  {
+    if (sockets==null)
+    {
+      return;
+    }
+    if (item instanceof Legendary2)
+    {
+      decodeTraceries((Legendary2)item,itemInstance,sockets);
+    }
+    else
+    {
+      EssencesSet essences=decodeEssences(item,sockets);
+      itemInstance.setEssences(essences);
+    }
+  }
+
+  private void decodeTraceries(Legendary2 item, ItemInstance<? extends Item> itemInstance, Object[] sockets)
+  {
+    int nbTraceries=sockets.length;
+    SocketsSetup setupTemplate=item.getLegendaryAttrs().getSockets();
+    int expectedSocketsCount=setupTemplate.getSocketsCount();
+    int nb=Math.min(nbTraceries,expectedSocketsCount);
+    LegendaryInstance2 legInstance2=(LegendaryInstance2)itemInstance;
+    LegendaryInstanceAttrs2 legAttrs=legInstance2.getLegendaryAttributes();
+    SocketsSetupInstance socketsSetup=legAttrs.getSocketsSetup();
+    for(int i=0;i<nb;i++)
+    {
+      PropertiesSet socketProps=(PropertiesSet)sockets[i];
+      if (socketProps==null)
+      {
+        continue;
+      }
+      Integer gemID=(Integer)socketProps.getProperty("Item_Socket_GemDID");
+      Integer gemLevel=(Integer)socketProps.getProperty("Item_Socket_GemLevel");
+      if ((gemID!=null) && (gemLevel!=null))
+      {
+        Tracery tracery=TraceriesManager.getInstance().getTracery(gemID.intValue());
+        if (tracery!=null)
+        {
+          SocketEntryInstance entryInstance=socketsSetup.getEntry(i);
+          entryInstance.setTracery(tracery);
+          entryInstance.setItemLevel(gemLevel.intValue());
+        }
+      }
+    }
   }
 
   private EssencesSet decodeEssences(Item item, Object[] essences)
