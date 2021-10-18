@@ -166,6 +166,12 @@ public class ItemInstancesExtractor
 
   private void decodeLegendaryData(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
   {
+    decodeLegendaryData1(props,itemInstance);
+    decodeLegendaryData2(props,itemInstance);
+  }
+
+  private void decodeLegendaryData1(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
+  {
     if (!(itemInstance instanceof LegendaryInstance))
     {
       return;
@@ -173,6 +179,9 @@ public class ItemInstancesExtractor
     LegendaryInstanceAttrs attrs=null;
     LegendaryInstance legendary=(LegendaryInstance)itemInstance;
     attrs=legendary.getLegendaryAttributes();
+    // Name
+    String name=(String)props.getProperty("Name");
+    attrs.setLegendaryName(name);
     // Imbued?
     Integer imbuedValue=(Integer)props.getProperty("ItemAdvancement_Imbued");
     LOGGER.debug("Imbued: "+imbuedValue);
@@ -221,6 +230,20 @@ public class ItemInstancesExtractor
       nonImbuedAttrs.setPointsLeft(legendaryPointsAvailable.intValue());
       nonImbuedAttrs.setPointsSpent(legendaryPointsSpent.intValue());
     }
+  }
+
+  private void decodeLegendaryData2(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
+  {
+    if (!(itemInstance instanceof LegendaryInstance2))
+    {
+      return;
+    }
+    LegendaryInstanceAttrs2 attrs=null;
+    LegendaryInstance2 legendary=(LegendaryInstance2)itemInstance;
+    attrs=legendary.getLegendaryAttributes();
+    // Name
+    String name=(String)props.getProperty("Name");
+    attrs.setLegendaryName(name);
   }
 
   private void decodeArmourSpecifics(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
