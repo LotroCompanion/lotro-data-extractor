@@ -132,7 +132,7 @@ public class CharacterItemsExtractor
       _itemsMgr.getBagsManager().addBagItem(countedItemInstance,index);
       return itemInstance;
     }
-    LOGGER.warn("Unmanaged item location! "+slotCode+" => "+props.dump());
+    LOGGER.warn("Unmanaged item location! "+slotCode+" => "+props.dump()+", item="+itemInstance.dump());
     return null;
   }
 
