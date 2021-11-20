@@ -34,7 +34,6 @@ public class AllegiancesExtractor
    */
   public void extract(PropertiesSet props)
   {
-    System.out.println(props.dump());
     _allegiancesStatusMgr.clear();
     AllegiancesManager mgr=AllegiancesManager.getInstance();
     // Current allegiance
