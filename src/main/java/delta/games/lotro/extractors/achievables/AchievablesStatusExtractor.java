@@ -145,6 +145,11 @@ public class AchievablesStatusExtractor
     {
       int achievableId=entry.getKey().intValue();
       ClassInstance questData=entry.getValue();
+      if (questData==null)
+      {
+        LOGGER.warn("questData is null for ID: "+achievableId);
+        continue;
+      }
       LOGGER.debug("ID: "+achievableId);
       /*
       int achievableId2=((Integer)questData.getAttributeValue("262113540")).intValue();
