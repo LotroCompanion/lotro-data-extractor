@@ -120,20 +120,14 @@ public class VaultDataExtractor
       LOGGER.warn("Quantities differ: vault="+vaultQuantityValue+", inventory="+quantity+" for IID="+itemIID);
     }
 
-    CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,vaultQuantityValue);
-    Integer slotCode=(Integer)vaultProps.getProperty("Container_Slot");
-    if (slotCode!=null)
-    {
-      int index=slotCode.intValue()&0xFFFF;
-      LOGGER.debug("Index: "+index+" => "+countedItemInstance);
-    }
-
     // Binding data
     // BoundToIID ignored: same data in instance props
     //Long boundToIID=(Long)props.getProperty("Bank_Repository_BoundToIID");
     // Manager IID
     // Should be the IID of the current character
     //Long managerIID=(Long)vaultProps.getProperty("Bank_Repository_ItemManagerIID");
+
+    CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,vaultQuantityValue);
     return countedItemInstance;
   }
 

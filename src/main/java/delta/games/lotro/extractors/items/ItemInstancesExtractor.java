@@ -14,6 +14,7 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemFactory;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.carryalls.CarryAllInstance;
 import delta.games.lotro.lore.items.essences.EssencesSet;
 import delta.games.lotro.lore.items.legendary.LegendaryInstance;
 import delta.games.lotro.lore.items.legendary.LegendaryInstanceAttrs;
@@ -40,6 +41,16 @@ public class ItemInstancesExtractor
 {
   private static final Logger LOGGER=Logger.getLogger(ItemInstancesExtractor.class);
 
+  private CarryAllDataExtractor _carryAllsExtractor;
+
+  /**
+   * Constructor.
+   */
+  public ItemInstancesExtractor()
+  {
+    _carryAllsExtractor=new CarryAllDataExtractor();
+  }
+
   /**
    * Build an item instance from the given properties.
    * @param props Properties to use.
@@ -55,6 +66,11 @@ public class ItemInstancesExtractor
       return null;
     }
     decodeShared(props,instance);
+    if (instance instanceof CarryAllInstance)
+    {
+      CarryAllInstance carryAllInstance=(CarryAllInstance)instance;
+      _carryAllsExtractor.extract(carryAllInstance,props);
+    }
     instance.updateAutoStats();
     if (LOGGER.isDebugEnabled())
     {
