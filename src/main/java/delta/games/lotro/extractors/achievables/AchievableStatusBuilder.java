@@ -44,6 +44,10 @@ public class AchievableStatusBuilder
     achievableStatus.setState(state);
     // Objectives
     Map<Integer,ClassInstance> objectivesData=(Map<Integer,ClassInstance>)questData.getAttributeValue("m_objectiveHash");
+    if (objectivesData==null)
+    {
+      return;
+    }
     for(Map.Entry<Integer,ClassInstance> entry : objectivesData.entrySet())
     {
       int objectiveIndex=entry.getKey().intValue();
