@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
+import delta.games.lotro.character.status.skills.SkillStatus;
+import delta.games.lotro.character.status.skills.SkillsStatusManager;
 import delta.games.lotro.dat.wlib.ClassInstance;
 
 /**
@@ -15,6 +17,17 @@ import delta.games.lotro.dat.wlib.ClassInstance;
 public class SkillsExtractor
 {
   private static final Logger LOGGER=Logger.getLogger(SkillsExtractor.class);
+
+  private SkillsStatusManager _statusMgr;
+
+  /**
+   * Set the status manager for storage.
+   * @param statusMgr Status manager.
+   */
+  public void setStatusManager(SkillsStatusManager statusMgr)
+  {
+    _statusMgr=statusMgr;
+  }
 
   /**
    * Extract skills.
@@ -32,7 +45,12 @@ public class SkillsExtractor
       SkillDescription skill=skillsMgr.getSkill(skillId.intValue());
       if (skill!=null)
       {
-        LOGGER.debug("Skill: "+skill.getName()+" acquired by: "+acquiredBy);
+        SkillStatus status=_statusMgr.get(skill,true);
+        status.setAvailable(true);
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("Skill: "+skill.getName()+" acquired by: "+acquiredBy+", category="+skill.getCategory());
+        }
       }
       else
       {
