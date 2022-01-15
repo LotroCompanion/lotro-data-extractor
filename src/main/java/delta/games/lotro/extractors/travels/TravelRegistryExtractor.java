@@ -75,7 +75,7 @@ public class TravelRegistryExtractor
     status.setName(name);
     ExtendedPosition extendedPosition=buildPosition(position);
     status.setPosition(extendedPosition);
-    System.out.println("Got: "+status);
+    LOGGER.debug("Got anchor: "+status);
   }
 
   private ExtendedPosition buildPosition(DatPosition position)
