@@ -1,6 +1,5 @@
 package delta.games.lotro.extractors.character;
 
-import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,7 +21,7 @@ import delta.games.lotro.character.virtues.SingleVirtueStatus;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.VirtuesManager;
 import delta.games.lotro.character.virtues.VirtuesStatus;
-import delta.games.lotro.character.virtues.io.xml.VirtuesStatusXMLWriter;
+import delta.games.lotro.character.virtues.io.VirtuesStatusIO;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingLevel;
@@ -250,8 +249,6 @@ public class CharacterDataExtractor
       int tier=virtue.getTierForXp(xpValue);
       virtueStatus.setTier(tier);
     }
-    File characterDir=toon.getRootDir();
-    File virtuesFile=new File(characterDir,"virtues.xml");
-    VirtuesStatusXMLWriter.write(virtuesFile,status);
+    VirtuesStatusIO.save(toon,status);
   }
 }

@@ -2,10 +2,12 @@ package delta.games.lotro.extractors.items;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.storage.carryAlls.CarryAllInstance;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.ItemsManager;
-import delta.games.lotro.lore.items.carryalls.CarryAllInstance;
+import delta.games.lotro.lore.items.carryalls.CarryAll;
 
 /**
  * Extractor for carry-all data.
@@ -17,10 +19,12 @@ public class CarryAllDataExtractor
 
   /**
    * Extract a carry-all from an item (if possible).
-   * @param carryAllInstance Input instance.
+   * @param carryAll Carry-all.
+   * @param instance Input instance.
    * @param props Entity properties.
+   * @return the loaded data.
    */
-  public void extract(CarryAllInstance carryAllInstance, PropertiesSet props)
+  public CarryAllInstance extract(CarryAll carryAll, ItemInstance<? extends Item> instance, PropertiesSet props)
   {
     /*
 BoS_ItemArray: 
@@ -29,6 +33,9 @@ BoS_ItemArray:
     BoS_ItemName: Magnificent Hide[e]
     BoS_Quantity: 1468
      */
+    CarryAllInstance carryAllInstance=new CarryAllInstance();
+    carryAllInstance.setId(instance.getInstanceId());
+    carryAllInstance.setReference(carryAll);
     Object[] entries=(Object[])props.getProperty("BoS_ItemArray");
     if ((entries!=null) && (entries.length>0))
     {
@@ -52,5 +59,6 @@ BoS_ItemArray:
         carryAllInstance.addItem(entryItem,count);
       }
     }
+    return carryAllInstance;
   }
 }

@@ -11,6 +11,7 @@ import delta.games.lotro.character.CharacterEquipment;
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.CharacterEquipment.SlotContents;
 import delta.games.lotro.character.storage.bags.BagsManager;
+import delta.games.lotro.character.storage.carryAlls.CarryAllInstance;
 import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.extractors.effects.EffectRecord;
@@ -37,6 +38,7 @@ public class CharacterItemsManager
   private BagsManager _bags;
   private CharacterEquipment _gear;
   private Map<Long,List<EffectRecord>> _mapItemIIDToEffects;
+  private List<CarryAllInstance> _carryAlls;
 
   /**
    * Constructor.
@@ -47,6 +49,7 @@ public class CharacterItemsManager
     _bags=new BagsManager();
     _gear=gear;
     _mapItemIIDToEffects=new HashMap<Long,List<EffectRecord>>();
+    _carryAlls=new ArrayList<CarryAllInstance>();
   }
 
   /**
@@ -56,6 +59,24 @@ public class CharacterItemsManager
   public BagsManager getBagsManager()
   {
     return _bags;
+  }
+
+  /**
+   * Add a carry-all instance.
+   * @param carryAll Instance to add.
+   */
+  public void addCarryAll(CarryAllInstance carryAll)
+  {
+    _carryAlls.add(carryAll);
+  }
+
+  /**
+   * Get the registered carry-alls.
+   * @return A list of carry-alls (possibly empty but never <code>null</code>).
+   */
+  public List<CarryAllInstance> getCarryAlls()
+  {
+    return _carryAlls;
   }
 
   /**

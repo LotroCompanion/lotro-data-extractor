@@ -3,12 +3,14 @@ package delta.games.lotro.extractors.items;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
+import delta.games.lotro.character.storage.carryAlls.CarryAllInstance;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.CountedItem;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.carryalls.CarryAll;
 import delta.games.lotro.utils.dat.DatEnumsUtils;
 
 /**
@@ -20,6 +22,7 @@ public class CharacterItemsExtractor
   private static final Logger LOGGER=Logger.getLogger(CharacterItemsExtractor.class);
 
   private ItemInstancesExtractor _itemExtractor;
+  private CarryAllDataExtractor _carryAllsExtractor;
   private CharacterItemsManager _itemsMgr;
   private CharacterGearRegistry _gearRegistry;
 
@@ -30,6 +33,7 @@ public class CharacterItemsExtractor
   public CharacterItemsExtractor(CharacterItemsManager itemsMgr)
   {
     _itemExtractor=new ItemInstancesExtractor();
+    _carryAllsExtractor=new CarryAllDataExtractor();
     _itemsMgr=itemsMgr;
   }
 
@@ -83,6 +87,11 @@ public class CharacterItemsExtractor
     if (itemInstance!=null)
     {
       itemInstance.setInstanceId(new InternalGameId(iid));
+    }
+    if (item instanceof CarryAll)
+    {
+      CarryAllInstance carryAll=_carryAllsExtractor.extract((CarryAll)item,itemInstance,props);
+      _itemsMgr.addCarryAll(carryAll);
     }
     return itemInstance;
   }
