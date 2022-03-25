@@ -26,12 +26,12 @@ import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.wlib.ClassInstance;
 
 /**
- * Character session start extractor.
+ * Traits extractor.
  * @author DAM
  */
-public class CharacterSessionStartExtractor
+public class TraitsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(CharacterSessionStartExtractor.class);
+  private static final Logger LOGGER=Logger.getLogger(TraitsExtractor.class);
 
   private DataFacade _facade;
   private EnumMapper _traitAcquisitionType;
@@ -43,7 +43,7 @@ public class CharacterSessionStartExtractor
    * @param facade Data facade.
    * @param storage for loaded data. 
    */
-  public CharacterSessionStartExtractor(DataFacade facade, CharacterData storage)
+  public TraitsExtractor(DataFacade facade, CharacterData storage)
   {
     _facade=facade;
     _traitAcquisitionType=_facade.getEnumsManager().getEnumMapper(587202676);
