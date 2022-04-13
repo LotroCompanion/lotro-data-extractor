@@ -55,15 +55,18 @@ public class CharacterDataExtractor
     details.setXp(xp!=null?xp.longValue():0);
     // Position
     //Object pos=props.getProperty("Physics_LastValidPosition");
-    // Area
-    // May be we shall use request: GWM_LFG::PostCEvt_Broadcast_OnPlayerAreaUpdated
-    // Contents: Area ID, player IID
     // In-game time
     Integer inGameTime=(Integer)props.getProperty("Time_TotalInGameTime");
     details.setIngameTime(inGameTime!=null?inGameTime.intValue():0);
     // Title
     Integer titleId=(Integer)props.getProperty("Title_ActiveTitleDID");
     details.setCurrentTitleId(titleId);
+    // Area
+    Integer areaID=(Integer)props.getProperty("Area_CurrentArea");
+    details.setAreaID(areaID);
+    // Dungeon
+    Integer dungeonID=(Integer)props.getProperty("Dungeon_CurrentDungeon");
+    details.setDungeonID(dungeonID);
     // Money
     Integer coppers=(Integer)props.getProperty("Currency_Amount");
     details.getMoney().setRawValue(coppers!=null?coppers.intValue():0);
