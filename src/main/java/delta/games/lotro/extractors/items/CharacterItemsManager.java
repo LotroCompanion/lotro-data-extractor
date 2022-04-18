@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.CharacterEquipment;
-import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
-import delta.games.lotro.character.CharacterEquipment.SlotContents;
+import delta.games.lotro.character.gear.CharacterGear;
+import delta.games.lotro.character.gear.GearSlot;
+import delta.games.lotro.character.gear.GearSlotContents;
 import delta.games.lotro.character.storage.bags.BagsManager;
 import delta.games.lotro.character.storage.carryAlls.CarryAllInstance;
 import delta.games.lotro.common.effects.Effect;
@@ -36,7 +36,7 @@ public class CharacterItemsManager
   private static final Logger LOGGER=Logger.getLogger(CharacterItemsManager.class);
 
   private BagsManager _bags;
-  private CharacterEquipment _gear;
+  private CharacterGear _gear;
   private Map<Long,List<EffectRecord>> _mapItemIIDToEffects;
   private List<CarryAllInstance> _carryAlls;
 
@@ -44,7 +44,7 @@ public class CharacterItemsManager
    * Constructor.
    * @param gear Character gear.
    */
-  public CharacterItemsManager(CharacterEquipment gear)
+  public CharacterItemsManager(CharacterGear gear)
   {
     _bags=new BagsManager();
     _gear=gear;
@@ -84,9 +84,9 @@ public class CharacterItemsManager
    * @param slot Targeted slot.
    * @param itemInstance Item instance to set.
    */
-  public void setGearSlot(EQUIMENT_SLOT slot, ItemInstance<? extends Item> itemInstance)
+  public void setGearSlot(GearSlot slot, ItemInstance<? extends Item> itemInstance)
   {
-    SlotContents contents=_gear.getSlotContents(slot,true);
+    GearSlotContents contents=_gear.getSlotContents(slot,true);
     contents.setItem(itemInstance);
   }
 
@@ -95,11 +95,11 @@ public class CharacterItemsManager
    * @param itemInstance Item instance to use.
    * @return A slot or <code>null</code> if not found.
    */
-  public EQUIMENT_SLOT getSlotForItem(ItemInstance<? extends Item> itemInstance)
+  public GearSlot getSlotForItem(ItemInstance<? extends Item> itemInstance)
   {
-    for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+    for(GearSlot slot : GearSlot.values())
     {
-      SlotContents contents=_gear.getSlotContents(slot,false);
+      GearSlotContents contents=_gear.getSlotContents(slot,false);
       if (contents!=null)
       {
         ItemInstance<? extends Item> currentInstance=contents.getItem();
@@ -120,9 +120,9 @@ public class CharacterItemsManager
   public ItemInstance<? extends Item> findItemByIid(long itemIid)
   {
     // Gear
-    for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+    for(GearSlot slot : GearSlot.values())
     {
-      SlotContents contents=_gear.getSlotContents(slot,false);
+      GearSlotContents contents=_gear.getSlotContents(slot,false);
       if (contents!=null)
       {
         ItemInstance<? extends Item> itemInstance=contents.getItem();
@@ -214,9 +214,9 @@ public class CharacterItemsManager
   public void dumpContents()
   {
     System.out.println("Gear:");
-    for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+    for(GearSlot slot : GearSlot.values())
     {
-      SlotContents contents=_gear.getSlotContents(slot,false);
+      GearSlotContents contents=_gear.getSlotContents(slot,false);
       if (contents!=null)
       {
         ItemInstance<? extends Item> itemInstance=contents.getItem();

@@ -2,7 +2,7 @@ package delta.games.lotro.extractors.items;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
+import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.character.storage.carryAlls.CarryAllInstance;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -112,7 +112,7 @@ public class CharacterItemsExtractor
     boolean isEquipped=DatEnumsUtils.isEquipped(slotCode.intValue());
     if (isEquipped)
     {
-      EQUIMENT_SLOT slot=DatEnumsUtils.getEquipmentSlot(slotCode.intValue());
+      GearSlot slot=DatEnumsUtils.getEquipmentSlot(slotCode.intValue());
       if (slot!=null)
       {
         long iid=itemInstance.getInstanceId().asLong();

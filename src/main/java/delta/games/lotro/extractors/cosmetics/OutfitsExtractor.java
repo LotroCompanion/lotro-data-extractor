@@ -3,10 +3,10 @@ package delta.games.lotro.extractors.cosmetics;
 import java.util.List;
 import java.util.Map;
 
-import delta.games.lotro.character.CharacterEquipment.EQUIMENT_SLOT;
 import delta.games.lotro.character.cosmetics.Outfit;
 import delta.games.lotro.character.cosmetics.OutfitElement;
 import delta.games.lotro.character.cosmetics.OutfitsManager;
+import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.ColorsManager;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -56,15 +56,15 @@ public class OutfitsExtractor
     if (visibilityBits==null)
     {
       // All slots are visible
-      for(EQUIMENT_SLOT slot : EQUIMENT_SLOT.values())
+      for(GearSlot slot : GearSlot.values())
       {
         outfit.setSlotVisible(slot,true);
       }
     }
     else
     {
-      List<EQUIMENT_SLOT> slots=DatEnumsUtils.getEquipmentSlots(visibilityBits.intValue());
-      for(EQUIMENT_SLOT slot : slots)
+      List<GearSlot> slots=DatEnumsUtils.getEquipmentSlots(visibilityBits.intValue());
+      for(GearSlot slot : slots)
       {
         outfit.setSlotVisible(slot,true);
       }
@@ -78,7 +78,7 @@ public class OutfitsExtractor
     Map<Integer,ClassInstance> entries=(Map<Integer,ClassInstance>)outfitDataMap.getAttributeValue("249837057");
     for(Map.Entry<Integer,ClassInstance> entry : entries.entrySet())
     {
-      EQUIMENT_SLOT slot=DatEnumsUtils.getEquipmentSlot(entry.getKey().intValue());
+      GearSlot slot=DatEnumsUtils.getEquipmentSlot(entry.getKey().intValue());
       ClassInstance outfitData=entry.getValue();
       if ((slot!=null) && (outfitData!=null))
       {
