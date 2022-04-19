@@ -5,6 +5,7 @@ import java.util.Map;
 
 import delta.games.lotro.character.cosmetics.Outfit;
 import delta.games.lotro.character.cosmetics.OutfitElement;
+import delta.games.lotro.character.cosmetics.OutfitsConstants;
 import delta.games.lotro.character.cosmetics.OutfitsManager;
 import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.common.colors.ColorDescription;
@@ -42,6 +43,15 @@ public class OutfitsExtractor
       Integer visibilityBits=(Integer)playerProps.getProperty(visibilityProperty);
       updateVisibility(outfit,visibilityBits);
     }
+    // Equipment
+    {
+      Outfit outfit=new Outfit();
+      ret.addOutfit(0,outfit);
+      // Visibility
+      String visibilityProperty=getOutfitVisibilityProperty(0);
+      Integer visibilityBits=(Integer)playerProps.getProperty(visibilityProperty);
+      updateVisibility(outfit,visibilityBits);
+    }
     // Current outfit
     Integer outfitId=(Integer)playerProps.getProperty("Outfit_ActiveOutfitType");
     if (outfitId!=null)
@@ -56,7 +66,7 @@ public class OutfitsExtractor
     if (visibilityBits==null)
     {
       // All slots are visible
-      for(GearSlot slot : GearSlot.values())
+      for(GearSlot slot : OutfitsConstants.OUTFIT_SLOTS)
       {
         outfit.setSlotVisible(slot,true);
       }
