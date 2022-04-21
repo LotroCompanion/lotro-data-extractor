@@ -52,15 +52,21 @@ public class WardrobeExtractor
     {
       return null;
     }
-    // Color
-    ColorDescription color=null;
-    Long colorBit=(Long)entry.getProperty("Wardrobe_ItemClothingColorsExt");
-    if (colorBit!=null)
+    WardrobeItem ret=new WardrobeItem(item);
+    // Colors
+    Long colorBits=(Long)entry.getProperty("Wardrobe_ItemClothingColorsExt");
+    if (colorBits!=null)
     {
-      int colorCode=Long.numberOfTrailingZeros(colorBit.intValue())+1;
-      color=ColorsManager.getInstance().getColor(colorCode);
+      for(ColorDescription color : ColorsManager.getInstance().getAll())
+      {
+        int code=color.getIntCode();
+        long mask=1L<<(code-1);
+        if ((mask&colorBits.longValue())!=0)
+        {
+          ret.addColor(color);
+        }
+      }
     }
-    WardrobeItem ret=new WardrobeItem(item,color);
     return ret;
   }
 }
