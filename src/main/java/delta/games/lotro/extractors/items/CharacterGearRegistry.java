@@ -44,7 +44,7 @@ public class CharacterGearRegistry
   /**
    * Indicates if the given IID is known or not.
    * @param iid IID to test.
-   * @return <code>true</code> if it is, <code>false</code> ottherwise.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
    */
   public boolean hasIID(long iid)
   {

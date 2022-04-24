@@ -40,6 +40,10 @@ public class SkillsExtractor
     SkillsManager skillsMgr=SkillsManager.getInstance();
     for(ClassInstance skillInfo : skillInfos)
     {
+      if (skillInfo==null)
+      {
+        continue;
+      }
       Integer acquiredBy=(Integer)skillInfo.getAttributeValue("m_acquiredBy");
       Integer skillId=(Integer)skillInfo.getAttributeValue("m_didSkill");
       SkillDescription skill=skillsMgr.getSkill(skillId.intValue());

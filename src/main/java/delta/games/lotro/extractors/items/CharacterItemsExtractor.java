@@ -109,6 +109,12 @@ public class CharacterItemsExtractor
     {
       return null;
     }
+    boolean isInOverflow=DatEnumsUtils.isInOverflow(slotCode.intValue());
+    if (isInOverflow)
+    {
+      LOGGER.debug("\tIn Overflow");
+      return null;
+    }
     boolean isEquipped=DatEnumsUtils.isEquipped(slotCode.intValue());
     if (isEquipped)
     {
