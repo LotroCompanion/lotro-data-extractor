@@ -159,7 +159,7 @@ public class TestOutfitsExtractor extends TestCase
     ClassInstance outfitsRegistry=buildOutfitRegistry();
     OutfitsManager outfitsMgr=extractor.extract(playerProps,outfitsRegistry);
     System.out.println(outfitsMgr);
-    CharacterFile file=CharactersManager.getInstance().getToonById("Landroval","Meva");
+    CharacterFile file=CharactersManager.getInstance().getToonById("Landroval","Kargarth");
     OutfitsIO.saveOutfits(file,outfitsMgr);
     OutfitsManager outfitsMgrReloaded=OutfitsIO.loadOutfits(file);
     System.out.println(outfitsMgrReloaded);
