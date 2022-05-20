@@ -23,6 +23,11 @@ public class AchievableStatusBuilder
   private static final Logger LOGGER=Logger.getLogger(AchievableStatusBuilder.class);
 
   /**
+   * Status code attribute name.
+   */
+  private static final String STATUS_CODE_ATTR="180500243";
+
+  /**
    * Handle a single achievable.
    * @param achievableStatus Storage for loaded data.
    * @param questData Input status data.
@@ -38,7 +43,7 @@ public class AchievableStatusBuilder
       return;
     }
     // State
-    Integer statusCode=(Integer)questData.getAttributeValue("180500243");
+    Integer statusCode=(Integer)questData.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(statusCode);
     //System.out.println("\t\tState: "+state);
     achievableStatus.setState(state);
@@ -84,7 +89,7 @@ public class AchievableStatusBuilder
       return;
     }
     // Status
-    Integer statusCode=(Integer)objectiveData.getAttributeValue("180500243");
+    Integer statusCode=(Integer)objectiveData.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(statusCode);
     //System.out.println("\t\tObjective #"+objective.getIndex()+": ");
     //System.out.println("\t\t\tState: "+state);
@@ -145,7 +150,7 @@ public class AchievableStatusBuilder
   private void handleObjectiveCondition(ObjectiveConditionStatus conditionStatus, ClassInstance dynamicQuestEvent)
   {
     // State
-    Integer stateCode=(Integer)dynamicQuestEvent.getAttributeValue("180500243");
+    Integer stateCode=(Integer)dynamicQuestEvent.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(stateCode);
     conditionStatus.setState(state);
     //System.out.println("\t\t\t\tState: "+state);

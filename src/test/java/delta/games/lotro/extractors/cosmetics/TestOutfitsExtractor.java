@@ -15,6 +15,7 @@ import delta.games.lotro.dat.wlib.AttributeDefinition;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.dat.wlib.ValueType;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 /**
@@ -158,10 +159,12 @@ public class TestOutfitsExtractor extends TestCase
     PropertiesSet playerProps=buildPlayerProperties();
     ClassInstance outfitsRegistry=buildOutfitRegistry();
     OutfitsManager outfitsMgr=extractor.extract(playerProps,outfitsRegistry);
+    Assert.assertNotNull(outfitsMgr);
     System.out.println(outfitsMgr);
     CharacterFile file=CharactersManager.getInstance().getToonById("Landroval","Kargarth");
     OutfitsIO.saveOutfits(file,outfitsMgr);
     OutfitsManager outfitsMgrReloaded=OutfitsIO.loadOutfits(file);
+    Assert.assertNotNull(outfitsMgrReloaded);
     System.out.println(outfitsMgrReloaded);
     //OutfitsIO.saveOutfits(file,outfitsMgrReloaded);
   }

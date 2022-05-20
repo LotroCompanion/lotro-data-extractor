@@ -176,12 +176,11 @@ public class ItemInstancesExtractor
     {
       return;
     }
-    LegendaryInstanceAttrs attrs=null;
     LegendaryInstance legendary=(LegendaryInstance)itemInstance;
-    attrs=legendary.getLegendaryAttributes();
+    LegendaryInstanceAttrs attrs=legendary.getLegendaryAttributes();
     // Name
     String name=(String)props.getProperty("Name");
-    attrs.setLegendaryName(name);
+ attrs.setLegendaryName(name);
     // Imbued?
     Integer imbuedValue=(Integer)props.getProperty("ItemAdvancement_Imbued");
     LOGGER.debug("Imbued: "+imbuedValue);
@@ -189,7 +188,7 @@ public class ItemInstancesExtractor
     NonImbuedLegendaryInstanceAttrs nonImbuedAttrs=attrs.getNonImbuedAttrs();
     // Item upgrades (crystals)
     Integer itemUpgrades=(Integer)props.getProperty("Item_LevelUpgradeTier");
-    if ((itemUpgrades!=null) && (attrs!=null))
+    if (itemUpgrades!=null)
     {
       LOGGER.debug("Item upgrades: "+itemUpgrades);
       nonImbuedAttrs.setNbUpgrades(itemUpgrades.intValue());
@@ -199,7 +198,7 @@ public class ItemInstancesExtractor
     LOGGER.debug("Default legacy rank: "+defaultLegacyRank);
     // Item advancement level
     Integer liLevel=(Integer)props.getProperty("ItemAdvancement_Level");
-    if ((liLevel!=null) && (attrs!=null))
+    if (liLevel!=null)
     {
       LOGGER.debug("LI level: "+liLevel);
       nonImbuedAttrs.setLegendaryItemLevel(liLevel.intValue());
