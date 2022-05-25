@@ -56,18 +56,21 @@ public class MemoryItemsManager
     if (isInOverflow)
     {
       _overflowItems.add(item);
+      return;
     }
     // Equipped?
     boolean isEquipped=DatEnumsUtils.isEquipped(slotCode.intValue());
     if (isEquipped)
     {
       _equippedItems.add(item);
+      return;
     }
     // Bags?
     boolean isInBags=DatEnumsUtils.isInBags(slotCode.intValue());
     if (isInBags)
     {
       _bagItems.add(item);
+      return;
     }
     // Other
     ItemInstance<? extends Item> itemInstance=item.getItem();
