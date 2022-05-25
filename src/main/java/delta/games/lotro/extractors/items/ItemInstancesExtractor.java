@@ -66,19 +66,6 @@ public class ItemInstancesExtractor
   private void decodeShared(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
   {
     Item ref=itemInstance.getReference();
-    // Slot (ignored)
-    /*
-    Integer containerSlot=(Integer)props.getProperty("Container_Slot");
-    if (containerSlot!=null)
-    {
-      EquipmentLocation loc=ref.getEquipmentLocation();
-      if (loc!=null)
-      {
-        EQUIMENT_SLOT slot=DatEnumsUtils.getEquipmentSlot(containerSlot.longValue());
-        LOGGER.debug("Container slots: "+containerSlot+" => "+slot);
-      }
-    }
-    */
     // Crafter name
     String crafterName=(String)props.getProperty("CrafterName");
     if (crafterName!=null)
