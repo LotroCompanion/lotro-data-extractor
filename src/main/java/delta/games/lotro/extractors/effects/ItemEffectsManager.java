@@ -1,4 +1,4 @@
-package delta.games.lotro.extractors.items;
+package delta.games.lotro.extractors.effects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,26 +7,26 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.extractors.effects.EffectRecord;
+import delta.games.lotro.extractors.items.MemoryItemsManager;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 
 /**
- * Items manager for a character.
+ * Items effects manager for a character.
  * @author DAM
  */
 public class ItemEffectsManager
 {
   private static final Logger LOGGER=Logger.getLogger(ItemEffectsManager.class);
 
-  private Map<Long,List<EffectRecord>> _mapItemIIDToEffects;
+  private Map<Long,List<ItemEffectRecord>> _mapItemIIDToEffects;
 
   /**
    * Constructor.
    */
   public ItemEffectsManager()
   {
-    _mapItemIIDToEffects=new HashMap<Long,List<EffectRecord>>();
+    _mapItemIIDToEffects=new HashMap<Long,List<ItemEffectRecord>>();
   }
 
   /**
@@ -47,7 +47,7 @@ public class ItemEffectsManager
 
   private void mergeItemEffect(Long itemIid, ItemInstance<? extends Item> itemInstance)
   {
-    List<EffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
+    List<ItemEffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
     if (effects==null)
     {
       return;
@@ -61,7 +61,7 @@ public class ItemEffectsManager
     mergeItemAndEffect(itemInstance,effects.get(0));
   }
 
-  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, EffectRecord effect)
+  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, ItemEffectRecord effect)
   {
     String itemName=itemInstance.getName();
     Integer itemLevel=itemInstance.getEffectiveItemLevel();
@@ -82,13 +82,13 @@ public class ItemEffectsManager
    * Add an item effect.
    * @param effect Effect to add.
    */
-  public void addEffect(EffectRecord effect)
+  public void addEffect(ItemEffectRecord effect)
   {
     Long itemIid=Long.valueOf(effect.getItemIid());
-    List<EffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
+    List<ItemEffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
     if (effects==null)
     {
-      effects=new ArrayList<EffectRecord>();
+      effects=new ArrayList<ItemEffectRecord>();
       _mapItemIIDToEffects.put(itemIid,effects);
     }
     effects.add(effect);

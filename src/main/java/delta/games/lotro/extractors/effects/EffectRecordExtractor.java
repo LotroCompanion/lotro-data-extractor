@@ -4,12 +4,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.character.stats.buffs.Buff;
 import delta.games.lotro.character.stats.buffs.BuffInstance;
 import delta.games.lotro.character.stats.buffs.BuffRegistry;
-import delta.games.lotro.character.stats.buffs.BuffsManager;
 import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
@@ -31,17 +29,14 @@ public class EffectRecordExtractor
   private static final Logger LOGGER=Logger.getLogger(EffectRecordExtractor.class);
 
   private DataFacade _facade;
-  private CharacterData _storage;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param storage for loaded data. 
    */
-  public EffectRecordExtractor(DataFacade facade, CharacterData storage)
+  public EffectRecordExtractor(DataFacade facade)
   {
     _facade=facade;
-    _storage=storage;
   }
 
   /**
@@ -54,18 +49,19 @@ public class EffectRecordExtractor
     Long itemIid=(Long)effectRecord.getAttributeValue("m_iidFromItem");
     if ((itemIid!=null) && (itemIid.longValue()!=0))
     {
-      EffectRecord effect=handleEffectOnItem(itemIid.longValue(),effectRecord);
+      ItemEffectRecord effect=handleEffectOnItem(itemIid.longValue(),effectRecord);
       return effect;
     }
     Integer effectId=(Integer)effectRecord.getAttributeValue("m_didEffect");
     if ((effectId!=null) && (effectId.intValue()>0))
     {
-      handleEffect(effectId.intValue());
+      DIDEffectRecord effect=handleDIDEffect(effectId.intValue());
+      return effect;
     }
     return null;
   }
 
-  private EffectRecord handleEffectOnItem(long itemIid, ClassInstance effectRecord)
+  private ItemEffectRecord handleEffectOnItem(long itemIid, ClassInstance effectRecord)
   {
     Float spellCraft=(Float)effectRecord.getAttributeValue("m_fSpellcraft");
     LOGGER.debug("Item "+itemIid+", spellCraft="+spellCraft);
@@ -107,21 +103,20 @@ public class EffectRecordExtractor
         }
       }
     }
-    EffectRecord effect=new EffectRecord(itemIid,spellCraft.floatValue(),stats);
+    ItemEffectRecord effect=new ItemEffectRecord(itemIid,spellCraft.floatValue(),stats);
     return effect;
   }
 
-  private void handleEffect(int effectId)
+  private DIDEffectRecord handleDIDEffect(int effectId)
   {
+    BuffInstance buffInstance=null;
     BuffRegistry buffsRegistry=BuffRegistry.getInstance();
     String key=String.valueOf(effectId);
     Buff buff=buffsRegistry.getBuffById(key);
     if (buff!=null)
     {
       LOGGER.debug("Found buff: "+buff);
-      BuffsManager buffsMgr=_storage.getBuffs();
-      BuffInstance buffInstance=buffsRegistry.newBuffInstance(key);
-      buffsMgr.addBuff(buffInstance);
+      buffInstance=buffsRegistry.newBuffInstance(key);
     }
     else
     {
@@ -137,5 +132,11 @@ public class EffectRecordExtractor
         LOGGER.debug("Unknown buff: "+effectId+": "+name);
       }
     }
+    if (buffInstance!=null)
+    {
+      DIDEffectRecord ret=new DIDEffectRecord(buffInstance);
+      return ret;
+    }
+    return null;
   }
 }
