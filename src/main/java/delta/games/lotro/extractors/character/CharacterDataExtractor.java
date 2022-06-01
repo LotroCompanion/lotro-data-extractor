@@ -227,9 +227,13 @@ public class CharacterDataExtractor
       {
         craftingLevel=profession.getByTier(1);
       }
-      CraftingLevelStatus toUpdate=professionStatus.getLevelStatus(craftingLevel);
-      CraftingLevelTierStatus tierStatus=mastery?toUpdate.getMastery():toUpdate.getProficiency();
-      tierStatus.setAcquiredXP(xp.intValue());
+      if (craftingLevel!=null)
+      {
+        professionStatus.setCompletionStatus(craftingLevel,mastery,false);
+        CraftingLevelStatus toUpdate=professionStatus.getLevelStatus(craftingLevel);
+        CraftingLevelTierStatus tierStatus=mastery?toUpdate.getMastery():toUpdate.getProficiency();
+        tierStatus.setAcquiredXP(xp.intValue());
+      }
     }
   }
 
