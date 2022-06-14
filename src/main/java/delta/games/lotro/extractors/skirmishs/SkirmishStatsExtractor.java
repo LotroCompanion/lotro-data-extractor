@@ -36,7 +36,7 @@ public class SkirmishStatsExtractor
   }
 
   /**
-   * Extract deeds.
+   * Extract skirmish stats.
    * @param skirmishStatsMap Map of the skirmish stats.
    */
   public void extract(Map<Integer,PropertiesSet> skirmishStatsMap)

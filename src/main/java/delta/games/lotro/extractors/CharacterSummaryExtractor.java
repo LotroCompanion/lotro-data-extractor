@@ -1,6 +1,8 @@
 package delta.games.lotro.extractors;
 
 import delta.games.lotro.character.CharacterSummary;
+import delta.games.lotro.character.races.NationalitiesManager;
+import delta.games.lotro.character.races.NationalityDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -32,8 +34,8 @@ public class CharacterSummaryExtractor
     // ... not found in properties!
     // Region
     int nationalityCode=((Integer)properties.getProperty("Nationality")).intValue();
-    String nationality=DatEnumsUtils.getNationalityFromNationalityId(nationalityCode);
-    summary.setRegion(nationality);
+    NationalityDescription nationality=NationalitiesManager.getInstance().getNationalityDescription(nationalityCode);
+    summary.setNationality(nationality);
     // Kinship
     Long kinshipID=(Long)properties.getProperty("Guild_ID");
     if (kinshipID!=null)
