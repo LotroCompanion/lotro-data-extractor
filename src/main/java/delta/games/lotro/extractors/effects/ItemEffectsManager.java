@@ -64,16 +64,22 @@ public class ItemEffectsManager
   private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, ItemEffectRecord effect)
   {
     String itemName=itemInstance.getName();
-    Integer itemLevel=itemInstance.getEffectiveItemLevel();
-    if (itemLevel==null)
+    Integer defaultItemLevel=itemInstance.getItemLevelForStats();
+    if (defaultItemLevel==null)
     {
       return;
     }
     int spellCraft=(int)effect.getSpellCraft();
-    if (spellCraft!=itemLevel.intValue())
+    if (spellCraft!=defaultItemLevel.intValue())
     {
+      int itemLevel=spellCraft;
+      Integer offset=itemInstance.getReference().getItemLevelOffset();
+      if (offset!=null)
+      {
+        itemLevel-=offset.intValue();
+      }
       LOGGER.info("Updating the item level for item name="+itemName+", itemLevel="+itemLevel+", spellcraft="+spellCraft);
-      itemInstance.setItemLevel(Integer.valueOf(spellCraft));
+      itemInstance.setItemLevel(Integer.valueOf(itemLevel));
       itemInstance.updateAutoStats();
     }
   }
