@@ -17,7 +17,6 @@ import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.utils.DatStringUtils;
 import delta.games.lotro.dat.wlib.ClassInstance;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.dat.DatStatUtils;
 
 /**
@@ -94,7 +93,7 @@ public class EffectRecordExtractor
           int modOperation=((Integer)appliedMod.getAttributeValue("m_eModOp")).intValue();
           if ((modOperation==7) && (stat!=null))
           {
-            stats.addStat(stat,new FixedDecimalsInteger(numberValue.floatValue()));
+            stats.addStat(stat,numberValue);
           }
         }
         else

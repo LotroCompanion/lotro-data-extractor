@@ -29,7 +29,6 @@ import delta.games.lotro.lore.items.legendary2.SocketsSetup;
 import delta.games.lotro.lore.items.legendary2.SocketsSetupInstance;
 import delta.games.lotro.lore.items.legendary2.TraceriesManager;
 import delta.games.lotro.lore.items.legendary2.Tracery;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 import delta.games.lotro.utils.StringUtils;
 
 /**
@@ -241,8 +240,7 @@ public class ItemInstancesExtractor
       LOGGER.debug("Armour: "+armorValue);
       StatsManager statsMgr=itemInstance.getStatsManager();
       statsMgr.setMode(CustomStatsMergeMode.MERGE);
-      FixedDecimalsInteger value=new FixedDecimalsInteger(armorValue.intValue());
-      statsMgr.getCustom().setStat(WellKnownStat.ARMOUR,value);
+      statsMgr.getCustom().setStat(WellKnownStat.ARMOUR,armorValue);
     }
   }
 

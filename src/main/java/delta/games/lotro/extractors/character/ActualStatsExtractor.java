@@ -7,7 +7,6 @@ import delta.games.lotro.common.stats.StatDescription;
 import delta.games.lotro.common.stats.StatType;
 import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.utils.FixedDecimalsInteger;
 
 /**
  * Extracts actual character stats from its properties.
@@ -20,10 +19,11 @@ public class ActualStatsExtractor
   private void extractStat(BasicStatsSet stats, StatDescription stat, PropertiesSet props, String name, float factor)
   {
     extractStat(stats,stat,props,name);
-    FixedDecimalsInteger value=stats.getStat(stat);
+    Number value=stats.getStat(stat);
     if (value!=null)
     {
-      value.multiply(new FixedDecimalsInteger(factor));
+      float newValue=value.floatValue()*factor;
+      stats.setStat(stat,Float.valueOf(newValue));
     }
   }
 
