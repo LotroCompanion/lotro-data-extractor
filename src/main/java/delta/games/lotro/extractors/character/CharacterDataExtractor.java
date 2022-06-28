@@ -61,6 +61,9 @@ public class CharacterDataExtractor
     // Title
     Integer titleId=(Integer)props.getProperty("Title_ActiveTitleDID");
     details.setCurrentTitleId(titleId);
+    // Vocation
+    Integer vocationId=(Integer)props.getProperty("Craft_Vocation");
+    details.setCurrentVocationId(vocationId);
     // Area
     Integer areaID=(Integer)props.getProperty("Area_CurrentArea");
     details.setAreaID(areaID);
