@@ -59,6 +59,6 @@ public class RewardsTracksExtractor
     // Next XP goal
     String nextExperienceGoalProperty=rewardsTrack.getNextExperienceGoalProperty();
     Integer nextExperienceGoal=(Integer)props.getProperty(nextExperienceGoalProperty);
-    status.setCurrentExperience((nextExperienceGoal!=null)?nextExperienceGoal.intValue():0);
+    status.setNextExperienceGoal((nextExperienceGoal!=null)?nextExperienceGoal.intValue():0);
   }
 }
