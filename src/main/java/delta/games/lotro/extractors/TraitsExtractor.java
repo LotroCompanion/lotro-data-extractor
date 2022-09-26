@@ -119,46 +119,56 @@ public class TraitsExtractor
     // Slotted traits
     List<List<Integer>> slotted=(List<List<Integer>>)traitPool.getAttributeValue("m_arSlottedTraits");
     // See TraitNature enum (587202647)
-    // 1 -> null 
-    // 2 -> 3x0
-    // 3 -> 7x0
-    // 4 -> 5 (Racial)
-    // 5 -> 5 (Virtues)
-    // 8 -> 5 (Skirmish)
+    // 1 -> null Characteristic: Novice, Riding, Conqueror of the Watching-stones, crafting proficiencies
+    // 2 -> 3x0 // Legendary => old traits system?
+    // 3 -> 7x0 // Class => old traits system?
+    // 4 -> 5 Race
+    // 5 -> 5 Active Virtues
+    // 8-11: Skirmish traits, see https://lotro-wiki.com/index.php/Item%3ASkirmish_Field_Manual_-_Traits
+    // 8 -> 5 (Attribute)
     // 9 -> 4x0
     // 10 -> 3x0
     // 11 -> 4x0
-    // 13 -> null
-    // 14 -> null
-    // 16 -> 7 (War-steed Appearance)
-    // 23 -> null (Champion)
-    // 29 -> null (Big Battle - engineering?)
-    // 28 -> null (1 earned = the one associated with the trait tree, for instance "The Deadly Storm"
+    // 13 -> null PvMP
+    // 14 -> null Mounted Combat
+    // 16 -> 7 (Mount/War-steed Appearance)
+    // 23 -> null (Champion) 19-27+31,32
+    // 28 -> null Class Specialization: (1 earned = the one associated with the trait tree, for instance "The Deadly Storm")
+    // 29 -> null (Big Battles)
     // 30 -> null (Set Bonus)
     if (key==4)
     {
       // Active racial traits
-      List<Integer> racialTraitIds=slotted.get(0);
+      List<Integer> racialTraitIds=getTraitIDList(slotted);
       handleRacialTraits(racialTraitIds);
     }
     if (key==5)
     {
       // Active virtues
-      List<Integer> virtueIds=slotted.get(0);
+      List<Integer> virtueIds=getTraitIDList(slotted);
       handleActiveVirtues(virtueIds);
     }
     if (key==8)
     {
       // Skirmish traits
-      List<Integer> skirmishTraitIds=slotted.get(0);
+      List<Integer> skirmishTraitIds=getTraitIDList(slotted);
       handleSkirmishTraits(skirmishTraitIds);
     }
     if (key==16)
     {
       // War-steed appearance traits
-      List<Integer> warsteedAppearanceTraitIds=slotted.get(0);
+      List<Integer> warsteedAppearanceTraitIds=getTraitIDList(slotted);
       handleWarsteedAppearanceTraits(warsteedAppearanceTraitIds);
     }
+  }
+
+  private List<Integer> getTraitIDList(List<List<Integer>> slotted)
+  {
+    if ((slotted==null) || (slotted.size()==0))
+    {
+      return new ArrayList<Integer>();
+    }
+    return slotted.get(0);
   }
 
   private void handleTrait(int traitId)
