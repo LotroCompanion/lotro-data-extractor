@@ -33,17 +33,19 @@ public class HobbiesExtractor
     HobbiesManager mgr=HobbiesManager.getInstance();
     for(HobbyDescription hobby : mgr.getAll())
     {
-      extractHobyStatus(hobby,props);
+      extractHobbyStatus(hobby,props);
     }
   }
 
-  private void extractHobyStatus(HobbyDescription hobby, PropertiesSet props)
+  private void extractHobbyStatus(HobbyDescription hobby, PropertiesSet props)
   {
-    HobbyStatus status=_hobbiesStatusMgr.get(hobby,true);
-
     // Proficiency
     String proficiencyPropertyName=hobby.getProficiencyPropertyName();
     Integer proficiency=(Integer)props.getProperty(proficiencyPropertyName);
-    status.setValue((proficiency!=null)?proficiency.intValue():0);
+    if (proficiency!=null)
+    {
+      HobbyStatus status=_hobbiesStatusMgr.get(hobby,true);
+      status.setValue(proficiency.intValue());
+    }
   }
 }
