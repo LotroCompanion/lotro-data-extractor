@@ -1,4 +1,4 @@
-package delta.games.lotro.extractors;
+package delta.games.lotro.extractors.traits;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +50,14 @@ public class TraitTreeExtractor
     ClassDescription classDescription=classesMgr.getClassDescription(characterClass);
     TraitTree traitTree=classDescription.getTraitTree();
     fetchTiersForTraitTree(traitTree,properties);
+    // TODO Spent points/total points
+    /*
+    Integer cost=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalSpentPoints");
+    ret.setCost(cost!=null?cost.intValue():0);
+    // Total points
+    Integer totalPoints=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalPoints");
+    ret.setTotalPoints(totalPoints!=null?totalPoints.intValue():0);
+    */
   }
 
   private void fetchTiersForTraitTree(TraitTree traitTree, PropertiesSet properties)
