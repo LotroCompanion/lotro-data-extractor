@@ -17,13 +17,19 @@ import delta.games.lotro.character.stats.tomes.StatTome;
 import delta.games.lotro.character.stats.tomes.StatTomesManager;
 import delta.games.lotro.character.stats.tomes.TomesSet;
 import delta.games.lotro.character.stats.virtues.VirtuesSet;
+import delta.games.lotro.character.status.traits.skirmish.SkirmishTraitsStatus;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.VirtuesManager;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.wlib.ClassInstance;
+import delta.games.lotro.extractors.traits.SkirmishTraitsStatusExtractor;
 
 /**
  * Traits extractor.
@@ -35,8 +41,10 @@ public class TraitsExtractor
 
   private DataFacade _facade;
   private EnumMapper _traitAcquisitionType;
-  private EnumMapper _traitNature;
+  private LotroEnum<TraitNature> _traitNatureEnum;
   private CharacterData _storage;
+  private SkirmishTraitsStatusExtractor _skirmishTraitsStatusExtractor;
+  private SkirmishTraitsStatus _skirmishTraitsStatus;
 
   /**
    * Constructor.
@@ -47,12 +55,32 @@ public class TraitsExtractor
   {
     _facade=facade;
     _traitAcquisitionType=_facade.getEnumsManager().getEnumMapper(587202676);
-    _traitNature=_facade.getEnumsManager().getEnumMapper(587202647);
+    _traitNatureEnum=LotroEnumsRegistry.getInstance().get(TraitNature.class);
     _storage=storage;
+    _skirmishTraitsStatusExtractor=new SkirmishTraitsStatusExtractor();
+    _skirmishTraitsStatus=new SkirmishTraitsStatus();
   }
 
   /**
-   * Extract traits.
+   * Get the skirmish traits status.
+   * @return the skirmish traits status.
+   */
+  public SkirmishTraitsStatus getSkirmishTraitsStatus()
+  {
+    return _skirmishTraitsStatus;
+  }
+
+  /**
+   * Extract data from the player properties.
+   * @param playerProps Player properties.
+   */
+  public void handlePlayerProperties(PropertiesSet playerProps)
+  {
+    _skirmishTraitsStatusExtractor.extract(playerProps,_skirmishTraitsStatus);
+  }
+
+  /**
+   * Extract data from the traits registry.
    * @param traitsRegistry WSL traits registry.
    */
   public void handleTraits(ClassInstance traitsRegistry)
@@ -81,9 +109,12 @@ public class TraitsExtractor
     {
       return;
     }
-    int nature=natureCode.intValue();
-    String natureLabel=_traitNature.getString(nature);
-    LOGGER.debug("Pool: key="+key+", nature="+nature+", name="+natureLabel);
+    TraitNature nature=_traitNatureEnum.getEntry(natureCode.intValue());
+    if (nature==null)
+    {
+      return;
+    }
+    LOGGER.debug("Pool: key="+key+", code="+natureCode+", nature="+nature);
     List<ClassInstance> earnedTraitInfos=(List<ClassInstance>)traitPool.getAttributeValue("m_rlTraitInfo");
     List<Integer> sortedIds2=new ArrayList<Integer>();
     for(ClassInstance earnedTraitInfo : earnedTraitInfos)
@@ -118,6 +149,7 @@ public class TraitsExtractor
     }
     // Slotted traits
     List<List<Integer>> slotted=(List<List<Integer>>)traitPool.getAttributeValue("m_arSlottedTraits");
+    List<Integer> traitIDs=getTraitIDList(slotted);
     // See TraitNature enum (587202647)
     // 1 -> null Characteristic: Novice, Riding, Conqueror of the Watching-stones, crafting proficiencies
     // 2 -> 3x0 // Legendary => old traits system?
@@ -125,10 +157,10 @@ public class TraitsExtractor
     // 4 -> 5 Race
     // 5 -> 5 Active Virtues
     // 8-11: Skirmish traits, see https://lotro-wiki.com/index.php/Item%3ASkirmish_Field_Manual_-_Traits
-    // 8 -> 5 (Attribute)
-    // 9 -> 4x0
-    // 10 -> 3x0
-    // 11 -> 4x0
+    //    8 -> 5 slots (Attribute)
+    //    9 -> 4 slots (Skill)
+    //   10 -> 3 slots (Personal)
+    //   11 -> 4 slots (Training)
     // 13 -> null PvMP
     // 14 -> null Mounted Combat
     // 16 -> 7 (Mount/War-steed Appearance)
@@ -139,21 +171,15 @@ public class TraitsExtractor
     if (key==4)
     {
       // Active racial traits
-      List<Integer> racialTraitIds=getTraitIDList(slotted);
-      handleRacialTraits(racialTraitIds);
+      handleRacialTraits(traitIDs);
     }
     if (key==5)
     {
       // Active virtues
-      List<Integer> virtueIds=getTraitIDList(slotted);
-      handleActiveVirtues(virtueIds);
+      handleActiveVirtues(traitIDs);
     }
-    if (key==8)
-    {
-      // Skirmish traits
-      List<Integer> skirmishTraitIds=getTraitIDList(slotted);
-      handleSkirmishTraits(skirmishTraitIds);
-    }
+    // Slotted skirmish traits
+    _skirmishTraitsStatusExtractor.extractSlottedTraits(nature,traitIDs,_skirmishTraitsStatus);
     if (key==16)
     {
       // War-steed appearance traits
@@ -167,6 +193,11 @@ public class TraitsExtractor
     if ((slotted==null) || (slotted.size()==0))
     {
       return new ArrayList<Integer>();
+    }
+    int size=slotted.size();
+    if (size>1)
+    {
+      LOGGER.warn("More than one traits list: "+slotted);
     }
     return slotted.get(0);
   }
@@ -226,20 +257,6 @@ public class TraitsExtractor
         virtuesSet.setSelectedVirtue(virtue,index);
       }
       index++;
-    }
-  }
-
-  private void handleSkirmishTraits(List<Integer> skirmishTraitIds)
-  {
-    TraitsManager traitsMgr=TraitsManager.getInstance();
-    for(Integer skirmishTraitId : skirmishTraitIds)
-    {
-      if (skirmishTraitId!=null)
-      {
-        TraitDescription trait=traitsMgr.getTrait(skirmishTraitId.intValue());
-        String traitName=(trait!=null)?trait.getName():"???";
-        LOGGER.debug("Skirmish trait: "+traitName);
-      }
     }
   }
 
