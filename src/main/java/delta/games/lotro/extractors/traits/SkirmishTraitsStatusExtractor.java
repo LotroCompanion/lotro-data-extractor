@@ -16,11 +16,32 @@ import delta.games.lotro.dat.data.PropertiesSet;
 public class SkirmishTraitsStatusExtractor
 {
   /**
+   * Extract the status of skirmish traits.
+   * @param traits Traits data.
+   * @param playerProperties Player properties.
+   * @return the loaded data.
+   */
+  public SkirmishTraitsStatus extract(TraitsData traits, PropertiesSet playerProperties)
+  {
+    SkirmishTraitsStatus ret=new SkirmishTraitsStatus();
+    // Trait ranks
+    extractRanks(playerProperties,ret);
+    // Slotted traits
+    SkirmishTraitsManager mgr=SkirmishTraitsManager.getInstance();
+    for(TraitNature nature : mgr.getNatures())
+    {
+      List<Integer> traitIDs=traits.getSlottedTraits(nature);
+      extractSlottedTraits(nature,traitIDs,ret);
+    }
+    return ret;
+  }
+
+  /**
    * Use the given properties to load the status of BB skirmish traits.
    * @param properties Properties to use.
    * @param status Storage for extracted data.
    */
-  public void extract(PropertiesSet properties, SkirmishTraitsStatus status)
+  private void extractRanks(PropertiesSet properties, SkirmishTraitsStatus status)
   {
     SkirmishTraitsManager mgr=SkirmishTraitsManager.getInstance();
     for(TraitDescription trait : mgr.getAll())
@@ -42,7 +63,7 @@ public class SkirmishTraitsStatusExtractor
    * @param traitIDs Trait IDs.
    * @param status Storage for extracted data.
    */
-  public void extractSlottedTraits(TraitNature nature, List<Integer> traitIDs, SkirmishTraitsStatus status)
+  private void extractSlottedTraits(TraitNature nature, List<Integer> traitIDs, SkirmishTraitsStatus status)
   {
     SkirmishTraitsManager mgr=SkirmishTraitsManager.getInstance();
     List<TraitDescription> traits=mgr.getAll(nature);

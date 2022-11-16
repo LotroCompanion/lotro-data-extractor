@@ -1,4 +1,4 @@
-package delta.games.lotro.extractors;
+package delta.games.lotro.extractors.traits;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,27 +9,14 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.character.CharacterData;
-import delta.games.lotro.character.stats.buffs.BuffInstance;
-import delta.games.lotro.character.stats.buffs.BuffRegistry;
-import delta.games.lotro.character.stats.buffs.BuffsManager;
-import delta.games.lotro.character.stats.tomes.StatTome;
-import delta.games.lotro.character.stats.tomes.StatTomesManager;
-import delta.games.lotro.character.stats.tomes.TomesSet;
-import delta.games.lotro.character.stats.virtues.VirtuesSet;
-import delta.games.lotro.character.status.traits.skirmish.SkirmishTraitsStatus;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.character.virtues.VirtueDescription;
-import delta.games.lotro.character.virtues.VirtuesManager;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.TraitNature;
 import delta.games.lotro.dat.data.DataFacade;
-import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.enums.EnumMapper;
 import delta.games.lotro.dat.wlib.ClassInstance;
-import delta.games.lotro.extractors.traits.SkirmishTraitsStatusExtractor;
 
 /**
  * Traits extractor.
@@ -42,49 +29,26 @@ public class TraitsExtractor
   private DataFacade _facade;
   private EnumMapper _traitAcquisitionType;
   private LotroEnum<TraitNature> _traitNatureEnum;
-  private CharacterData _storage;
-  private SkirmishTraitsStatusExtractor _skirmishTraitsStatusExtractor;
-  private SkirmishTraitsStatus _skirmishTraitsStatus;
 
   /**
    * Constructor.
    * @param facade Data facade.
-   * @param storage for loaded data. 
    */
-  public TraitsExtractor(DataFacade facade, CharacterData storage)
+  public TraitsExtractor(DataFacade facade)
   {
     _facade=facade;
     _traitAcquisitionType=_facade.getEnumsManager().getEnumMapper(587202676);
     _traitNatureEnum=LotroEnumsRegistry.getInstance().get(TraitNature.class);
-    _storage=storage;
-    _skirmishTraitsStatusExtractor=new SkirmishTraitsStatusExtractor();
-    _skirmishTraitsStatus=new SkirmishTraitsStatus();
-  }
-
-  /**
-   * Get the skirmish traits status.
-   * @return the skirmish traits status.
-   */
-  public SkirmishTraitsStatus getSkirmishTraitsStatus()
-  {
-    return _skirmishTraitsStatus;
-  }
-
-  /**
-   * Extract data from the player properties.
-   * @param playerProps Player properties.
-   */
-  public void handlePlayerProperties(PropertiesSet playerProps)
-  {
-    _skirmishTraitsStatusExtractor.extract(playerProps,_skirmishTraitsStatus);
   }
 
   /**
    * Extract data from the traits registry.
    * @param traitsRegistry WSL traits registry.
+   * @return the loaded data.
    */
-  public void handleTraits(ClassInstance traitsRegistry)
+  public TraitsData handleTraits(ClassInstance traitsRegistry)
   {
+    TraitsData ret=new TraitsData();
     @SuppressWarnings("unchecked")
     Map<Integer,ClassInstance> traitPools=(Map<Integer,ClassInstance>)traitsRegistry.getAttributeValue("m_arhPools");
     int size=traitPools.size();
@@ -97,12 +61,13 @@ public class TraitsExtractor
       {
         continue;
       }
-      handleTraitPool(key,persistentTraitPool);
+      handleTraitPool(key,persistentTraitPool,ret);
     }
+    return ret;
   }
 
   @SuppressWarnings("unchecked")
-  private void handleTraitPool(int key, ClassInstance traitPool)
+  private void handleTraitPool(int key, ClassInstance traitPool, TraitsData storage)
   {
     Integer natureCode=(Integer)traitPool.getAttributeValue("m_eNature");
     if (natureCode==null)
@@ -125,7 +90,6 @@ public class TraitsExtractor
       }
       int traitId=((Integer)earnedTraitInfo.getAttributeValue("m_didTrait")).intValue();
       sortedIds2.add(Integer.valueOf(traitId));
-      handleTrait(traitId);
       TraitsManager traitsMgr=TraitsManager.getInstance();
       TraitDescription trait=traitsMgr.getTrait(traitId);
       String traitName=(trait!=null)?trait.getName():"???";
@@ -146,6 +110,10 @@ public class TraitsExtractor
     if (!sortedIds1.equals(sortedIds2))
     {
       LOGGER.warn("Size: "+ids.size()+", "+earnedTraitInfos.size());
+    }
+    for(Integer id : ids)
+    {
+      storage.addAcquiredTrait(id.intValue());
     }
     // Slotted traits
     List<List<Integer>> slotted=(List<List<Integer>>)traitPool.getAttributeValue("m_arSlottedTraits");
@@ -168,29 +136,12 @@ public class TraitsExtractor
     // 28 -> null Class Specialization: (1 earned = the one associated with the trait tree, for instance "The Deadly Storm")
     // 29 -> null (Big Battles)
     // 30 -> null (Set Bonus)
-    if (key==4)
-    {
-      // Active racial traits
-      handleRacialTraits(traitIDs);
-    }
-    if (key==5)
-    {
-      // Active virtues
-      handleActiveVirtues(traitIDs);
-    }
-    // Slotted skirmish traits
-    _skirmishTraitsStatusExtractor.extractSlottedTraits(nature,traitIDs,_skirmishTraitsStatus);
-    if (key==16)
-    {
-      // War-steed appearance traits
-      List<Integer> warsteedAppearanceTraitIds=getTraitIDList(slotted);
-      handleWarsteedAppearanceTraits(warsteedAppearanceTraitIds);
-    }
+    storage.setSlottedTraits(nature,traitIDs);
   }
 
   private List<Integer> getTraitIDList(List<List<Integer>> slotted)
   {
-    if ((slotted==null) || (slotted.size()==0))
+    if ((slotted==null) || (slotted.isEmpty()))
     {
       return new ArrayList<Integer>();
     }
@@ -200,77 +151,5 @@ public class TraitsExtractor
       LOGGER.warn("More than one traits list: "+slotted);
     }
     return slotted.get(0);
-  }
-
-  private void handleTrait(int traitId)
-  {
-    StatTomesManager tomesManager=StatTomesManager.getInstance();
-    StatTome tome=tomesManager.getStatTomeFromTraitId(traitId);
-    if (tome!=null)
-    {
-      TomesSet tomesSet=_storage.getTomes();
-      tomesSet.setTomeRank(tome.getStat(),tome.getRank());
-    }
-  }
-
-  private void handleRacialTraits(List<Integer> racialTraitIds)
-  {
-    BuffsManager buffsMgr=_storage.getBuffs();
-    BuffRegistry buffsRegistry=BuffRegistry.getInstance();
-    TraitsManager traitsMgr=TraitsManager.getInstance();
-    for(Integer racialTraitId : racialTraitIds)
-    {
-      if ((racialTraitId!=null) && (racialTraitId.intValue()!=0))
-      {
-        TraitDescription trait=traitsMgr.getTrait(racialTraitId.intValue());
-        if (trait!=null)
-        {
-          String traitName=trait.getName();
-          LOGGER.debug("Racial trait: "+traitName);
-          String key=String.valueOf(trait.getIdentifier());
-          BuffInstance buffInstance=buffsRegistry.newBuffInstance(key);
-          if (buffInstance!=null)
-          {
-            buffsMgr.addBuff(buffInstance);
-          }
-        }
-        else
-        {
-          LOGGER.warn("Racial trait not found: "+racialTraitId);
-        }
-      }
-    }
-  }
-
-  private void handleActiveVirtues(List<Integer> virtueIds)
-  {
-    VirtuesSet virtuesSet=_storage.getVirtues();
-    VirtuesManager virtuesMgr=VirtuesManager.getInstance();
-    int index=0;
-    for(Integer virtueId : virtueIds)
-    {
-      if (virtueId!=null)
-      {
-        VirtueDescription virtue=virtuesMgr.getVirtue(virtueId.intValue());
-        String virtueName=(virtue!=null)?virtue.getName():"???";
-        LOGGER.debug("Virtue: "+virtueName);
-        virtuesSet.setSelectedVirtue(virtue,index);
-      }
-      index++;
-    }
-  }
-
-  private void handleWarsteedAppearanceTraits(List<Integer> warsteedAppearanceTraitIds)
-  {
-    TraitsManager traitsMgr=TraitsManager.getInstance();
-    for(Integer warsteedAppearanceTraitId : warsteedAppearanceTraitIds)
-    {
-      if (warsteedAppearanceTraitId!=null)
-      {
-        TraitDescription trait=traitsMgr.getTrait(warsteedAppearanceTraitId.intValue());
-        String traitName=(trait!=null)?trait.getName():"???";
-        LOGGER.debug("War-steed appearance trait: "+traitName);
-      }
-    }
   }
 }
