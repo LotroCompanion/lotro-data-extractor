@@ -1,5 +1,7 @@
 package delta.games.lotro.extractors.rewardsTracks;
 
+import java.util.List;
+
 import delta.games.lotro.account.status.rewardsTrack.RewardsTrackStatus;
 import delta.games.lotro.account.status.rewardsTrack.RewardsTracksStatusManager;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -29,10 +31,11 @@ public class RewardsTracksExtractor
    */
   public void extract(PropertiesSet props)
   {
-    _rewardsTracksStatusMgr.clear();
     RewardsTracksManager mgr=RewardsTracksManager.getInstance();
-    for(RewardsTrack rewardsTrack : mgr.getAllRewardsTracks())
+    List<RewardsTrack> rewardTracks=mgr.getAllRewardsTracks();
+    if (rewardTracks.size()>0)
     {
+      RewardsTrack rewardsTrack=rewardTracks.get(rewardTracks.size()-1);
       extractRewardsTrack(rewardsTrack,props);
     }
   }
