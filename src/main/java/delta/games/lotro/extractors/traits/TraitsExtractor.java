@@ -124,7 +124,7 @@ public class TraitsExtractor
     // 3 -> 7x0 // Class => old traits system?
     // 4 -> 5 Race
     // 5 -> 5 Active Virtues
-    // 8-11: Skirmish traits, see https://lotro-wiki.com/index.php/Item%3ASkirmish_Field_Manual_-_Traits
+    // 8-11: Active skirmish traits, see https://lotro-wiki.com/index.php/Item%3ASkirmish_Field_Manual_-_Traits
     //    8 -> 5 slots (Attribute)
     //    9 -> 4 slots (Skill)
     //   10 -> 3 slots (Personal)
