@@ -66,17 +66,22 @@ public class TraitTreeExtractor
 
     BuffsManager buffsMgr=_storage.getBuffs();
     BuffRegistry buffsRegistry=BuffRegistry.getInstance();
+    Map<Integer,Integer> ranksMap=new HashMap<Integer,Integer>();
     for(TraitTreeBranch branch : traitTree.getBranches())
     {
       Map<Integer,Integer> foundTraits=handleBranch(branch,selectedBranch,properties);
-      for(Map.Entry<Integer,Integer> entry : foundTraits.entrySet())
+      ranksMap.putAll(foundTraits);
+    }
+    for(TraitDescription trait : traitTree.getAllTraits())
+    {
+      int traitID=trait.getIdentifier();
+      Integer rank=ranksMap.get(Integer.valueOf(traitID));
+      if (rank!=null)
       {
-        Integer key=entry.getKey();
-        Integer tier=entry.getValue();
-        BuffInstance buffInstance=buffsRegistry.newBuffInstance(key.toString());
+        BuffInstance buffInstance=buffsRegistry.newBuffInstance(String.valueOf(traitID));
         if (buffInstance!=null)
         {
-          buffInstance.setTier(tier);
+          buffInstance.setTier(rank);
           buffsMgr.addBuff(buffInstance);
         }
       }
