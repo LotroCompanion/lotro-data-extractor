@@ -1,8 +1,5 @@
 package delta.games.lotro.extractors.traits;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.BasicCharacterAttributes;
@@ -11,10 +8,7 @@ import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.traitTree.TraitTree;
 import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
-import delta.games.lotro.character.classes.traitTree.TraitTreeProgression;
-import delta.games.lotro.character.stats.buffs.BuffInstance;
-import delta.games.lotro.character.stats.buffs.BuffRegistry;
-import delta.games.lotro.character.stats.buffs.BuffsManager;
+import delta.games.lotro.character.status.traitTree.TraitTreeStatus;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -49,88 +43,56 @@ public class TraitTreeExtractor
     ClassesManager classesMgr=ClassesManager.getInstance();
     ClassDescription classDescription=classesMgr.getClassDescription(characterClass);
     TraitTree traitTree=classDescription.getTraitTree();
-    fetchTiersForTraitTree(traitTree,properties);
-    // TODO Spent points/total points
-    /*
-    Integer cost=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalSpentPoints");
-    ret.setCost(cost!=null?cost.intValue():0);
-    // Total points
-    Integer totalPoints=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalPoints");
-    ret.setTotalPoints(totalPoints!=null?totalPoints.intValue():0);
-    */
+    TraitTreeStatus status=extractTraitTree(traitTree,properties);
+    if (status!=null)
+    {
+      // Cost
+      Integer costValue=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalSpentPoints");
+      int expectedCost=(costValue!=null?costValue.intValue():0);
+      int actualCost=status.getCost();
+      if (actualCost!=expectedCost)
+      {
+        LOGGER.warn("Actual cost difference: expected="+expectedCost+", actual="+actualCost);
+      }
+      // Total points
+      Integer totalPointsValue=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalPoints");
+      int totalPoints=(totalPointsValue!=null?totalPointsValue.intValue():0);
+      status.setTotalPoints(totalPoints);
+    }
+    // Set trait tree status
+    _storage.getTraits().setTraitTreeStatus(status);
   }
 
-  private void fetchTiersForTraitTree(TraitTree traitTree, PropertiesSet properties)
+  private TraitTreeStatus extractTraitTree(TraitTree traitTree, PropertiesSet properties)
   {
-    Integer selectedBranch=(Integer)properties.getProperty("Trait_TraitTree_Class_SpecializationBranch");
+    Integer selectedBranchCode=(Integer)properties.getProperty("Trait_TraitTree_Class_SpecializationBranch");
+    if (selectedBranchCode==null)
+    {
+      return null;
+    }
+    TraitTreeStatus ret=new TraitTreeStatus(traitTree);
+    TraitTreeBranch selectedBranch=traitTree.getBranchByCode(selectedBranchCode.intValue());
+    ret.setSelectedBranch(selectedBranch);
 
-    BuffsManager buffsMgr=_storage.getBuffs();
-    BuffRegistry buffsRegistry=BuffRegistry.getInstance();
-    Map<Integer,Integer> ranksMap=new HashMap<Integer,Integer>();
     for(TraitTreeBranch branch : traitTree.getBranches())
     {
-      Map<Integer,Integer> foundTraits=handleBranch(branch,selectedBranch,properties);
-      ranksMap.putAll(foundTraits);
-    }
-    for(TraitDescription trait : traitTree.getAllTraits())
-    {
-      int traitID=trait.getIdentifier();
-      Integer rank=ranksMap.get(Integer.valueOf(traitID));
-      if (rank!=null)
+      for(TraitDescription trait : branch.getTraits())
       {
-        BuffInstance buffInstance=buffsRegistry.newBuffInstance(String.valueOf(traitID));
-        if (buffInstance!=null)
+        String propertyName=trait.getTierPropertyName();
+        if (propertyName!=null)
         {
-          buffInstance.setTier(rank);
-          buffsMgr.addBuff(buffInstance);
+          Integer tier=(Integer)properties.getProperty(propertyName);
+          if (tier!=null)
+          {
+            LOGGER.debug("Trait "+trait.getName()+" => tier "+tier+" (prop="+propertyName+")");
+            int traitID=trait.getIdentifier();
+            ret.setRankForTrait(traitID,tier.intValue());
+          }
         }
       }
     }
-  }
-
-  private Map<Integer,Integer> handleBranch(TraitTreeBranch branch, Integer selectedBranch, PropertiesSet properties)
-  {
-    Map<Integer,Integer> ret=new HashMap<Integer,Integer>();
-    int pointsSpent=0;
-    for(TraitDescription trait : branch.getTraits())
-    {
-      String propertyName=trait.getTierPropertyName();
-      if (propertyName!=null)
-      {
-        Integer tier=(Integer)properties.getProperty(propertyName);
-        if (tier!=null)
-        {
-          LOGGER.debug("Trait "+trait.getName()+" => tier "+tier+" (prop="+propertyName+")");
-          pointsSpent+=tier.intValue();
-          Integer key=Integer.valueOf(trait.getIdentifier());
-          ret.put(key,tier);
-        }
-      }
-    }
-    if ((selectedBranch!=null) && (selectedBranch.intValue()==branch.getCode()))
-    {
-      // Main trait
-      TraitDescription mainTrait=branch.getMainTrait();
-      if (mainTrait!=null)
-      {
-        Integer key=Integer.valueOf(mainTrait.getIdentifier());
-        ret.put(key,Integer.valueOf(1));
-      }
-      // Progression
-      TraitTreeProgression progression=branch.getProgression();
-      int nbSteps=progression.getSteps().size();
-      for(int i=0;i<nbSteps;i++)
-      {
-        Integer stepValue=progression.getSteps().get(i);
-        if (pointsSpent>=stepValue.intValue())
-        {
-          TraitDescription trait=progression.getTraits().get(i);
-          LOGGER.debug("Enough points for trait "+trait.getName());
-          Integer key=Integer.valueOf(trait.getIdentifier());
-          ret.put(key,Integer.valueOf(1));
-        }
-      }
-    }
+    int cost=ret.computeCost();
+    ret.setCost(cost);
     return ret;
   }
 }
