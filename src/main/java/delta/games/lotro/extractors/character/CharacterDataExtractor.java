@@ -22,7 +22,10 @@ import delta.games.lotro.character.status.virtues.VirtuesStatus;
 import delta.games.lotro.character.status.virtues.io.VirtuesStatusIO;
 import delta.games.lotro.character.virtues.VirtueDescription;
 import delta.games.lotro.character.virtues.VirtuesManager;
+import delta.games.lotro.common.geo.Position;
+import delta.games.lotro.dat.data.DatPosition;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.loaders.PositionDecoder;
 import delta.games.lotro.lore.crafting.CraftingData;
 import delta.games.lotro.lore.crafting.CraftingLevel;
 import delta.games.lotro.lore.crafting.CraftingSystem;
@@ -46,8 +49,9 @@ public class CharacterDataExtractor
    * Synchronize character details.
    * @param toon Targeted character.
    * @param props Properties to use.
+   * @param position Position (may be <code>null</code>).
    */
-  public void syncDetails(CharacterFile toon, PropertiesSet props)
+  public void syncDetails(CharacterFile toon, PropertiesSet props, DatPosition position)
   {
     CharacterDetails details=toon.getDetails();
     // XP
@@ -70,6 +74,13 @@ public class CharacterDataExtractor
     // Dungeon
     Integer dungeonID=(Integer)props.getProperty("Dungeon_CurrentDungeon");
     details.setDungeonID(dungeonID);
+    // Position
+    if (position!=null)
+    {
+      float[] lonLat=PositionDecoder.decodePosition(position.getBlockX(),position.getBlockY(),position.getPosition().getX(),position.getPosition().getY());
+      Position pos=new Position(position.getRegion(),lonLat[0],lonLat[1]);
+      details.setPosition(pos);
+    }
     // Money
     Integer coppers=(Integer)props.getProperty("Currency_Amount");
     details.getMoney().setRawValue(coppers!=null?coppers.intValue():0);
