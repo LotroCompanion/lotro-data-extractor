@@ -52,32 +52,38 @@ public class LegendaryDataExtractor
     LegendaryDataManager ret=new LegendaryDataManager();
     // Relics registry
     HashMap<Integer,Integer> relicsCount=(HashMap<Integer,Integer>)legendaryData.getAttributeValue("135264115");
-    for(Map.Entry<Integer,Integer> relicEntry : relicsCount.entrySet())
+    if (relicsCount!=null)
     {
-      int relicId=relicEntry.getKey().intValue();
-      int count=relicEntry.getValue().intValue();
-      Relic relic=RelicsManager.getInstance().getById(relicId);
-      if (relic!=null)
+      for(Map.Entry<Integer,Integer> relicEntry : relicsCount.entrySet())
       {
-        LOGGER.debug("Relic: "+relic.getName()+" => "+count);
+        int relicId=relicEntry.getKey().intValue();
+        int count=relicEntry.getValue().intValue();
+        Relic relic=RelicsManager.getInstance().getById(relicId);
+        if (relic!=null)
+        {
+          LOGGER.debug("Relic: "+relic.getName()+" => "+count);
+        }
       }
     }
     // Legendary items
     HashMap<Long,ClassInstance> map=(HashMap<Long,ClassInstance>)legendaryData.getAttributeValue("262884911");
-    for(Map.Entry<Long,ClassInstance> entry : map.entrySet())
+    if (map!=null)
     {
-      long iid=entry.getKey().longValue();
-      if (LOGGER.isDebugEnabled())
+      for(Map.Entry<Long,ClassInstance> entry : map.entrySet())
       {
-        LOGGER.debug("Found legendary data for IID: "+iid);
+        long iid=entry.getKey().longValue();
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("Found legendary data for IID: "+iid);
+        }
+        ClassInstance class2337=entry.getValue();
+        LegendaryInstanceAttrs attrs=loadLegendaryAttrs(class2337);
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("Legendary data: "+attrs.dump());
+        }
+        ret.addLegendaryData(iid,attrs);
       }
-      ClassInstance class2337=entry.getValue();
-      LegendaryInstanceAttrs attrs=loadLegendaryAttrs(class2337);
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("Legendary data: "+attrs.dump());
-      }
-      ret.addLegendaryData(iid,attrs);
     }
     return ret;
   }
