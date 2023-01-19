@@ -4,9 +4,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.races.RaceDescription;
+import delta.games.lotro.character.races.RacesManager;
 import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
-import delta.games.lotro.common.Race;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.extractors.TimeUtils;
@@ -137,7 +138,7 @@ public class KinshipExtractor
     characterSummary.setVocationID(vocationID);
     // Race
     Integer raceCode=(Integer)memberInstance.getAttributeValue("m_species");
-    Race race=DatEnumsUtils.getRaceFromRaceId(raceCode.intValue());
+    RaceDescription race=RacesManager.getInstance().getByCode(raceCode.intValue());
     characterSummary.setRace(race);
     // Class
     Integer classCode=(Integer)memberInstance.getAttributeValue("m_class");
