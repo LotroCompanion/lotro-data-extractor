@@ -4,9 +4,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.CharacterSex;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.wlib.ClassInstance;
@@ -18,7 +19,6 @@ import delta.games.lotro.kinship.KinshipRank;
 import delta.games.lotro.kinship.KinshipRoster;
 import delta.games.lotro.kinship.KinshipSummary;
 import delta.games.lotro.utils.StringUtils;
-import delta.games.lotro.utils.dat.DatEnumsUtils;
 
 /**
  * Kinship roster extractor.
@@ -141,9 +141,9 @@ public class KinshipExtractor
     RaceDescription race=RacesManager.getInstance().getByCode(raceCode.intValue());
     characterSummary.setRace(race);
     // Class
-    Integer classCode=(Integer)memberInstance.getAttributeValue("m_class");
-    CharacterClass charClass=DatEnumsUtils.getCharacterClassFromId(classCode.intValue());
-    characterSummary.setCharacterClass(charClass);
+    int classCode=((Integer)memberInstance.getAttributeValue("m_class")).intValue();
+    ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+    characterSummary.setCharacterClass(characterClass);
     // Level
     Integer level=(Integer)memberInstance.getAttributeValue("m_uiLevel");
     characterSummary.setLevel(level!=null?level.intValue():1);

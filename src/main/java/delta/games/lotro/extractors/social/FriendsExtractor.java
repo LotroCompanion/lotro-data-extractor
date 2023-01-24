@@ -2,13 +2,13 @@ package delta.games.lotro.extractors.social;
 
 import java.util.Map;
 
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.social.friends.Friend;
 import delta.games.lotro.character.social.friends.FriendsManager;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.extractors.TimeUtils;
-import delta.games.lotro.utils.dat.DatEnumsUtils;
 
 /**
  * Friends data extractor.
@@ -46,10 +46,10 @@ public class FriendsExtractor
     Integer vocationID=(Integer)properties.getProperty("Craft_Vocation");
     ret.setVocationID(vocationID);
     // Class
-    Integer classID=(Integer)properties.getProperty("Agent_Class");
-    if (classID!=null)
+    Integer classCode=(Integer)properties.getProperty("Agent_Class");
+    if (classCode!=null)
     {
-      CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classID.intValue());
+      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode.intValue());
       ret.setCharacterClass(characterClass);
     }
     // Level

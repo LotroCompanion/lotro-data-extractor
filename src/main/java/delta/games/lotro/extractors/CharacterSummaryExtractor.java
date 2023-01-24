@@ -1,13 +1,13 @@
 package delta.games.lotro.extractors;
 
 import delta.games.lotro.character.CharacterSummary;
+import delta.games.lotro.character.classes.ClassDescription;
+import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.NationalitiesManager;
 import delta.games.lotro.character.races.NationalityDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.utils.StringUtils;
-import delta.games.lotro.utils.dat.DatEnumsUtils;
 
 /**
  * Extracts character summary.
@@ -28,7 +28,7 @@ public class CharacterSummaryExtractor
     summary.setName(name);
     // Class
     int classCode=((Integer)properties.getProperty("Agent_Class")).intValue();
-    CharacterClass characterClass=DatEnumsUtils.getCharacterClassFromId(classCode);
+    ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
     summary.setCharacterClass(characterClass);
     // Race
     // ... not found in properties!

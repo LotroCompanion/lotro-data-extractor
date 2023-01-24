@@ -5,12 +5,10 @@ import org.apache.log4j.Logger;
 import delta.games.lotro.character.BasicCharacterAttributes;
 import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.classes.ClassDescription;
-import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.classes.traitTree.TraitTree;
 import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
 import delta.games.lotro.character.status.traitTree.TraitTreeStatus;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.common.CharacterClass;
 import delta.games.lotro.dat.data.PropertiesSet;
 
 /**
@@ -39,10 +37,8 @@ public class TraitTreeExtractor
   public void useProperties(PropertiesSet properties)
   {
     BasicCharacterAttributes attrs=_storage.getSummary();
-    CharacterClass characterClass=attrs.getCharacterClass();
-    ClassesManager classesMgr=ClassesManager.getInstance();
-    ClassDescription classDescription=classesMgr.getClassDescription(characterClass);
-    TraitTree traitTree=classDescription.getTraitTree();
+    ClassDescription characterClass=attrs.getCharacterClass();
+    TraitTree traitTree=characterClass.getTraitTree();
     TraitTreeStatus status=extractTraitTree(traitTree,properties);
     if (status!=null)
     {
