@@ -28,7 +28,7 @@ public class CharacterSummaryExtractor
     summary.setName(name);
     // Class
     int classCode=((Integer)properties.getProperty("Agent_Class")).intValue();
-    ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+    ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode);
     summary.setCharacterClass(characterClass);
     // Race
     // ... not found in properties!

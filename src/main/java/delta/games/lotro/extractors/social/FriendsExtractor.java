@@ -49,7 +49,7 @@ public class FriendsExtractor
     Integer classCode=(Integer)properties.getProperty("Agent_Class");
     if (classCode!=null)
     {
-      ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode.intValue());
+      ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode.intValue());
       ret.setCharacterClass(characterClass);
     }
     // Level

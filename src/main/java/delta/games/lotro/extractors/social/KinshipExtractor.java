@@ -142,7 +142,7 @@ public class KinshipExtractor
     characterSummary.setRace(race);
     // Class
     int classCode=((Integer)memberInstance.getAttributeValue("m_class")).intValue();
-    ClassDescription characterClass=ClassesManager.getInstance().getByCode(classCode);
+    ClassDescription characterClass=ClassesManager.getInstance().getCharacterClassByCode(classCode);
     characterSummary.setCharacterClass(characterClass);
     // Level
     Integer level=(Integer)memberInstance.getAttributeValue("m_uiLevel");
