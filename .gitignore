@@ -1,3 +1,6 @@
-/target/classes
-/target
+/target/
+/bin/
+/.settings/
+/.classpath
+/.project
 /*.txt
