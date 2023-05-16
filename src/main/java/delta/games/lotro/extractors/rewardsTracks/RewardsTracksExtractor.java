@@ -33,9 +33,8 @@ public class RewardsTracksExtractor
   {
     RewardsTracksManager mgr=RewardsTracksManager.getInstance();
     List<RewardsTrack> rewardTracks=mgr.getAllRewardsTracks();
-    if (rewardTracks.size()>0)
+    for(RewardsTrack rewardsTrack : rewardTracks)
     {
-      RewardsTrack rewardsTrack=rewardTracks.get(rewardTracks.size()-1);
       extractRewardsTrack(rewardsTrack,props);
     }
   }
@@ -45,23 +44,32 @@ public class RewardsTracksExtractor
     RewardsTrackStatus status=_rewardsTracksStatusMgr.getStatus(rewardsTrack,true);
     // Claimed milestones
     String claimedMilestonesProperty=rewardsTrack.getClaimedMilestonesProperty();
-    Integer claimedMilestones=(Integer)props.getProperty(claimedMilestonesProperty);
-    status.setClaimedMilestones((claimedMilestones!=null)?claimedMilestones.intValue():0);
+    Integer claimedMilestonesInt=(Integer)props.getProperty(claimedMilestonesProperty);
+    int claimedMilestones=(claimedMilestonesInt!=null)?claimedMilestonesInt.intValue():0;
     // Current milestone
     String currentMilestoneProperty=rewardsTrack.getCurrentMilestoneProperty();
-    Integer currentMilestone=(Integer)props.getProperty(currentMilestoneProperty);
-    status.setCurrentMilestone((currentMilestone!=null)?currentMilestone.intValue():0);
+    Integer currentMilestoneInt=(Integer)props.getProperty(currentMilestoneProperty);
+    int currentMilestone=(currentMilestoneInt!=null)?currentMilestoneInt.intValue():0;
     // Last XP goal
     String lastExperienceGoalProperty=rewardsTrack.getLastExperienceGoalProperty();
-    Integer lastExperienceGoal=(Integer)props.getProperty(lastExperienceGoalProperty);
-    status.setLastExperienceGoal((lastExperienceGoal!=null)?lastExperienceGoal.intValue():0);
+    Integer lastExperienceGoalInt=(Integer)props.getProperty(lastExperienceGoalProperty);
+    int lastExperienceGoal=(lastExperienceGoalInt!=null)?lastExperienceGoalInt.intValue():0;
     // Current XP
     String currentExperienceProperty=rewardsTrack.getCurrentExperienceProperty();
-    Integer currentExperience=(Integer)props.getProperty(currentExperienceProperty);
-    status.setCurrentExperience((currentExperience!=null)?currentExperience.intValue():0);
+    Integer currentExperienceInt=(Integer)props.getProperty(currentExperienceProperty);
+    int currentExperience=(currentExperienceInt!=null)?currentExperienceInt.intValue():0;
     // Next XP goal
     String nextExperienceGoalProperty=rewardsTrack.getNextExperienceGoalProperty();
-    Integer nextExperienceGoal=(Integer)props.getProperty(nextExperienceGoalProperty);
-    status.setNextExperienceGoal((nextExperienceGoal!=null)?nextExperienceGoal.intValue():0);
+    Integer nextExperienceGoalInt=(Integer)props.getProperty(nextExperienceGoalProperty);
+    int nextExperienceGoal=(nextExperienceGoalInt!=null)?nextExperienceGoalInt.intValue():0;
+
+    if ((claimedMilestones!=0) && (currentMilestone!=0) && (lastExperienceGoal!=0) && (currentExperience!=0) && (nextExperienceGoal!=0))
+    {
+      status.setClaimedMilestones(claimedMilestones);
+      status.setCurrentMilestone(currentMilestone);
+      status.setLastExperienceGoal(lastExperienceGoal);
+      status.setCurrentExperience(currentExperience);
+      status.setNextExperienceGoal(nextExperienceGoal);
+    }
   }
 }
