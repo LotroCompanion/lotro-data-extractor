@@ -8,7 +8,7 @@ import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
 import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.races.RacesManager;
-import delta.games.lotro.common.CharacterSex;
+import delta.games.lotro.common.Genders;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.extractors.TimeUtils;
@@ -130,7 +130,7 @@ public class KinshipExtractor
       LOGGER.warn("Unknown sex: "+charName);
       male=true;
     }
-    characterSummary.setCharacterSex(male?CharacterSex.MALE:CharacterSex.FEMALE);
+    characterSummary.setCharacterSex(male?Genders.MALE:Genders.FEMALE);
     charName=StringUtils.fixName(charName);
     characterSummary.setName(charName);
     // Vocation
