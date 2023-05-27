@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import delta.games.lotro.character.gear.GearSlot;
+import delta.games.lotro.character.gear.GearSlots;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -87,27 +88,27 @@ public class CharacterGearRegistry
 
   private GearSlot getSlotFromProperty(String propertyName)
   {
-    if ("Inventory_SlotCache_Eq_Back".equals(propertyName)) return GearSlot.BACK;
-    if ("Inventory_SlotCache_Eq_Boots".equals(propertyName)) return GearSlot.FEET;
-    if ("Inventory_SlotCache_Eq_Bracelet1".equals(propertyName)) return GearSlot.LEFT_WRIST;
-    if ("Inventory_SlotCache_Eq_Bracelet2".equals(propertyName)) return GearSlot.RIGHT_WRIST;
-    if ("Inventory_SlotCache_Eq_Chest".equals(propertyName)) return GearSlot.BREAST;
-    if ("Inventory_SlotCache_Eq_Class".equals(propertyName)) return GearSlot.CLASS_ITEM;
-    if ("Inventory_SlotCache_Eq_CraftTool".equals(propertyName)) return GearSlot.TOOL;
-    if ("Inventory_SlotCache_Eq_Earring1".equals(propertyName)) return GearSlot.LEFT_EAR;
-    if ("Inventory_SlotCache_Eq_Earring2".equals(propertyName)) return GearSlot.RIGHT_EAR;
-    if ("Inventory_SlotCache_Eq_Gloves".equals(propertyName)) return GearSlot.HANDS;
-    if ("Inventory_SlotCache_Eq_Head".equals(propertyName)) return GearSlot.HEAD;
-    if ("Inventory_SlotCache_Eq_Legs".equals(propertyName)) return GearSlot.LEGS;
+    if ("Inventory_SlotCache_Eq_Back".equals(propertyName)) return GearSlots.BACK;
+    if ("Inventory_SlotCache_Eq_Boots".equals(propertyName)) return GearSlots.FEET;
+    if ("Inventory_SlotCache_Eq_Bracelet1".equals(propertyName)) return GearSlots.LEFT_WRIST;
+    if ("Inventory_SlotCache_Eq_Bracelet2".equals(propertyName)) return GearSlots.RIGHT_WRIST;
+    if ("Inventory_SlotCache_Eq_Chest".equals(propertyName)) return GearSlots.BREAST;
+    if ("Inventory_SlotCache_Eq_Class".equals(propertyName)) return GearSlots.CLASS_ITEM;
+    if ("Inventory_SlotCache_Eq_CraftTool".equals(propertyName)) return GearSlots.TOOL;
+    if ("Inventory_SlotCache_Eq_Earring1".equals(propertyName)) return GearSlots.LEFT_EAR;
+    if ("Inventory_SlotCache_Eq_Earring2".equals(propertyName)) return GearSlots.RIGHT_EAR;
+    if ("Inventory_SlotCache_Eq_Gloves".equals(propertyName)) return GearSlots.HANDS;
+    if ("Inventory_SlotCache_Eq_Head".equals(propertyName)) return GearSlots.HEAD;
+    if ("Inventory_SlotCache_Eq_Legs".equals(propertyName)) return GearSlots.LEGS;
     if ("Inventory_SlotCache_Eq_Mounted".equals(propertyName)) return null; // Unmanaged
-    if ("Inventory_SlotCache_Eq_Necklace".equals(propertyName)) return GearSlot.NECK;
-    if ("Inventory_SlotCache_Eq_Pocket1".equals(propertyName)) return GearSlot.POCKET;
-    if ("Inventory_SlotCache_Eq_Ring1".equals(propertyName)) return GearSlot.LEFT_FINGER;
-    if ("Inventory_SlotCache_Eq_Ring2".equals(propertyName)) return GearSlot.RIGHT_FINGER;
-    if ("Inventory_SlotCache_Eq_Shoulder".equals(propertyName)) return GearSlot.SHOULDER;
-    if ("Inventory_SlotCache_Eq_Weapon_Primary".equals(propertyName)) return GearSlot.MAIN_MELEE;
-    if ("Inventory_SlotCache_Eq_Weapon_Ranged".equals(propertyName)) return GearSlot.RANGED;
-    if ("Inventory_SlotCache_Eq_Weapon_Secondary".equals(propertyName)) return GearSlot.OTHER_MELEE;
+    if ("Inventory_SlotCache_Eq_Necklace".equals(propertyName)) return GearSlots.NECK;
+    if ("Inventory_SlotCache_Eq_Pocket1".equals(propertyName)) return GearSlots.POCKET;
+    if ("Inventory_SlotCache_Eq_Ring1".equals(propertyName)) return GearSlots.LEFT_FINGER;
+    if ("Inventory_SlotCache_Eq_Ring2".equals(propertyName)) return GearSlots.RIGHT_FINGER;
+    if ("Inventory_SlotCache_Eq_Shoulder".equals(propertyName)) return GearSlots.SHOULDER;
+    if ("Inventory_SlotCache_Eq_Weapon_Primary".equals(propertyName)) return GearSlots.MAIN_MELEE;
+    if ("Inventory_SlotCache_Eq_Weapon_Ranged".equals(propertyName)) return GearSlots.RANGED;
+    if ("Inventory_SlotCache_Eq_Weapon_Secondary".equals(propertyName)) return GearSlots.OTHER_MELEE;
     return null;
   }
 }
