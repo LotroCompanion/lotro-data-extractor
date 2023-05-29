@@ -2,10 +2,10 @@ package delta.games.lotro.extractors.social;
 
 import java.util.Map;
 
+import delta.games.lotro.account.status.friends.Friend;
+import delta.games.lotro.account.status.friends.FriendsManager;
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
-import delta.games.lotro.character.social.friends.Friend;
-import delta.games.lotro.character.social.friends.FriendsManager;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.extractors.TimeUtils;
