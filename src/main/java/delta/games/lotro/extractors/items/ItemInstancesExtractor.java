@@ -6,9 +6,6 @@ import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.ColorsManager;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.common.money.Money;
-import delta.games.lotro.common.stats.CustomStatsMergeMode;
-import delta.games.lotro.common.stats.StatsManager;
-import delta.games.lotro.common.stats.WellKnownStat;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemFactory;
@@ -234,6 +231,8 @@ public class ItemInstancesExtractor
   private void decodeArmourSpecifics(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
   {
     // Armor value
+    /// Disabled for Update 37 since it causes un-wanted armour stats
+    /*
     Integer armorValue=(Integer)props.getProperty("Item_Armor_Value");
     if (armorValue!=null)
     {
@@ -242,6 +241,7 @@ public class ItemInstancesExtractor
       statsMgr.setMode(CustomStatsMergeMode.MERGE);
       statsMgr.getCustom().setStat(WellKnownStat.ARMOUR,armorValue);
     }
+    */
   }
 
   private void decodeWeaponSpecifics(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
