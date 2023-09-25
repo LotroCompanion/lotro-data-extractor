@@ -10,7 +10,8 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemFactory;
 import delta.games.lotro.lore.items.ItemInstance;
-import delta.games.lotro.lore.items.ItemsManager;
+import delta.games.lotro.lore.items.essences.Essence;
+import delta.games.lotro.lore.items.essences.EssencesManager;
 import delta.games.lotro.lore.items.essences.EssencesSet;
 import delta.games.lotro.lore.items.legendary.LegendaryInstance;
 import delta.games.lotro.lore.items.legendary.LegendaryInstanceAttrs;
@@ -331,7 +332,7 @@ public class ItemInstancesExtractor
 
   private EssencesSet decodeEssences(Item item, Object[] essences)
   {
-    ItemsManager itemMgr=ItemsManager.getInstance();
+    EssencesManager essencesMgr=EssencesManager.getInstance();
     int nbEssencesMax=item.getEssenceSlots();
     if (nbEssencesMax==0)
     {
@@ -355,7 +356,7 @@ public class ItemInstancesExtractor
       Integer essenceLevel=(Integer)essenceProps.getProperty("Item_Socket_GemLevel");
       if ((essenceId!=null) && (essenceLevel!=null))
       {
-        Item essence=itemMgr.getItem(essenceId.intValue());
+        Essence essence=essencesMgr.getEssence(essenceId.intValue());
         ret.setEssence(i,essence);
       }
     }
