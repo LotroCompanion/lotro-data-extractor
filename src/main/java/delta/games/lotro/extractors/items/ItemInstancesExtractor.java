@@ -13,6 +13,7 @@ import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.essences.Essence;
 import delta.games.lotro.lore.items.essences.EssencesManager;
 import delta.games.lotro.lore.items.essences.EssencesSet;
+import delta.games.lotro.lore.items.essences.EssencesSlotsSetup;
 import delta.games.lotro.lore.items.legendary.LegendaryInstance;
 import delta.games.lotro.lore.items.legendary.LegendaryInstanceAttrs;
 import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
@@ -338,7 +339,8 @@ public class ItemInstancesExtractor
     {
       return null;
     }
-    EssencesSet ret=new EssencesSet(nbEssencesMax);
+    EssencesSlotsSetup setup=item.getEssenceSlotsSetup();
+    EssencesSet ret=new EssencesSet(setup);
     int nbEssences=0;
     if ((essences!=null) && (essences.length>0))
     {
