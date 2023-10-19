@@ -63,7 +63,7 @@ public class RewardsTracksExtractor
     Integer nextExperienceGoalInt=(Integer)props.getProperty(nextExperienceGoalProperty);
     int nextExperienceGoal=(nextExperienceGoalInt!=null)?nextExperienceGoalInt.intValue():0;
 
-    if ((claimedMilestones!=0) && (currentMilestone!=0) && (lastExperienceGoal!=0) && (currentExperience!=0) && (nextExperienceGoal!=0))
+    if ((currentExperience!=0) || (nextExperienceGoal!=0))
     {
       status.setClaimedMilestones(claimedMilestones);
       status.setCurrentMilestone(currentMilestone);
