@@ -96,7 +96,6 @@ public class AchievableStatusBuilder
     objectiveStatus.setState(state);
 
     // Loop on conditions
-    int conditionIndex=0;
     for(int i=0;i<nbQuestConditions;i++)
     {
       ClassInstance questCondition=questConditions.get(i);
@@ -118,10 +117,6 @@ public class AchievableStatusBuilder
       //int j=0;
       for(ClassInstance dynamicQuestEvent : dynamicQuestEvents)
       {
-        int indexToUse=conditionIndex;
-        conditionIndex++;
-        //System.out.println("\t\t\t\tdynamicQuestEvent #"+j);
-        //j++;
         if (dynamicQuestEvent==null)
         {
           LOGGER.warn("dynamicQuestEvent is null!");
@@ -133,14 +128,14 @@ public class AchievableStatusBuilder
           LOGGER.warn("Bad event ID: got="+questEventId);
           continue;
         }
-        ObjectiveCondition condition=objective.getConditionByIndex(indexToUse);
+        ObjectiveCondition condition=objective.getConditionByEventID(questEventId.intValue());
         if (condition==null)
         {
-          LOGGER.warn("Condition not found. Index="+indexToUse);
+          LOGGER.warn("Condition not found. Event ID="+questEventId);
           continue;
         }
+        int indexToUse=condition.getIndex();
         ObjectiveConditionStatus conditionStatus=objectiveStatus.getConditionStatus(indexToUse);
-        //System.out.println("\t\t\tCondition #"+indexToUse);
         handleObjectiveCondition(conditionStatus,dynamicQuestEvent);
       }
     }
