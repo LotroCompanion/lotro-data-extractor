@@ -165,14 +165,21 @@ public class CharacterDataExtractor
     Professions professions=craftingData.getProfessionsRegistry();
     for(Profession profession : professions.getAll())
     {
+      LOGGER.debug("\tProfession: "+profession.getName());
       String enabledProperty=profession.getEnabledPropertyName();
-      Integer enabled=(Integer)props.getProperty(enabledProperty);
-      if ((enabled==null) || (enabled.intValue()==0))
+      Integer enabledInt=(Integer)props.getProperty(enabledProperty);
+      boolean disabled=((enabledInt==null) || (enabledInt.intValue()==0));
+      ProfessionStatus professionStatus=craftingStatus.getProfessionStatus(profession,false);
+      if (professionStatus!=null)
+      {
+        professionStatus.setActive(!disabled);
+      }
+      if (disabled)
       {
         continue;
       }
-      LOGGER.debug("\tProfession: "+profession.getName());
-      ProfessionStatus professionStatus=craftingStatus.getProfessionStatus(profession,true);
+      professionStatus=craftingStatus.getProfessionStatus(profession,true);
+      professionStatus.setActive(true);
       // Mastery
       String masteryLevelProperty=profession.getMasteryLevelPropertyName();
       Integer masteryLevel=(Integer)props.getProperty(masteryLevelProperty);
