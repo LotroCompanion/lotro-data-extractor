@@ -4,12 +4,16 @@ import org.apache.log4j.Logger;
 
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.ColorsManager;
+import delta.games.lotro.common.enums.LotroEnum;
+import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.common.money.Money;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.items.DamageType;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemFactory;
 import delta.games.lotro.lore.items.ItemInstance;
+import delta.games.lotro.lore.items.WeaponInstance;
 import delta.games.lotro.lore.items.essences.Essence;
 import delta.games.lotro.lore.items.essences.EssencesManager;
 import delta.games.lotro.lore.items.essences.EssencesSet;
@@ -146,7 +150,11 @@ public class ItemInstancesExtractor
     // Armour specifics
     decodeArmourSpecifics(props,itemInstance);
     // Weapon specifics
-    decodeWeaponSpecifics(props,itemInstance);
+    if (itemInstance instanceof WeaponInstance)
+    {
+      WeaponInstance<?> weaponInstance=(WeaponInstance<?>)itemInstance;
+      decodeWeaponSpecifics(props,weaponInstance);
+    }
   }
 
   private void decodeLegendaryData(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
@@ -246,31 +254,46 @@ public class ItemInstancesExtractor
     */
   }
 
-  private void decodeWeaponSpecifics(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
+  private void decodeWeaponSpecifics(PropertiesSet props, WeaponInstance<?> weaponInstance)
   {
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Weapon props: "+props.dump());
+    }
     // Max damage
     Float maxDamage=(Float)props.getProperty("Combat_Damage");
     if (maxDamage!=null)
     {
-      LOGGER.debug("Max Damage: "+maxDamage);
+      weaponInstance.setMaxDamage(maxDamage);
     }
     // Damage variance
+    // Not found on weapons. Found on mob/player entities.
     Float damageVariance=(Float)props.getProperty("Combat_DamageVariance");
     if (damageVariance!=null)
     {
-      LOGGER.debug("Combat damage variance: "+damageVariance);
+      LOGGER.warn("Found a damage variance: "+damageVariance);
+    }
+    // Damage type
+    Integer damageTypeCode=(Integer)props.getProperty("Combat_DamageType");
+    if (damageTypeCode!=null)
+    {
+      LotroEnum<DamageType> damageTypeEnum=LotroEnumsRegistry.getInstance().get(DamageType.class);
+      DamageType damageType=damageTypeEnum.getEntry(damageTypeCode.intValue());
+      weaponInstance.setDamageType(damageType);
     }
     // Base DPS
     Float baseDPS=(Float)props.getProperty("Combat_BaseDPS");
     if (baseDPS!=null)
     {
-      LOGGER.debug("Combat base DPS: "+baseDPS);
+      weaponInstance.setDPS(baseDPS);
     }
     // Slayer modifier
+    // Really? Seems to be on item templates, but not on weapon instances
+    // May be on old LIs with a title applied?
     Float slayerValue=(Float)props.getProperty("Combat_WeaponSlayerAddMod");
     if (slayerValue!=null)
     {
-      LOGGER.debug("Weapon slayer modifier: "+slayerValue);
+      LOGGER.warn("Found a weapon slayer modifier: "+slayerValue);
     }
   }
 
