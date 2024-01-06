@@ -69,7 +69,7 @@ public class SkirmishTraitsStatusExtractor
     List<TraitDescription> traits=mgr.getAll(nature);
     if (traits.size()==0)
     {
-      // Not skimirsh traits
+      // Not skirmish traits
       return;
     }
     int nbTraitIds=traitIDs.size();
