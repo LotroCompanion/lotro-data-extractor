@@ -1,6 +1,5 @@
 package delta.games.lotro.extractors.items;
 
-import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.lore.items.legendary.LegendaryInstance;
@@ -11,6 +10,7 @@ import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacy;
 import delta.games.lotro.lore.items.legendary.non_imbued.DefaultNonImbuedLegacyInstance;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryInstanceAttrs;
 import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.passives.Passive;
 import delta.games.lotro.lore.items.legendary.relics.RelicsSet;
 
 /**
@@ -43,7 +43,7 @@ public class LegendaryDataUtils
     to.setTitle(from.getTitle());
     // Passives
     to.removeAllPassvies();
-    for(Effect passive : from.getPassives())
+    for(Passive passive : from.getPassives())
     {
       to.addPassive(passive);
     }

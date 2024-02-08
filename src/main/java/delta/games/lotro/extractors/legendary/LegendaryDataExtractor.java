@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.games.lotro.common.effects.Effect;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
 import delta.games.lotro.lore.items.legendary.LegendaryInstanceAttrs;
@@ -20,6 +19,7 @@ import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegaciesManage
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegacyTier;
 import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryInstanceAttrs;
 import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacyInstance;
+import delta.games.lotro.lore.items.legendary.passives.Passive;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
@@ -187,7 +187,7 @@ public class LegendaryDataExtractor
       PassivesManager passivesMgr=PassivesManager.getInstance();
       for(Integer passiveId : passives)
       {
-        Effect passive=passivesMgr.getEffect(passiveId.intValue());
+        Passive passive=passivesMgr.getPassive(passiveId.intValue());
         if (passive!=null)
         {
           attrs.addPassive(passive);
