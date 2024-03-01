@@ -18,6 +18,7 @@ import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.enums.SkillCategory;
 import delta.games.lotro.common.enums.TraitNature;
+import delta.games.lotro.common.enums.comparator.LotroEnumEntryCodeComparator;
 import delta.games.lotro.common.enums.comparator.LotroEnumEntryNameComparator;
 
 /**
@@ -93,6 +94,18 @@ public class TraitsData
   public void setSlottedTraits(TraitNature nature, List<Integer> slottedTraitIDs)
   {
     _slottedTraitsByNature.put(nature,slottedTraitIDs);
+  }
+
+  /**
+   * Get the known trait natures.
+   * @return A list of trait natures, sorted by code.
+   */
+  public List<TraitNature> getTraitNatures()
+  {
+    List<TraitNature> ret=new ArrayList<TraitNature>();
+    ret.addAll(_slottedTraitsByNature.keySet());
+    Collections.sort(ret,new LotroEnumEntryCodeComparator<TraitNature>());
+    return ret;
   }
 
   /**

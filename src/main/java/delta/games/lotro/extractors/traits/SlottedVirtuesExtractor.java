@@ -1,4 +1,4 @@
-package delta.games.lotro.extractors.character;
+package delta.games.lotro.extractors.traits;
 
 import java.util.List;
 
