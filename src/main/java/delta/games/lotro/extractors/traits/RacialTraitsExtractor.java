@@ -12,10 +12,9 @@ import delta.games.lotro.character.stats.buffs.BuffsManager;
 import delta.games.lotro.character.status.traits.shared.SlottedTraitsStatus;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
-import delta.games.lotro.extractors.traits.TraitsData;
 
 /**
- * Puts racial traits into character data.
+ * Extractor for racial traits status.
  * @author DAM
  */
 public class RacialTraitsExtractor

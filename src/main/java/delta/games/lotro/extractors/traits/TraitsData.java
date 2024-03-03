@@ -51,6 +51,15 @@ public class TraitsData
   }
 
   /**
+   * Get the slotted mounted appearances.
+   * @return A list of trait IDs (empty slots are 0).
+   */
+  public List<Integer> getMountedAppearances()
+  {
+    return getSlottedTraits(16);
+  }
+
+  /**
    * Get the slotted virtues.
    * @return A list of trait IDs (empty slots are 0).
    */
