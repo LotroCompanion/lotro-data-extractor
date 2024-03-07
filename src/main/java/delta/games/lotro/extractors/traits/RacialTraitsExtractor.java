@@ -9,6 +9,7 @@ import delta.games.lotro.character.races.RaceDescription;
 import delta.games.lotro.character.stats.buffs.BuffInstance;
 import delta.games.lotro.character.stats.buffs.BuffRegistry;
 import delta.games.lotro.character.stats.buffs.BuffsManager;
+import delta.games.lotro.character.status.traits.shared.AvailableTraitsStatus;
 import delta.games.lotro.character.status.traits.shared.SlottedTraitsStatus;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
@@ -72,17 +73,18 @@ public class RacialTraitsExtractor
     {
       traitIDs[i]=racialTraits.get(i).intValue();
     }
-    status.setTraits(traitIDs);
+    status.getSlotsStatus().setTraits(traitIDs);
     // Acquired traits
     if (race!=null)
     {
+      AvailableTraitsStatus availableTraits=status.getAvailableTraitsStatus();
       List<TraitDescription> earnableTraits=race.getEarnableTraits();
       for(TraitDescription earnableTrait : earnableTraits)
       {
         Integer traitID=Integer.valueOf(earnableTrait.getIdentifier());
         if (traits.getAcquiredTraits().contains(traitID))
         {
-          status.addTraitID(traitID.intValue());
+          availableTraits.addTraitID(traitID.intValue());
         }
       }
     }

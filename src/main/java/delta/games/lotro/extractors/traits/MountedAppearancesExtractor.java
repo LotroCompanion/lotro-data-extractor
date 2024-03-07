@@ -2,6 +2,7 @@ package delta.games.lotro.extractors.traits;
 
 import java.util.List;
 
+import delta.games.lotro.character.status.traits.shared.AvailableTraitsStatus;
 import delta.games.lotro.character.status.traits.shared.SlottedTraitsStatus;
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
@@ -30,8 +31,9 @@ public class MountedAppearancesExtractor
     {
       traitIDs[i]=slottedTraits.get(i).intValue();
     }
-    status.setTraits(traitIDs);
+    status.getSlotsStatus().setTraits(traitIDs);
     // Acquired traits
+    AvailableTraitsStatus availableTraits=status.getAvailableTraitsStatus();
     TraitsManager traitsMgr=TraitsManager.getInstance();
     LotroEnum<TraitNature> traitNatureEnum=LotroEnumsRegistry.getInstance().get(TraitNature.class);
     TraitNature traitNature=traitNatureEnum.getEntry(16);
@@ -41,7 +43,7 @@ public class MountedAppearancesExtractor
       Integer traitID=Integer.valueOf(possibleTrait.getIdentifier());
       if (traits.getAcquiredTraits().contains(traitID))
       {
-        status.addTraitID(traitID.intValue());
+        availableTraits.addTraitID(traitID.intValue());
       }
     }
     return status;
