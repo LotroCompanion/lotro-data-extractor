@@ -21,6 +21,8 @@ import delta.games.lotro.lore.items.legendary.non_imbued.NonImbuedLegendaryInsta
 import delta.games.lotro.lore.items.legendary.non_imbued.TieredNonImbuedLegacyInstance;
 import delta.games.lotro.lore.items.legendary.passives.Passive;
 import delta.games.lotro.lore.items.legendary.relics.Relic;
+import delta.games.lotro.lore.items.legendary.relics.RelicType;
+import delta.games.lotro.lore.items.legendary.relics.RelicTypes;
 import delta.games.lotro.lore.items.legendary.relics.RelicsManager;
 import delta.games.lotro.lore.items.legendary.titles.LegendaryTitle;
 import delta.games.lotro.lore.items.legendary.titles.LegendaryTitlesManager;
@@ -93,82 +95,11 @@ public class LegendaryDataExtractor
   {
     LegendaryInstanceAttrs attrs=new LegendaryInstanceAttrs();
     // Non imbued legacies
-    {
-      NonImbuedLegendaryInstanceAttrs nonImbuedAttrs=attrs.getNonImbuedAttrs();
-      Map<Integer,Integer> subMap=(Map<Integer,Integer>)class2337.getAttributeValue("224277884");
-      int index=0;
-      for(Map.Entry<Integer,Integer> subEntry : subMap.entrySet())
-      {
-        int legacyId=subEntry.getKey().intValue();
-        int rank=subEntry.getValue().intValue();
-        Object legacy=getNonImbuedLegacy(legacyId);
-        if (legacy instanceof DefaultNonImbuedLegacy)
-        {
-          DefaultNonImbuedLegacyInstance defaultLegacyInstance=nonImbuedAttrs.getDefaultLegacy();
-          defaultLegacyInstance.setLegacy((DefaultNonImbuedLegacy)legacy);
-          defaultLegacyInstance.setRank(rank);
-        }
-        else if (legacy instanceof NonImbuedLegacyTier)
-        {
-          TieredNonImbuedLegacyInstance legacyInstance=nonImbuedAttrs.getLegacy(index);
-          legacyInstance.setLegacyTier((NonImbuedLegacyTier)legacy);
-          legacyInstance.setRank(rank);
-          index++;
-        }
-      }
-    }
+    handleNonImbuedLegacies(class2337,attrs);
     // Slotted relics
-    Map<Integer,Integer> slottedRelics=(Map<Integer,Integer>)class2337.getAttributeValue("40715683");
-    if (slottedRelics!=null)
-    {
-      RelicsManager relicsMgr=RelicsManager.getInstance();
-      for(Map.Entry<Integer,Integer> slottedRelic : slottedRelics.entrySet())
-      {
-        int relicId=slottedRelic.getKey().intValue();
-        int slotId=slottedRelic.getValue().intValue();
-        Relic relic=relicsMgr.getById(relicId);
-        if (relic!=null)
-        {
-          if (slotId==1) attrs.getRelicsSet().setSetting(relic);
-          if (slotId==2) attrs.getRelicsSet().setGem(relic);
-          if (slotId==3) attrs.getRelicsSet().setRune(relic);
-          if (slotId==4) attrs.getRelicsSet().setCraftedRelic(relic);
-          if (LOGGER.isDebugEnabled())
-          {
-            LOGGER.debug("Found relic: "+relic.getName()+" on slot "+slotId);
-          }
-        }
-      }
-    }
+    handleRelics(class2337,attrs);
     // Imbued legacies
-    List<ClassInstance> imbuedLegacies=(List<ClassInstance>)class2337.getAttributeValue("20012243");
-    if (imbuedLegacies!=null)
-    {
-      ImbuedLegendaryInstanceAttrs imbuedAttrs=attrs.getImbuedAttrs();
-      LegaciesManager legaciesMgr=LegaciesManager.getInstance();
-      int index=0;
-      for(ClassInstance imbuedLegacy : imbuedLegacies)
-      {
-        Integer legacyId=(Integer)imbuedLegacy.getAttributeValue("162330420");
-        if (legacyId!=null)
-        {
-          ImbuedLegacyInstance imbuedLegacyInstance=imbuedAttrs.getLegacy(index);
-          ImbuedLegacy legacy=legaciesMgr.getLegacy(legacyId.intValue());
-          imbuedLegacyInstance.setLegacy(legacy);
-          Long xp=(Long)imbuedLegacy.getAttributeValue("121029072");
-          if (xp!=null)
-          {
-            imbuedLegacyInstance.setXp(xp.intValue());
-          }
-          Integer unlockedLevels=(Integer)imbuedLegacy.getAttributeValue("219149635");
-          if (unlockedLevels!=null)
-          {
-            imbuedLegacyInstance.setUnlockedLevels(unlockedLevels.intValue());
-          }
-        }
-        index++;
-      }
-    }
+    handleImbuedLegacies(class2337,attrs);
     // Title
     Integer titleId=(Integer)class2337.getAttributeValue("m_didTitle");
     if ((titleId!=null) && (titleId.intValue()!=0))
@@ -200,6 +131,103 @@ public class LegendaryDataExtractor
     Integer slotIndex=(Integer)class2337.getAttributeValue("57320212");
     LOGGER.debug("Slot: "+slotIndex);
     return attrs;
+  }
+
+  private void handleNonImbuedLegacies(ClassInstance class2337, LegendaryInstanceAttrs attrs)
+  {
+    @SuppressWarnings("unchecked")
+    Map<Integer,Integer> subMap=(Map<Integer,Integer>)class2337.getAttributeValue("224277884");
+    NonImbuedLegendaryInstanceAttrs nonImbuedAttrs=attrs.getNonImbuedAttrs();
+    int index=0;
+    for(Map.Entry<Integer,Integer> subEntry : subMap.entrySet())
+    {
+      int legacyId=subEntry.getKey().intValue();
+      int rank=subEntry.getValue().intValue();
+      Object legacy=getNonImbuedLegacy(legacyId);
+      if (legacy instanceof DefaultNonImbuedLegacy)
+      {
+        DefaultNonImbuedLegacyInstance defaultLegacyInstance=nonImbuedAttrs.getDefaultLegacy();
+        defaultLegacyInstance.setLegacy((DefaultNonImbuedLegacy)legacy);
+        defaultLegacyInstance.setRank(rank);
+      }
+      else if (legacy instanceof NonImbuedLegacyTier)
+      {
+        TieredNonImbuedLegacyInstance legacyInstance=nonImbuedAttrs.getLegacy(index);
+        legacyInstance.setLegacyTier((NonImbuedLegacyTier)legacy);
+        legacyInstance.setRank(rank);
+        index++;
+      }
+    }
+  }
+
+  private void handleRelics(ClassInstance class2337, LegendaryInstanceAttrs attrs)
+  {
+    @SuppressWarnings("unchecked")
+    Map<Integer,Integer> slottedRelics=(Map<Integer,Integer>)class2337.getAttributeValue("40715683");
+    if (slottedRelics!=null)
+    {
+      RelicsManager relicsMgr=RelicsManager.getInstance();
+      for(Map.Entry<Integer,Integer> slottedRelic : slottedRelics.entrySet())
+      {
+        int relicId=slottedRelic.getKey().intValue();
+        int slotId=slottedRelic.getValue().intValue();
+        Relic relic=relicsMgr.getById(relicId);
+        if (relic!=null)
+        {
+          RelicType type=getRelicTypeFromSlotId(slotId);
+          if (type!=null)
+          {
+            attrs.getRelicsSet().slotRelic(relic,type);
+          }
+          if (LOGGER.isDebugEnabled())
+          {
+            LOGGER.debug("Found relic: "+relic.getName()+" on slot "+slotId);
+          }
+        }
+      }
+    }
+  }
+
+  private RelicType getRelicTypeFromSlotId(int slotId)
+  {
+    if (slotId==1) return RelicTypes.SETTING;
+    if (slotId==2) return RelicTypes.GEM;
+    if (slotId==3) return RelicTypes.RUNE;
+    if (slotId==4) return RelicTypes.CRAFTED_RELIC;
+    return null;
+  }
+
+  private void handleImbuedLegacies(ClassInstance class2337, LegendaryInstanceAttrs attrs)
+  {
+    @SuppressWarnings("unchecked")
+    List<ClassInstance> imbuedLegacies=(List<ClassInstance>)class2337.getAttributeValue("20012243");
+    if (imbuedLegacies!=null)
+    {
+      ImbuedLegendaryInstanceAttrs imbuedAttrs=attrs.getImbuedAttrs();
+      LegaciesManager legaciesMgr=LegaciesManager.getInstance();
+      int index=0;
+      for(ClassInstance imbuedLegacy : imbuedLegacies)
+      {
+        Integer legacyId=(Integer)imbuedLegacy.getAttributeValue("162330420");
+        if (legacyId!=null)
+        {
+          ImbuedLegacyInstance imbuedLegacyInstance=imbuedAttrs.getLegacy(index);
+          ImbuedLegacy legacy=legaciesMgr.getLegacy(legacyId.intValue());
+          imbuedLegacyInstance.setLegacy(legacy);
+          Long xp=(Long)imbuedLegacy.getAttributeValue("121029072");
+          if (xp!=null)
+          {
+            imbuedLegacyInstance.setXp(xp.intValue());
+          }
+          Integer unlockedLevels=(Integer)imbuedLegacy.getAttributeValue("219149635");
+          if (unlockedLevels!=null)
+          {
+            imbuedLegacyInstance.setUnlockedLevels(unlockedLevels.intValue());
+          }
+        }
+        index++;
+      }
+    }
   }
 
   private Object getNonImbuedLegacy(int legacyId)

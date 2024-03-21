@@ -26,13 +26,13 @@ public class FriendsExtractor
     FriendsManager ret=new FriendsManager();
     for(Map.Entry<Long,PropertiesSet> entry : rawData.entrySet())
     {
-      Friend friend=extractFriend(entry.getKey(),entry.getValue());
+      Friend friend=extractFriend(entry.getValue());
       ret.addFriend(friend);
     }
     return ret;
   }
 
-  private Friend extractFriend(Long id, PropertiesSet properties)
+  private Friend extractFriend(PropertiesSet properties)
   {
     Friend ret=new Friend();
     // ID

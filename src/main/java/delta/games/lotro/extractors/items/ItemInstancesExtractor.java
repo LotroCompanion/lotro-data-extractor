@@ -177,7 +177,7 @@ public class ItemInstancesExtractor
     // Imbued?
     Integer imbuedValue=(Integer)props.getProperty("ItemAdvancement_Imbued");
     LOGGER.debug("Imbued: "+imbuedValue);
-    attrs.setImbued((imbuedValue!=null)?(imbuedValue.intValue()>0):false);
+    attrs.setImbued((imbuedValue!=null)&&(imbuedValue.intValue()>0));
     NonImbuedLegendaryInstanceAttrs nonImbuedAttrs=attrs.getNonImbuedAttrs();
     // Item upgrades (crystals)
     Integer itemUpgrades=(Integer)props.getProperty("Item_LevelUpgradeTier");

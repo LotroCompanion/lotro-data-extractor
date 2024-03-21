@@ -57,8 +57,6 @@ public class CharacterDataExtractor
     // XP
     Long xp=(Long)props.getProperty("XP_EarnedXP");
     details.setXp(xp!=null?xp.longValue():0);
-    // Position
-    //Object pos=props.getProperty("Physics_LastValidPosition");
     // In-game time
     Integer inGameTime=(Integer)props.getProperty("Time_TotalInGameTime");
     details.setIngameTime(inGameTime!=null?inGameTime.intValue():0);

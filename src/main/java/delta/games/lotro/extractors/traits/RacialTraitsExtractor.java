@@ -2,17 +2,10 @@ package delta.games.lotro.extractors.traits;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.races.RaceDescription;
-import delta.games.lotro.character.stats.buffs.BuffInstance;
-import delta.games.lotro.character.stats.buffs.BuffRegistry;
-import delta.games.lotro.character.stats.buffs.BuffsManager;
 import delta.games.lotro.character.status.traits.shared.AvailableTraitsStatus;
 import delta.games.lotro.character.status.traits.shared.SlottedTraitsStatus;
 import delta.games.lotro.character.traits.TraitDescription;
-import delta.games.lotro.character.traits.TraitsManager;
 
 /**
  * Extractor for racial traits status.

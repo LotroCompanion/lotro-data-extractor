@@ -67,9 +67,9 @@ public class SkirmishTraitsStatusExtractor
   {
     SkirmishTraitsManager mgr=SkirmishTraitsManager.getInstance();
     List<TraitDescription> traits=mgr.getAll(nature);
-    if (traits.size()==0)
+    if (traits.isEmpty())
     {
-      // Not skirmish traits
+      // No skirmish traits
       return;
     }
     int nbTraitIds=traitIDs.size();

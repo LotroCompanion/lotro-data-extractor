@@ -14,7 +14,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class ActualStatsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(CharacterDataExtractor.class);
+  private static final Logger LOGGER=Logger.getLogger(ActualStatsExtractor.class);
 
   private void extractStat(BasicStatsSet stats, StatDescription stat, PropertiesSet props, String name, float factor)
   {

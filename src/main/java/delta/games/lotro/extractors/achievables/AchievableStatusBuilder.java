@@ -114,7 +114,6 @@ public class AchievableStatusBuilder
         LOGGER.warn("dynamicQuestEvents is null!");
         continue;
       }
-      //int j=0;
       for(ClassInstance dynamicQuestEvent : dynamicQuestEvents)
       {
         if (dynamicQuestEvent==null)
@@ -166,7 +165,7 @@ public class AchievableStatusBuilder
       }
     }
     /*
-Instance of class DynamicQuestEvent: {
+Instance of class DynamicQuestEvent:
   INTEGER 251897092 = 0
   REFERENCE m_rRuntimeStringList = null
   INTEGER 55837717 = 0
@@ -181,7 +180,6 @@ Instance of class DynamicQuestEvent: {
   LONG 143181940 = 300665784428920902
   INTEGER 122406325 = 0
   INTEGER 180500243 = 805306368
-}
      */
   }
 
