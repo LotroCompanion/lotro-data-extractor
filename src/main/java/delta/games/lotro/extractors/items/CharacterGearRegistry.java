@@ -100,7 +100,7 @@ public class CharacterGearRegistry
     if ("Inventory_SlotCache_Eq_Gloves".equals(propertyName)) return GearSlots.HANDS;
     if ("Inventory_SlotCache_Eq_Head".equals(propertyName)) return GearSlots.HEAD;
     if ("Inventory_SlotCache_Eq_Legs".equals(propertyName)) return GearSlots.LEGS;
-    if ("Inventory_SlotCache_Eq_Mounted".equals(propertyName)) return null; // Unmanaged
+    if ("Inventory_SlotCache_Eq_Mounted".equals(propertyName)) return GearSlots.BRIDLE;
     if ("Inventory_SlotCache_Eq_Necklace".equals(propertyName)) return GearSlots.NECK;
     if ("Inventory_SlotCache_Eq_Pocket1".equals(propertyName)) return GearSlots.POCKET;
     if ("Inventory_SlotCache_Eq_Ring1".equals(propertyName)) return GearSlots.LEFT_FINGER;
