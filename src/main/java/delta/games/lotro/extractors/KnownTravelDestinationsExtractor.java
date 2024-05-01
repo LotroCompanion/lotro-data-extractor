@@ -2,7 +2,10 @@ package delta.games.lotro.extractors;
 
 import java.util.Set;
 
+import delta.games.lotro.dat.DATConstants;
 import delta.games.lotro.dat.data.DataFacade;
+import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.dat.utils.DatStringUtils;
 
 /**
  * Extractor for known travel destinations.
@@ -10,7 +13,7 @@ import delta.games.lotro.dat.data.DataFacade;
  */
 public class KnownTravelDestinationsExtractor
 {
-  //private DataFacade _facade;
+  private DataFacade _facade;
 
   /**
    * Constructor.
@@ -18,7 +21,7 @@ public class KnownTravelDestinationsExtractor
    */
   public KnownTravelDestinationsExtractor(DataFacade facade)
   {
-    //_facade=facade;
+    _facade=facade;
   }
 
   /**
@@ -35,8 +38,8 @@ public class KnownTravelDestinationsExtractor
 
   private void showTravelLocation(int id)
   {
-    //PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
-    //String travelDisplayName=DatUtils.getStringProperty(properties,"TravelDisplayName");
-    //System.out.println(travelDisplayName);
+    PropertiesSet properties=_facade.loadProperties(id+DATConstants.DBPROPERTIES_OFFSET);
+    @SuppressWarnings("unused")
+    String travelDisplayName=DatStringUtils.getStringProperty(properties,"TravelDisplayName");
   }
 }

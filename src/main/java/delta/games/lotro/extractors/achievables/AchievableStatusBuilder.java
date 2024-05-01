@@ -35,17 +35,20 @@ public class AchievableStatusBuilder
   @SuppressWarnings("unchecked")
   public void handleAchievable(AchievableStatus achievableStatus, ClassInstance questData)
   {
+    Achievable achievable=achievableStatus.getAchievable();
     // questData is a QuestRecord
     if (questData==null)
     {
-      Achievable achievable=achievableStatus.getAchievable();
       LOGGER.warn("Could not use status for achievable: "+achievable.getIdentifier());
       return;
     }
     // State
     Integer statusCode=(Integer)questData.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(statusCode);
-    //System.out.println("\t\tState: "+state);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Achievable state: "+achievable.getIdentifier()+" ("+achievable.getName()+") => "+state);
+    }
     achievableStatus.setState(state);
     // Objectives
     Map<Integer,ClassInstance> objectivesData=(Map<Integer,ClassInstance>)questData.getAttributeValue("m_objectiveHash");
@@ -67,7 +70,6 @@ public class AchievableStatusBuilder
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void handleAchievableObjective(AchievableObjectiveStatus objectiveStatus, ClassInstance objectiveData)
   {
     if (objectiveData==null)
@@ -75,12 +77,12 @@ public class AchievableStatusBuilder
       return;
     }
     Objective objective=objectiveStatus.getObjective();
+    @SuppressWarnings("unchecked")
     List<ClassInstance> questConditions=(List<ClassInstance>)objectiveData.getAttributeValue("m_conditionList");
     if (questConditions==null)
     {
       return;
     }
-    int nbQuestConditions=questConditions.size();
     // Checks
     Integer index=(Integer)objectiveData.getAttributeValue("125031076");
     if ((index==null) || (index.intValue()!=objective.getIndex()))
@@ -91,74 +93,97 @@ public class AchievableStatusBuilder
     // Status
     Integer statusCode=(Integer)objectiveData.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(statusCode);
-    //System.out.println("\t\tObjective #"+objective.getIndex()+": ");
-    //System.out.println("\t\t\tState: "+state);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("\t\tObjective #"+objective.getIndex()+": ");
+      LOGGER.debug("\t\t\tState: "+state);
+    }
     objectiveStatus.setState(state);
 
     // Loop on conditions
+    int nbQuestConditions=questConditions.size();
     for(int i=0;i<nbQuestConditions;i++)
     {
+      LOGGER.debug("\t\t\t- questCondition #"+i);
       ClassInstance questCondition=questConditions.get(i);
-      //Integer condIndex=(Integer)questCondition.getAttributeValue("225496484");
-      //System.out.println("\t\t\t- questCondition #"+i);
-      //System.out.println("\t\t\tquestCondition index#"+condIndex);
-
-      if (questCondition==null)
-      {
-        LOGGER.warn("questCondition is null!");
-        continue;
-      }
-      List<ClassInstance> dynamicQuestEvents=(List<ClassInstance>)questCondition.getAttributeValue("m_eventList");
-      if (dynamicQuestEvents==null)
-      {
-        LOGGER.warn("dynamicQuestEvents is null!");
-        continue;
-      }
-      for(ClassInstance dynamicQuestEvent : dynamicQuestEvents)
-      {
-        if (dynamicQuestEvent==null)
-        {
-          LOGGER.warn("dynamicQuestEvent is null!");
-          continue;
-        }
-        Integer questEventId=(Integer)dynamicQuestEvent.getAttributeValue("m_questEventID");
-        if ((questEventId==null) || (questEventId.intValue()<1))
-        {
-          LOGGER.warn("Bad event ID: got="+questEventId);
-          continue;
-        }
-        ObjectiveCondition condition=objective.getConditionByEventID(questEventId.intValue());
-        if (condition==null)
-        {
-          LOGGER.warn("Condition not found. Event ID="+questEventId);
-          continue;
-        }
-        int indexToUse=condition.getIndex();
-        ObjectiveConditionStatus conditionStatus=objectiveStatus.getConditionStatus(indexToUse);
-        handleObjectiveCondition(conditionStatus,dynamicQuestEvent);
-      }
+      handleQuestCondition(questCondition,objectiveStatus);
     }
   }
 
-  @SuppressWarnings("unchecked")
+  private void handleQuestCondition(ClassInstance questCondition, AchievableObjectiveStatus objectiveStatus)
+  {
+    if (LOGGER.isDebugEnabled())
+    {
+      Integer condIndex=(Integer)questCondition.getAttributeValue("225496484");
+      LOGGER.debug("\t\t\t  questCondition index #"+condIndex);
+    }
+
+    if (questCondition==null)
+    {
+      LOGGER.warn("questCondition is null!");
+      return;
+    }
+    @SuppressWarnings("unchecked")
+    List<ClassInstance> dynamicQuestEvents=(List<ClassInstance>)questCondition.getAttributeValue("m_eventList");
+    if (dynamicQuestEvents==null)
+    {
+      LOGGER.warn("dynamicQuestEvents is null!");
+      return;
+    }
+    Objective objective=objectiveStatus.getObjective();
+    for(ClassInstance dynamicQuestEvent : dynamicQuestEvents)
+    {
+      if (dynamicQuestEvent==null)
+      {
+        LOGGER.warn("dynamicQuestEvent is null!");
+        continue;
+      }
+      Integer questEventId=(Integer)dynamicQuestEvent.getAttributeValue("m_questEventID");
+      if ((questEventId==null) || (questEventId.intValue()<1))
+      {
+        LOGGER.warn("Bad event ID: got="+questEventId);
+        continue;
+      }
+      ObjectiveCondition condition=objective.getConditionByEventID(questEventId.intValue());
+      if (condition==null)
+      {
+        LOGGER.warn("Condition not found. Event ID="+questEventId);
+        continue;
+      }
+      int indexToUse=condition.getIndex();
+      ObjectiveConditionStatus conditionStatus=objectiveStatus.getConditionStatus(indexToUse);
+      handleObjectiveCondition(conditionStatus,dynamicQuestEvent);
+    }
+  }
+
   private void handleObjectiveCondition(ObjectiveConditionStatus conditionStatus, ClassInstance dynamicQuestEvent)
   {
     // State
     Integer stateCode=(Integer)dynamicQuestEvent.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(stateCode);
     conditionStatus.setState(state);
-    //System.out.println("\t\t\t\tState: "+state);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("\t\t\t\tState: "+state);
+    }
     Integer count=(Integer)dynamicQuestEvent.getAttributeValue("m_uCount");
     if ((count!=null) && (count.intValue()>0))
     {
-      //System.out.println("\t\t\t\tCount: "+count);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\t\t\t\tCount: "+count);
+      }
       conditionStatus.setCount(count);
     }
     conditionStatus.clearKeys();
+    @SuppressWarnings("unchecked")
     List<String> strings=(List<String>)dynamicQuestEvent.getAttributeValue("m_rRuntimeStringList");
     if (strings!=null)
     {
-      //System.out.println("\t\t\t\tKeys: "+strings);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("\t\t\t\tKeys: "+strings);
+      }
       for(String key : strings)
       {
         conditionStatus.addKey(key);

@@ -63,7 +63,6 @@ public class TravelRegistryExtractor
   {
     DatPosition position=(DatPosition)travelRecord.getAttributeValue("111647278");
     String name=(String)travelRecord.getAttributeValue("47172757");
-    //String itemName=(String)travelRecord.getAttributeValue("m_name");
     LotroEnum<TravelLink> typeEnum=LotroEnumsRegistry.getInstance().get(TravelLink.class);
     TravelLink type=typeEnum.getEntry(typeCode);
     if (type==null)

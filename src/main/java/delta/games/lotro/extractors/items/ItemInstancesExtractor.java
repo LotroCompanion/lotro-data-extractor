@@ -147,8 +147,6 @@ public class ItemInstancesExtractor
 
     // Legendary specifics
     decodeLegendaryData(props,itemInstance);
-    // Armour specifics
-    decodeArmourSpecifics(props,itemInstance);
     // Weapon specifics
     if (itemInstance instanceof WeaponInstance)
     {
@@ -236,22 +234,6 @@ public class ItemInstancesExtractor
     // Name
     String name=(String)props.getProperty("Name");
     attrs.setLegendaryName(name);
-  }
-
-  private void decodeArmourSpecifics(PropertiesSet props, ItemInstance<? extends Item> itemInstance)
-  {
-    // Armor value
-    /// Disabled for Update 37 since it causes un-wanted armour stats
-    /*
-    Integer armorValue=(Integer)props.getProperty("Item_Armor_Value");
-    if (armorValue!=null)
-    {
-      LOGGER.debug("Armour: "+armorValue);
-      StatsManager statsMgr=itemInstance.getStatsManager();
-      statsMgr.setMode(CustomStatsMergeMode.MERGE);
-      statsMgr.getCustom().setStat(WellKnownStat.ARMOUR,armorValue);
-    }
-    */
   }
 
   private void decodeWeaponSpecifics(PropertiesSet props, WeaponInstance<?> weaponInstance)

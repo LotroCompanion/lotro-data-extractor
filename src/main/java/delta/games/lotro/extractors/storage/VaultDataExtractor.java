@@ -122,10 +122,12 @@ public class VaultDataExtractor
 
     // Binding data
     // BoundToIID ignored: same data in instance props
-    //Long boundToIID=(Long)props.getProperty("Bank_Repository_BoundToIID");
+    @SuppressWarnings("unused")
+    Long boundToIID=(Long)vaultProps.getProperty("Bank_Repository_BoundToIID");
     // Manager IID
     // Should be the IID of the current character
-    //Long managerIID=(Long)vaultProps.getProperty("Bank_Repository_ItemManagerIID");
+    @SuppressWarnings("unused")
+    Long managerIID=(Long)vaultProps.getProperty("Bank_Repository_ItemManagerIID");
 
     CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,vaultQuantityValue);
     return countedItemInstance;
