@@ -77,10 +77,12 @@ public class KinshipExtractor
       ClassInstance rankInstance=rankEntry.getValue();
       Integer rankId=rankEntry.getKey();
       String rankName=(String)rankInstance.getAttributeValue("m_siName");
-      LOGGER.debug("Rank "+rankId+" => "+rankName);
+      Integer levelInt=(Integer)rankInstance.getAttributeValue("m_uLevel");
+      int level=(levelInt!=null)?levelInt.intValue():0;
+      LOGGER.debug("Rank "+rankId+" => level="+level+", rank="+rankName);
       if (rankId!=null)
       {
-        KinshipRank rank=new KinshipRank(rankId.intValue(),rankName);
+        KinshipRank rank=new KinshipRank(rankId.intValue(),level,rankName);
         roster.addRank(rank);
       }
     }
