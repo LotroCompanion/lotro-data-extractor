@@ -166,6 +166,5 @@ public class TestOutfitsExtractor extends TestCase
     OutfitsManager outfitsMgrReloaded=OutfitsIO.loadOutfits(file);
     Assert.assertNotNull(outfitsMgrReloaded);
     System.out.println(outfitsMgrReloaded);
-    //OutfitsIO.saveOutfits(file,outfitsMgrReloaded);
   }
 }
