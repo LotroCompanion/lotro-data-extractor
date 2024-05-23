@@ -36,6 +36,10 @@ BoS_ItemArray:
     CarryAllInstance carryAllInstance=new CarryAllInstance();
     carryAllInstance.setId(instance.getInstanceId());
     carryAllInstance.setReference(carryAll);
+    // Name
+    String name=(String)props.getProperty("BoS_Pseudonym");
+    carryAllInstance.setName(name);
+    // Contents
     Object[] entries=(Object[])props.getProperty("BoS_ItemArray");
     if ((entries!=null) && (entries.length>0))
     {
