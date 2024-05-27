@@ -47,5 +47,12 @@ public class CharacterSummaryExtractor
     // Level
     Integer level=(Integer)properties.getProperty("Advancement_Level");
     summary.setLevel(level!=null?level.intValue():1);
+    // Surname
+    String surname=(String)properties.getProperty("Surname");
+    surname=StringUtils.fixName(surname);
+    summary.setSurname(surname);
+    // Rank
+    Integer rankCode=(Integer)properties.getProperty("Glory_GloryRank");
+    summary.setRankCode(rankCode);
   }
 }
