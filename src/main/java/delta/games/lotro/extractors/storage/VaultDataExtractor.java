@@ -9,7 +9,7 @@ import delta.games.lotro.character.storage.vaults.Vault;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.ArrayPropertyValue;
 import delta.games.lotro.dat.data.PropertiesSet;
-import delta.games.lotro.dat.data.PropertiesSet.PropertyValue;
+import delta.games.lotro.dat.data.PropertyValue;
 import delta.games.lotro.dat.data.bank.VaultDescriptor;
 import delta.games.lotro.dat.data.bank.VaultItemDescriptor;
 import delta.games.lotro.extractors.items.ItemInstancesExtractor;
