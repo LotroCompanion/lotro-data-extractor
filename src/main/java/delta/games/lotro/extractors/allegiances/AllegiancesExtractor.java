@@ -55,16 +55,15 @@ public class AllegiancesExtractor
           LOGGER.warn("Unknown allegiance: "+allegianceID);
           continue;
         }
-        Integer curveID=(Integer)memberProps.getProperty("Allegiance_Advancement_Progression_Entry");
-        if (curveID==null)
-        {
-          LOGGER.warn("Unknown curve: "+curveID);
-          continue;
-        }
         AllegianceDescription allegiance=mgr.getAllegiance(allegianceID.intValue());
         AllegianceStatus status=_allegiancesStatusMgr.get(allegiance,true);
-        Points2LevelCurve curve=mgr.getCurvesManager().getCurve(curveID.intValue());
-        status.setPoints2LevelCurve(curve);
+        status.setStarted(true);
+        Integer curveID=(Integer)memberProps.getProperty("Allegiance_Advancement_Progression_Entry");
+        if (curveID!=null)
+        {
+          Points2LevelCurve curve=mgr.getCurvesManager().getCurve(curveID.intValue());
+          status.setPoints2LevelCurve(curve);
+        }
         Long points=(Long)memberProps.getProperty("Allegiance_Points_Earned");
         status.setPointsEarned((points!=null)?points.intValue():0);
         Long flags=(Long)memberProps.getProperty("Allegiance_Reward_Flags");
