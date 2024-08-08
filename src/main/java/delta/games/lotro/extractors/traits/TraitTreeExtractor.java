@@ -61,12 +61,12 @@ public class TraitTreeExtractor
 
   private TraitTreeStatus extractTraitTree(TraitTree traitTree, PropertiesSet properties)
   {
+    TraitTreeStatus ret=new TraitTreeStatus(traitTree);
     Integer selectedBranchCode=(Integer)properties.getProperty("Trait_TraitTree_Class_SpecializationBranch");
     if (selectedBranchCode==null)
     {
-      return null;
+      return ret;
     }
-    TraitTreeStatus ret=new TraitTreeStatus(traitTree);
     TraitTreeBranch selectedBranch=traitTree.getBranchByCode(selectedBranchCode.intValue());
     ret.setSelectedBranch(selectedBranch);
 
