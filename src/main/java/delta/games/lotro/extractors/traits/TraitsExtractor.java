@@ -51,17 +51,19 @@ public class TraitsExtractor
     TraitsData ret=new TraitsData();
     @SuppressWarnings("unchecked")
     Map<Integer,ClassInstance> traitPools=(Map<Integer,ClassInstance>)traitsRegistry.getAttributeValue("m_arhPools");
-    int size=traitPools.size();
-    LOGGER.debug("Nb trait pools: "+size);
-    for(Map.Entry<Integer,ClassInstance> entry : traitPools.entrySet())
+    if (traitPools!=null)
     {
-      int key=entry.getKey().intValue();
-      ClassInstance persistentTraitPool=entry.getValue();
-      if (persistentTraitPool==null)
+      int size=traitPools.size();
+      LOGGER.debug("Nb trait pools: "+size);
+      for(Map.Entry<Integer,ClassInstance> entry : traitPools.entrySet())
       {
-        continue;
+        int key=entry.getKey().intValue();
+        ClassInstance persistentTraitPool=entry.getValue();
+        if (persistentTraitPool!=null)
+        {
+          handleTraitPool(key,persistentTraitPool,ret);
+        }
       }
-      handleTraitPool(key,persistentTraitPool,ret);
     }
     return ret;
   }
