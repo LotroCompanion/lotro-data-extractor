@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.skirmishs;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.skirmishes.SingleSkirmishStats;
 import delta.games.lotro.character.status.skirmishes.SkirmishLevel;
@@ -22,7 +23,7 @@ import delta.games.lotro.lore.instances.SkirmishPrivateEncounter;
  */
 public class SkirmishStatsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(SkirmishStatsExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SkirmishStatsExtractor.class);
 
   private SkirmishStatsManager _statsManager;
 

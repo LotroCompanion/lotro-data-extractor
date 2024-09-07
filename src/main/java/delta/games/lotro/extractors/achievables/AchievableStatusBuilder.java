@@ -3,7 +3,8 @@ package delta.games.lotro.extractors.achievables;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.achievables.AchievableElementState;
 import delta.games.lotro.character.status.achievables.AchievableObjectiveStatus;
@@ -20,7 +21,7 @@ import delta.games.lotro.lore.quests.objectives.ObjectiveCondition;
  */
 public class AchievableStatusBuilder
 {
-  private static final Logger LOGGER=Logger.getLogger(AchievableStatusBuilder.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(AchievableStatusBuilder.class);
 
   /**
    * Status code attribute name.

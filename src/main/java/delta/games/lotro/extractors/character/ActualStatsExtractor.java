@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.character;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.stats.BasicStatsSet;
 import delta.games.lotro.common.stats.StatDescription;
@@ -14,7 +15,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class ActualStatsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(ActualStatsExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ActualStatsExtractor.class);
 
   private void extractStat(BasicStatsSet stats, StatDescription stat, PropertiesSet props, String name, float factor)
   {

@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.travels;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.travels.AnchorStatus;
 import delta.games.lotro.character.status.travels.AnchorsStatusManager;
@@ -25,7 +26,7 @@ import delta.games.lotro.lore.maps.landblocks.LandblocksManager;
  */
 public class TravelRegistryExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(TravelRegistryExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TravelRegistryExtractor.class);
 
   private AnchorsStatusManager _statusMgr;
 

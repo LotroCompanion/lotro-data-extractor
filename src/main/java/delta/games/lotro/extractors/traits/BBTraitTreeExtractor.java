@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.traits;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.traitTree.TraitTree;
 import delta.games.lotro.character.classes.traitTree.TraitTreeBranch;
@@ -16,7 +17,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class BBTraitTreeExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(BBTraitTreeExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(BBTraitTreeExtractor.class);
 
   /**
    * Use the given properties to load the status of BB trait tree.

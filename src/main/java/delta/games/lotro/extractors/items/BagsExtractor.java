@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.items;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.storage.bags.BagsManager;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -16,7 +17,7 @@ import delta.games.lotro.lore.items.ItemInstance;
  */
 public class BagsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(BagsExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(BagsExtractor.class);
 
   private MemoryItemsManager _itemsMgr;
 

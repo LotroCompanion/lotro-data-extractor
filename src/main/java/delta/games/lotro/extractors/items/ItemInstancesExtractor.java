@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.items;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.colors.ColorDescription;
 import delta.games.lotro.common.colors.ColorsManager;
@@ -40,7 +41,7 @@ import delta.games.lotro.utils.StringUtils;
  */
 public class ItemInstancesExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(ItemInstancesExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemInstancesExtractor.class);
 
   /**
    * Build an item instance from the given properties.

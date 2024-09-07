@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.io.streams.IndentableStream;
 import delta.games.lotro.character.traits.TraitDescription;
@@ -27,7 +28,7 @@ import delta.games.lotro.common.enums.comparator.LotroEnumEntryNameComparator;
  */
 public class TraitsData
 {
-  private static final Logger LOGGER=Logger.getLogger(TraitsData.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TraitsData.class);
 
   private Map<TraitNature,List<Integer>> _slottedTraitsByNature;
   private Set<Integer> _acquiredTraits;

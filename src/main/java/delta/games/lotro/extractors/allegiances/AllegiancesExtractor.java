@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.allegiances;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.allegiances.AllegianceStatus;
 import delta.games.lotro.character.status.allegiances.AllegiancesStatusManager;
@@ -15,7 +16,7 @@ import delta.games.lotro.lore.allegiances.Points2LevelCurve;
  */
 public class AllegiancesExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(AllegiancesExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(AllegiancesExtractor.class);
 
   private AllegiancesStatusManager _allegiancesStatusMgr;
 

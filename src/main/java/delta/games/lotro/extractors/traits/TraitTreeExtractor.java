@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.traits;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.BasicCharacterAttributes;
 import delta.games.lotro.character.CharacterData;
@@ -17,7 +18,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class TraitTreeExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(TraitTreeExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TraitTreeExtractor.class);
 
   private CharacterData _storage;
 

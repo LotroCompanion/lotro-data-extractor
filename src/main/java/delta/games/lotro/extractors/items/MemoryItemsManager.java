@@ -3,7 +3,8 @@ package delta.games.lotro.extractors.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -17,7 +18,7 @@ import delta.games.lotro.utils.dat.DatEnumsUtils;
  */
 public class MemoryItemsManager
 {
-  private static final Logger LOGGER=Logger.getLogger(MemoryItemsManager.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MemoryItemsManager.class);
 
   private List<MemoryItem> _allItems;
   private List<MemoryItem> _equippedItems;

@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.achievables.AchievableStatus;
 import delta.games.lotro.character.status.achievables.AchievablesStatusManager;
@@ -23,7 +24,7 @@ import delta.games.lotro.lore.quests.QuestsManager;
  */
 public class AchievablesStatusExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(AchievablesStatusExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(AchievablesStatusExtractor.class);
 
   private static final String NB_ENTRIES="Nb entries: ";
 
@@ -86,7 +87,7 @@ public class AchievablesStatusExtractor
     if (LOGGER.isDebugEnabled())
     {
       LOGGER.debug("Quest name: "+quest.getName());
-      LOGGER.debug(questData);
+      LOGGER.debug("{}",questData);
     }
     Map<Integer,ClassInstance> objectivesData=(Map<Integer,ClassInstance>)questData.getAttributeValue("m_objectiveHash");
     for(Map.Entry<Integer,ClassInstance> entry : objectivesData.entrySet())
@@ -100,7 +101,7 @@ public class AchievablesStatusExtractor
       List<ClassInstance> conditions=(List<ClassInstance>)objectiveData.getAttributeValue("m_conditionList");
       for(ClassInstance condition : conditions) // QuestCondition
       {
-        LOGGER.debug(condition);
+        LOGGER.debug("{}",condition);
       }
     }
   }

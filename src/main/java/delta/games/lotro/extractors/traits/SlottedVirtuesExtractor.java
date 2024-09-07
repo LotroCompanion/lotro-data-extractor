@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.traits;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.CharacterData;
 import delta.games.lotro.character.stats.virtues.VirtuesSet;
@@ -15,7 +16,7 @@ import delta.games.lotro.character.virtues.VirtuesManager;
  */
 public class SlottedVirtuesExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(SlottedVirtuesExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SlottedVirtuesExtractor.class);
 
   /**
    * Handle slotted virtues.

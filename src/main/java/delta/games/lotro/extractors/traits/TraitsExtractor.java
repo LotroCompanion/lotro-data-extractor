@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.traits.TraitDescription;
 import delta.games.lotro.character.traits.TraitsManager;
@@ -24,7 +25,7 @@ import delta.games.lotro.dat.wlib.ClassInstance;
  */
 public class TraitsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(TraitsExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TraitsExtractor.class);
 
   private DataFacade _facade;
   private EnumMapper _traitAcquisitionType;

@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.items;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.storage.carryAlls.CarryAllInstance;
 import delta.games.lotro.dat.data.PropertiesSet;
@@ -15,7 +16,7 @@ import delta.games.lotro.lore.items.carryalls.CarryAll;
  */
 public class CarryAllDataExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(CarryAllDataExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CarryAllDataExtractor.class);
 
   /**
    * Extract a carry-all from an item (if possible).

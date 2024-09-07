@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.social;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.classes.ClassDescription;
 import delta.games.lotro.character.classes.ClassesManager;
@@ -26,7 +27,7 @@ import delta.games.lotro.utils.StringUtils;
  */
 public class KinshipExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(KinshipExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(KinshipExtractor.class);
 
   /**
    * Extract kinship data.

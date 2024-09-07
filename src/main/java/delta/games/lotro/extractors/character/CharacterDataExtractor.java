@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.character;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.CharacterFile;
 import delta.games.lotro.character.details.CharacterDetails;
@@ -43,7 +44,7 @@ import delta.games.lotro.utils.events.EventsManager;
  */
 public class CharacterDataExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(CharacterDataExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CharacterDataExtractor.class);
 
   /**
    * Synchronize character details.

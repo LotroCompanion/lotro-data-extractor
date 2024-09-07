@@ -1,6 +1,7 @@
 package delta.games.lotro.extractors.emotes;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.emotes.EmoteStatus;
 import delta.games.lotro.character.status.emotes.EmotesStatusManager;
@@ -14,7 +15,7 @@ import delta.games.lotro.lore.emotes.EmotesManager;
  */
 public class EmotesExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(EmotesExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(EmotesExtractor.class);
 
   private EmotesStatusManager _emotesStatusMgr;
 

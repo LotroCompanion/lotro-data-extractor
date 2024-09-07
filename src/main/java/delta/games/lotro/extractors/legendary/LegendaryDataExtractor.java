@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.lore.items.legendary.LegaciesManager;
@@ -33,7 +34,7 @@ import delta.games.lotro.lore.items.legendary.titles.LegendaryTitlesManager;
  */
 public class LegendaryDataExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(LegendaryDataExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(LegendaryDataExtractor.class);
 
   /**
    * Constructor.

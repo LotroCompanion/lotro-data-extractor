@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.titles;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.status.titles.TitleState;
 import delta.games.lotro.character.status.titles.TitleStatus;
@@ -17,7 +18,7 @@ import delta.games.lotro.lore.titles.TitlesManager;
  */
 public class TitlesExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(TitlesExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TitlesExtractor.class);
 
   private TitlesStatusManager _titlesStatusMgr;
 
@@ -63,7 +64,7 @@ public class TitlesExtractor
       return;
     }
     LOGGER.debug("Title name: "+title.getName());
-    LOGGER.debug(titleAcquisitionData);
+    LOGGER.debug("{}",titleAcquisitionData);
     TitleStatus titleStatus=_titlesStatusMgr.get(title,true);
     // Acquired
     titleStatus.setState(TitleState.ACQUIRED);

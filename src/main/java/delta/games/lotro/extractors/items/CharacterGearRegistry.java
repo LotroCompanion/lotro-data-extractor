@@ -3,7 +3,8 @@ package delta.games.lotro.extractors.items;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.character.gear.GearSlots;
@@ -16,7 +17,7 @@ import delta.games.lotro.dat.data.PropertiesSet;
  */
 public class CharacterGearRegistry
 {
-  private static final Logger LOGGER=Logger.getLogger(CharacterGearRegistry.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CharacterGearRegistry.class);
 
   private Map<GearSlot,Long> _iidsMap;
   private Map<Long,GearSlot> _slotsMap;

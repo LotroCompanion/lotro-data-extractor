@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.storage;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.storage.vaults.Chest;
 import delta.games.lotro.character.storage.vaults.Vault;
@@ -24,7 +25,7 @@ import delta.games.lotro.lore.items.ItemsManager;
  */
 public class VaultDataExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(VaultDataExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(VaultDataExtractor.class);
 
   private ItemInstancesExtractor _itemInstancesExtractor;
 

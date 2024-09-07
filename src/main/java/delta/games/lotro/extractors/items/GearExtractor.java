@@ -2,7 +2,8 @@ package delta.games.lotro.extractors.items;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.gear.CharacterGear;
 import delta.games.lotro.character.gear.GearSlot;
@@ -18,7 +19,7 @@ import delta.games.lotro.utils.dat.DatEnumsUtils;
  */
 public class GearExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(GearExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(GearExtractor.class);
 
   private MemoryItemsManager _itemsMgr;
 

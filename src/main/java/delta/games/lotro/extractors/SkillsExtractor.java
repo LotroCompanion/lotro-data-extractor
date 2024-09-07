@@ -2,7 +2,8 @@ package delta.games.lotro.extractors;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.games.lotro.character.skills.SkillDescription;
 import delta.games.lotro.character.skills.SkillsManager;
@@ -16,7 +17,7 @@ import delta.games.lotro.dat.wlib.ClassInstance;
  */
 public class SkillsExtractor
 {
-  private static final Logger LOGGER=Logger.getLogger(SkillsExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(SkillsExtractor.class);
 
   private SkillsStatusManager _statusMgr;
 
