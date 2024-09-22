@@ -1,7 +1,11 @@
 package delta.games.lotro.extractors.cosmetics;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 
 import delta.games.lotro.character.CharacterFile;
 import delta.games.lotro.character.CharactersManager;
@@ -15,14 +19,12 @@ import delta.games.lotro.dat.wlib.AttributeDefinition;
 import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.dat.wlib.ValueType;
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
 /**
  * Outfits data extractor.
  * @author DAM
  */
-public class TestOutfitsExtractor extends TestCase
+class TestOutfitsExtractor
 {
   private ClassDefinition _outfitRegistry;
   private ClassDefinition _outfit;
@@ -31,7 +33,7 @@ public class TestOutfitsExtractor extends TestCase
   /**
    * Constructor.
    */
-  public TestOutfitsExtractor()
+  TestOutfitsExtractor()
   {
     init();
   }
@@ -153,18 +155,19 @@ public class TestOutfitsExtractor extends TestCase
   /**
    * Test outfit import and XML I/O.
    */
-  public void testOutfitImport()
+  @Test
+  void testOutfitImport()
   {
     OutfitsExtractor extractor=new OutfitsExtractor();
     PropertiesSet playerProps=buildPlayerProperties();
     ClassInstance outfitsRegistry=buildOutfitRegistry();
     OutfitsManager outfitsMgr=extractor.extract(playerProps,outfitsRegistry);
-    Assert.assertNotNull(outfitsMgr);
+    assertNotNull(outfitsMgr);
     System.out.println(outfitsMgr);
     CharacterFile file=CharactersManager.getInstance().getToonById("Landroval","Kargarth");
     OutfitsIO.saveOutfits(file,outfitsMgr);
     OutfitsManager outfitsMgrReloaded=OutfitsIO.loadOutfits(file);
-    Assert.assertNotNull(outfitsMgrReloaded);
+    assertNotNull(outfitsMgrReloaded);
     System.out.println(outfitsMgrReloaded);
   }
 }
