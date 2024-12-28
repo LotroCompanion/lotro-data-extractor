@@ -8,7 +8,7 @@ import delta.games.lotro.lore.items.ItemInstance;
  * Storage for item data as loaded from memory.
  * @author DAM
  */
-public class MemoryItem
+public class ItemData
 {
   private PropertiesSet _properties;
   private ItemInstance<? extends Item> _item;
@@ -18,7 +18,7 @@ public class MemoryItem
    * @param item Decoded item.
    * @param properties Source properties.
    */
-  public MemoryItem(ItemInstance<? extends Item> item, PropertiesSet properties)
+  public ItemData(ItemInstance<? extends Item> item, PropertiesSet properties)
   {
     _properties=properties;
     _item=item;

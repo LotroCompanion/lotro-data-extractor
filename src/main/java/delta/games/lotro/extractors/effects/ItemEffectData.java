@@ -3,12 +3,12 @@ package delta.games.lotro.extractors.effects;
 import delta.games.lotro.character.stats.BasicStatsSet;
 
 /**
- * Item effect record.
+ * Base class for effect data.
  * @author DAM
  */
-public class ItemEffectRecord extends EffectRecord
+public class ItemEffectData
 {
-  private long _itemIid;
+  private Long _itemIid;
   private float _spellCraft;
   private BasicStatsSet _stats;
 
@@ -18,7 +18,7 @@ public class ItemEffectRecord extends EffectRecord
    * @param spellcraft Spellcraft.
    * @param stats Stats.
    */
-  public ItemEffectRecord(long itemIid, float spellcraft, BasicStatsSet stats)
+  public ItemEffectData(Long itemIid, float spellcraft, BasicStatsSet stats)
   {
     _itemIid=itemIid;
     _spellCraft=spellcraft;
@@ -29,7 +29,7 @@ public class ItemEffectRecord extends EffectRecord
    * Get the identifier of the source/targeted item instance
    * @return an item instance identifier.
    */
-  public long getItemIid()
+  public Long getItemIid()
   {
     return _itemIid;
   }

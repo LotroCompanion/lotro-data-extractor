@@ -8,7 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import delta.games.lotro.extractors.items.MemoryItemsManager;
+import delta.games.lotro.extractors.items.ItemsData;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 
@@ -20,21 +20,21 @@ public class ItemEffectsManager
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(ItemEffectsManager.class);
 
-  private Map<Long,List<ItemEffectRecord>> _mapItemIIDToEffects;
+  private Map<Long,List<ItemEffectData>> _mapItemIIDToEffects;
 
   /**
    * Constructor.
    */
   public ItemEffectsManager()
   {
-    _mapItemIIDToEffects=new HashMap<Long,List<ItemEffectRecord>>();
+    _mapItemIIDToEffects=new HashMap<Long,List<ItemEffectData>>();
   }
 
   /**
    * Merge effects data on item instances.
    * @param itemsMgr Items to use.
    */
-  public void mergeEffects(MemoryItemsManager itemsMgr)
+  public void mergeEffects(ItemsData itemsMgr)
   {
     for(Long itemIid : _mapItemIIDToEffects.keySet())
     {
@@ -48,7 +48,7 @@ public class ItemEffectsManager
 
   private void mergeItemEffect(Long itemIid, ItemInstance<? extends Item> itemInstance)
   {
-    List<ItemEffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
+    List<ItemEffectData> effects=_mapItemIIDToEffects.get(itemIid);
     if (effects==null)
     {
       return;
@@ -62,7 +62,7 @@ public class ItemEffectsManager
     mergeItemAndEffect(itemInstance,effects.get(0));
   }
 
-  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, ItemEffectRecord effect)
+  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, ItemEffectData effect)
   {
     String itemName=itemInstance.getName();
     Integer defaultItemLevel=itemInstance.getItemLevelForStats();
@@ -89,13 +89,13 @@ public class ItemEffectsManager
    * Add an item effect.
    * @param effect Effect to add.
    */
-  public void addEffect(ItemEffectRecord effect)
+  public void addEffect(ItemEffectData effect)
   {
-    Long itemIid=Long.valueOf(effect.getItemIid());
-    List<ItemEffectRecord> effects=_mapItemIIDToEffects.get(itemIid);
+    Long itemIid=effect.getItemIid();
+    List<ItemEffectData> effects=_mapItemIIDToEffects.get(itemIid);
     if (effects==null)
     {
-      effects=new ArrayList<ItemEffectRecord>();
+      effects=new ArrayList<ItemEffectData>();
       _mapItemIIDToEffects.put(itemIid,effects);
     }
     effects.add(effect);

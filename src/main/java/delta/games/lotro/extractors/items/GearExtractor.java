@@ -21,15 +21,15 @@ public class GearExtractor
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(GearExtractor.class);
 
-  private MemoryItemsManager _itemsMgr;
+  private ItemsData _itemsData;
 
   /**
    * Constructor.
-   * @param itemsMgr Loaded items manager.
+   * @param itemsData Loaded items manager.
    */
-  public GearExtractor(MemoryItemsManager itemsMgr)
+  public GearExtractor(ItemsData itemsData)
   {
-    _itemsMgr=itemsMgr;
+    _itemsData=itemsData;
   }
 
   /**
@@ -41,8 +41,8 @@ public class GearExtractor
   {
     CharacterGearRegistry gearRegistry=new CharacterGearRegistry();
     gearRegistry.useProperties(playerProps);
-    List<MemoryItem> equippedItems=_itemsMgr.getEquippedItems();
-    for(MemoryItem equippedItem : equippedItems)
+    List<ItemData> equippedItems=_itemsData.getEquippedItems();
+    for(ItemData equippedItem : equippedItems)
     {
       Integer slotCode=equippedItem.getSlotCode();
       GearSlot slot=DatEnumsUtils.getEquipmentSlot(slotCode.intValue());

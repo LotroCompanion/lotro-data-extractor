@@ -19,13 +19,13 @@ public class BagsExtractor
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(BagsExtractor.class);
 
-  private MemoryItemsManager _itemsMgr;
+  private ItemsData _itemsMgr;
 
   /**
    * Constructor.
    * @param itemsMgr Loaded items manager.
    */
-  public BagsExtractor(MemoryItemsManager itemsMgr)
+  public BagsExtractor(ItemsData itemsMgr)
   {
     _itemsMgr=itemsMgr;
   }
@@ -37,8 +37,8 @@ public class BagsExtractor
   public BagsManager extract()
   {
     BagsManager ret=new BagsManager();
-    List<MemoryItem> equippedItems=_itemsMgr.getBagItems();
-    for(MemoryItem equippedItem : equippedItems)
+    List<ItemData> equippedItems=_itemsMgr.getBagItems();
+    for(ItemData equippedItem : equippedItems)
     {
       PropertiesSet props=equippedItem.getProperties();
       // Quantity

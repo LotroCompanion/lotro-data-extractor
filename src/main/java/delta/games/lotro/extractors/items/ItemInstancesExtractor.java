@@ -172,7 +172,7 @@ public class ItemInstancesExtractor
     LegendaryInstanceAttrs attrs=legendary.getLegendaryAttributes();
     // Name
     String name=(String)props.getProperty("Name");
- attrs.setLegendaryName(name);
+    attrs.setLegendaryName(name);
     // Imbued?
     Integer imbuedValue=(Integer)props.getProperty("ItemAdvancement_Imbued");
     LOGGER.debug("Imbued: "+imbuedValue);

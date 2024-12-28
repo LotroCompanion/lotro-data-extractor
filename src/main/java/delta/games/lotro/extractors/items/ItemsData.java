@@ -16,33 +16,33 @@ import delta.games.lotro.utils.dat.DatEnumsUtils;
  * Storage for items loaded from memory.
  * @author DAM
  */
-public class MemoryItemsManager
+public class ItemsData
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(MemoryItemsManager.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemsData.class);
 
-  private List<MemoryItem> _allItems;
-  private List<MemoryItem> _equippedItems;
-  private List<MemoryItem> _bagItems;
-  private List<MemoryItem> _overflowItems;
-  private List<MemoryItem> _otherItems;
+  private List<ItemData> _allItems;
+  private List<ItemData> _equippedItems;
+  private List<ItemData> _bagItems;
+  private List<ItemData> _overflowItems;
+  private List<ItemData> _otherItems;
 
   /**
    * Constructor.
    */
-  public MemoryItemsManager()
+  public ItemsData()
   {
-    _allItems=new ArrayList<MemoryItem>();
-    _equippedItems=new ArrayList<MemoryItem>();
-    _bagItems=new ArrayList<MemoryItem>();
-    _overflowItems=new ArrayList<MemoryItem>();
-    _otherItems=new ArrayList<MemoryItem>();
+    _allItems=new ArrayList<ItemData>();
+    _equippedItems=new ArrayList<ItemData>();
+    _bagItems=new ArrayList<ItemData>();
+    _overflowItems=new ArrayList<ItemData>();
+    _otherItems=new ArrayList<ItemData>();
   }
 
   /**
    * Add an item.
    * @param item Item to add.
    */
-  public void addItem(MemoryItem item)
+  public void addItem(ItemData item)
   {
     PropertiesSet props=item.getProperties();
     Integer slotCode=(Integer)props.getProperty("Container_Slot");
@@ -86,7 +86,7 @@ public class MemoryItemsManager
    */
   public ItemInstance<? extends Item> findItemByIid(long itemIid)
   {
-    for(MemoryItem item : _allItems)
+    for(ItemData item : _allItems)
     {
       ItemInstance<? extends Item> itemInstance=item.getItem();
       if (itemInstance!=null)
@@ -108,17 +108,17 @@ public class MemoryItemsManager
    * Get the equipped items.
    * @return the equipped items.
    */
-  public List<MemoryItem> getEquippedItems()
+  public List<ItemData> getEquippedItems()
   {
-    return new ArrayList<MemoryItem>(_equippedItems);
+    return new ArrayList<ItemData>(_equippedItems);
   }
 
   /**
    * Get the bag items.
    * @return the bag items.
    */
-  public List<MemoryItem> getBagItems()
+  public List<ItemData> getBagItems()
   {
-    return new ArrayList<MemoryItem>(_bagItems);
+    return new ArrayList<ItemData>(_bagItems);
   }
 }
