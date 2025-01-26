@@ -90,16 +90,7 @@ public class AccountHousingDataExtractor
       return null;
     }
     InternalGameId owner=new InternalGameId(houseOwner.longValue());
-    HouseAddress address=buildAddress(addressLong);
+    HouseAddress address=HousingUtils.buildAddress(addressLong);
     return new HouseReference(address,owner);
-  }
-
-  private HouseAddress buildAddress(Long addressLong)
-  {
-    InternalGameId addressID=new InternalGameId(addressLong.longValue());
-    int neighborhoodID=addressID.getId2();
-    int houseID=addressID.getId1();
-    HouseAddress address=new HouseAddress(neighborhoodID,houseID);
-    return address;
   }
 }
