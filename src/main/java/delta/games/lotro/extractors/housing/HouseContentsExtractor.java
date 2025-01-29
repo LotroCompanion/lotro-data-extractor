@@ -6,6 +6,7 @@ import delta.games.lotro.character.status.housing.HousingItem;
 import delta.games.lotro.common.enums.HousingHookID;
 import delta.games.lotro.common.enums.LotroEnum;
 import delta.games.lotro.common.enums.LotroEnumsRegistry;
+import delta.games.lotro.common.geo.Position;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 
@@ -48,20 +49,21 @@ public class HouseContentsExtractor
 
   /**
    * Handle a housing entity.
-   * @param entityID Entity ID.
+   * @param position Entity position.
    * @param did DID.
    * @param props Properties.
    * @return the loaded item, or <code>null</code>.
    */
-  public HousingItem handleEntity(long entityID, int did, PropertiesSet props)
+  public HousingItem handleEntity(int did, Position position, PropertiesSet props)
   {
+    // Hook ID
     Integer hookIDCode=(Integer)props.getProperty("HousingSystem_DecorationItem_HookID");
     HousingHookID hookID=(hookIDCode!=null)?_hookIDEnum.getEntry(hookIDCode.intValue()):null;
     if(hookID==null)
     {
       return null;
     }
-    HousingItem ret=new HousingItem(did,new InternalGameId(entityID),hookID);
+    HousingItem ret=new HousingItem(did,position,hookID);
     Float hookRotation=(Float)props.getProperty("HousingDecoration_HookRotation");
     if (hookRotation!=null)
     {
