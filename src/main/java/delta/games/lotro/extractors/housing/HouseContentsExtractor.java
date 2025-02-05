@@ -9,6 +9,8 @@ import delta.games.lotro.common.enums.LotroEnumsRegistry;
 import delta.games.lotro.common.geo.Position;
 import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
+import delta.games.lotro.lore.items.Item;
+import delta.games.lotro.lore.items.ItemsManager;
 
 /**
  * Extractor for house contents.
@@ -63,7 +65,12 @@ public class HouseContentsExtractor
     {
       return null;
     }
-    HousingItem ret=new HousingItem(did,position,hookID);
+    Item item=ItemsManager.getInstance().getItem(did);
+    if (item==null)
+    {
+      return null;
+    }
+    HousingItem ret=new HousingItem(item,position,hookID);
     Float hookRotation=(Float)props.getProperty("HousingDecoration_HookRotation");
     if (hookRotation!=null)
     {
