@@ -41,6 +41,11 @@ public class RawTraitsExtractor
             ret.setTraitRank(traitID.intValue(),tier.intValue());
           }
         }
+        else
+        {
+          LOGGER.debug("Trait "+trait.getName()+" => tier 1");
+          ret.setTraitRank(traitID.intValue(),1);
+        }
       }
     }
     return ret;
