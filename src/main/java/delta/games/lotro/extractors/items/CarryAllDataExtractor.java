@@ -56,7 +56,7 @@ BoS_ItemArray:
         Item entryItem=ItemsManager.getInstance().getItem(itemID.intValue());
         if (entryItem==null)
         {
-          LOGGER.warn("Cannot find item: "+itemID);
+          LOGGER.warn("Cannot find item: {}",itemID);
           continue;
         }
         Integer quantity=(Integer)entryProps.getProperty("BoS_Quantity");

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import delta.games.lotro.character.gear.CharacterGear;
 import delta.games.lotro.character.gear.GearSlot;
 import delta.games.lotro.character.gear.GearSlotContents;
+import delta.games.lotro.common.id.InternalGameId;
 import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
@@ -49,9 +50,9 @@ public class GearExtractor
       if (slot!=null)
       {
         ItemInstance<? extends Item> itemInstance=equippedItem.getItem();
-        long iid=itemInstance.getInstanceId().asLong();
-        LOGGER.debug("\t"+slot+" => "+iid);
-        boolean ok=gearRegistry.hasIID(iid);
+        InternalGameId iid=itemInstance.getInstanceId();
+        LOGGER.debug("\t{} => {}",slot,iid);
+        boolean ok=gearRegistry.hasIID(iid.asLong());
         if (ok)
         {
           GearSlotContents contents=gear.getSlotContents(slot,true);

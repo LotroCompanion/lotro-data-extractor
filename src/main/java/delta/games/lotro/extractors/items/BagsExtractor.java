@@ -45,14 +45,14 @@ public class BagsExtractor
       Integer quantityValue=(Integer)props.getProperty("Inventory_Quantity");
       if (quantityValue!=null)
       {
-        LOGGER.debug("Quantity: "+quantityValue);
+        LOGGER.debug("Quantity: {}",quantityValue);
       }
       ItemInstance<? extends Item> itemInstance=equippedItem.getItem();
       int quantity=(quantityValue!=null)?quantityValue.intValue():1;
       CountedItem<ItemInstance<? extends Item>> countedItemInstance=new CountedItem<ItemInstance<? extends Item>>(itemInstance,quantity);
       Integer slotCode=equippedItem.getSlotCode();
       int index=slotCode.intValue()&0xFFFF;
-      LOGGER.debug("Index: "+index+" => "+countedItemInstance);
+      LOGGER.debug("Index: {} => {}",Integer.valueOf(index),countedItemInstance);
       ret.addBagItem(countedItemInstance,index);
     }
     return ret;

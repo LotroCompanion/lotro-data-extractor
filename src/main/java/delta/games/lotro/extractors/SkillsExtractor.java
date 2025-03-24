@@ -54,12 +54,12 @@ public class SkillsExtractor
         status.setAvailable(true);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Skill: "+skill.getName()+" acquired by: "+acquiredBy+", category="+skill.getCategory());
+          LOGGER.debug("Skill: {} acquired by: {}, category={}",skill.getName(),acquiredBy,skill.getCategory());
         }
       }
       else
       {
-        LOGGER.warn("Skill not found: ID="+skillId);
+        LOGGER.warn("Skill not found: ID={}",skillId);
       }
     }
   }

@@ -41,7 +41,7 @@ public class ActualStatsExtractor
     }
     else
     {
-      LOGGER.warn("Unmanaged stat type: "+stat);
+      LOGGER.warn("Unmanaged stat type: {}",stat);
     }
   }
 

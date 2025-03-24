@@ -51,7 +51,10 @@ public class ItemInstancesExtractor
    */
   public ItemInstance<? extends Item> buildItemInstanceFromProps(PropertiesSet props, Item item)
   {
-    LOGGER.debug(props.dump());
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("{}",props.dump());
+    }
     ItemInstance<? extends Item> instance=ItemFactory.buildInstance(item);
     if (instance==null)
     {
@@ -61,7 +64,7 @@ public class ItemInstancesExtractor
     instance.updateAutoStats();
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Found item: "+instance.dump());
+      LOGGER.debug("Found item: {}",instance.dump());
     }
     return instance;
   }
@@ -83,14 +86,14 @@ public class ItemInstancesExtractor
     Integer usageMinLevel=(Integer)props.getProperty("Usage_MinLevel");
     if (usageMinLevel!=null)
     {
-      LOGGER.debug("Usage min level: "+usageMinLevel);
+      LOGGER.debug("Usage min level: {}",usageMinLevel);
       itemInstance.setMinLevel(usageMinLevel);
     }
     // Item level
     Integer itemLevel=(Integer)props.getProperty("Item_Level");
     if (itemLevel!=null)
     {
-      LOGGER.debug("Item level: "+itemLevel);
+      LOGGER.debug("Item level: {}",itemLevel);
       itemInstance.setItemLevel(itemLevel);
     }
 
@@ -100,34 +103,34 @@ public class ItemInstancesExtractor
     if (boundTo!=null)
     {
       InternalGameId id=new InternalGameId(boundTo.longValue());
-      LOGGER.debug("Bound to: "+id);
+      LOGGER.debug("Bound to: {}",id);
       itemInstance.setBoundTo(id);
     }
     // Bind on acquire
     Integer bindOnAcquire=(Integer)props.getProperty("Inventory_BindOnAcquire");
     if (bindOnAcquire!=null)
     {
-      LOGGER.debug("Bind on acquire: "+bindOnAcquire);
+      LOGGER.debug("Bind on acquire: {}",bindOnAcquire);
     }
     // Bind to account
     Integer bindToAccount=(Integer)props.getProperty("Inventory_BindToAccount");
     if (bindToAccount!=null)
     {
-      LOGGER.debug("Bind to account: "+bindToAccount);
+      LOGGER.debug("Bind to account: {}",bindToAccount);
     }
 
     // Current item durability
     Integer durability=(Integer)props.getProperty("Item_CurStructurePoints");
     if (durability!=null)
     {
-      LOGGER.debug("Durability: "+durability);
+      LOGGER.debug("Durability: {}",durability);
     }
     itemInstance.setDurability(durability);
     // Item value
     Integer itemValue=(Integer)props.getProperty("Item_Value");
     if (itemValue!=null)
     {
-      LOGGER.debug("Item value: "+itemValue);
+      LOGGER.debug("Item value: {}",itemValue);
       Money money=parseItemValue(itemValue.intValue());
       itemInstance.setValue(money);
     }
@@ -140,7 +143,7 @@ public class ItemInstancesExtractor
     Float colorCode=(Float)props.getProperty("Item_ClothingColor");
     if (colorCode!=null)
     {
-      LOGGER.debug("Dye: "+colorCode);
+      LOGGER.debug("Dye: {}",colorCode);
       ColorsManager colorsMgr=ColorsManager.getInstance();
       ColorDescription color=colorsMgr.getColor(colorCode.floatValue());
       itemInstance.setColor(color);
@@ -175,24 +178,24 @@ public class ItemInstancesExtractor
     attrs.setLegendaryName(name);
     // Imbued?
     Integer imbuedValue=(Integer)props.getProperty("ItemAdvancement_Imbued");
-    LOGGER.debug("Imbued: "+imbuedValue);
+    LOGGER.debug("Imbued: {}",imbuedValue);
     attrs.setImbued((imbuedValue!=null)&&(imbuedValue.intValue()>0));
     NonImbuedLegendaryInstanceAttrs nonImbuedAttrs=attrs.getNonImbuedAttrs();
     // Item upgrades (crystals)
     Integer itemUpgrades=(Integer)props.getProperty("Item_LevelUpgradeTier");
     if (itemUpgrades!=null)
     {
-      LOGGER.debug("Item upgrades: "+itemUpgrades);
+      LOGGER.debug("Item upgrades: {}",itemUpgrades);
       nonImbuedAttrs.setNbUpgrades(itemUpgrades.intValue());
     }
     // Default legacy rank
     Integer defaultLegacyRank=(Integer)props.getProperty("ItemAdvancement_CombatPropertyModLevel");
-    LOGGER.debug("Default legacy rank: "+defaultLegacyRank);
+    LOGGER.debug("Default legacy rank: {}",defaultLegacyRank);
     // Item advancement level
     Integer liLevel=(Integer)props.getProperty("ItemAdvancement_Level");
     if (liLevel!=null)
     {
-      LOGGER.debug("LI level: "+liLevel);
+      LOGGER.debug("LI level: {}",liLevel);
       nonImbuedAttrs.setLegendaryItemLevel(liLevel.intValue());
     }
     // Max LI level: ItemAdvancement_MaxLevel_Override: 70
@@ -241,7 +244,7 @@ public class ItemInstancesExtractor
   {
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Weapon props: "+props.dump());
+      LOGGER.debug("Weapon props: {}",props.dump());
     }
     // Max damage
     Float maxDamage=(Float)props.getProperty("Combat_Damage");
@@ -254,7 +257,7 @@ public class ItemInstancesExtractor
     Float damageVariance=(Float)props.getProperty("Combat_DamageVariance");
     if (damageVariance!=null)
     {
-      LOGGER.warn("Found a damage variance: "+damageVariance);
+      LOGGER.warn("Found a damage variance: {}",damageVariance);
     }
     // Damage type
     Integer damageTypeCode=(Integer)props.getProperty("Combat_DamageType");
@@ -276,7 +279,7 @@ public class ItemInstancesExtractor
     Float slayerValue=(Float)props.getProperty("Combat_WeaponSlayerAddMod");
     if (slayerValue!=null)
     {
-      LOGGER.warn("Found a weapon slayer modifier: "+slayerValue);
+      LOGGER.warn("Found a weapon slayer modifier: {}",slayerValue);
     }
   }
 
@@ -352,7 +355,7 @@ public class ItemInstancesExtractor
     {
       nbEssences=essences.length;
     }
-    LOGGER.debug("Nb essences: "+nbEssences);
+    LOGGER.debug("Nb essences: {}",Integer.valueOf(nbEssences));
     for(int i=0;i<nbEssences;i++)
     {
       PropertiesSet essenceProps=(PropertiesSet)essences[i];

@@ -26,7 +26,7 @@ public class AchievablesStatusExtractor
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(AchievablesStatusExtractor.class);
 
-  private static final String NB_ENTRIES="Nb entries: ";
+  private static final String NB_ENTRIES="Nb entries: {}";
 
   private AchievableStatusBuilder _builder;
   private AchievablesStatusManager _deedsStatusMgr;
@@ -63,7 +63,7 @@ public class AchievablesStatusExtractor
     {
       Map<Integer,ClassInstance> dataMap=(Map<Integer,ClassInstance>)data.getValueForReference(orphanRefs.get(0).intValue());
       int size=dataMap.size();
-      LOGGER.debug(NB_ENTRIES+size);
+      LOGGER.debug(NB_ENTRIES,Integer.valueOf(size));
       for(Map.Entry<Integer,ClassInstance> entry : dataMap.entrySet())
       {
         int questId=entry.getKey().intValue();
@@ -81,27 +81,24 @@ public class AchievablesStatusExtractor
     QuestDescription quest=questMgr.getQuest(questId);
     if (quest==null)
     {
-      LOGGER.warn("Quest not found: ID="+questId);
+      LOGGER.warn("Quest not found: ID={}",Integer.valueOf(questId));
       return;
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Quest name: "+quest.getName());
+      LOGGER.debug("Quest name: {}",quest);
       LOGGER.debug("{}",questData);
-    }
-    Map<Integer,ClassInstance> objectivesData=(Map<Integer,ClassInstance>)questData.getAttributeValue("m_objectiveHash");
-    for(Map.Entry<Integer,ClassInstance> entry : objectivesData.entrySet())
-    {
-      int objectiveIndex=entry.getKey().intValue();
-      ClassInstance objectiveData=entry.getValue(); // QuestCompletionObjective
-      if (LOGGER.isDebugEnabled())
+      Map<Integer,ClassInstance> objectivesData=(Map<Integer,ClassInstance>)questData.getAttributeValue("m_objectiveHash");
+      for(Map.Entry<Integer,ClassInstance> entry : objectivesData.entrySet())
       {
-        LOGGER.debug("Objective #"+objectiveIndex+": "+objectiveData);
-      }
-      List<ClassInstance> conditions=(List<ClassInstance>)objectiveData.getAttributeValue("m_conditionList");
-      for(ClassInstance condition : conditions) // QuestCondition
-      {
-        LOGGER.debug("{}",condition);
+        Integer objectiveIndex=entry.getKey();
+        ClassInstance objectiveData=entry.getValue(); // QuestCompletionObjective
+        LOGGER.debug("Objective #{}: {}",objectiveIndex,objectiveData);
+        List<ClassInstance> conditions=(List<ClassInstance>)objectiveData.getAttributeValue("m_conditionList");
+        for(ClassInstance condition : conditions) // QuestCondition
+        {
+          LOGGER.debug("{}",condition);
+        }
       }
     }
   }
@@ -109,7 +106,7 @@ public class AchievablesStatusExtractor
   private void handleActiveAchievables(Map<Integer,ClassInstance> activeAchievables)
   {
     int size=activeAchievables.size();
-    LOGGER.debug(NB_ENTRIES+size);
+    LOGGER.debug(NB_ENTRIES,Integer.valueOf(size));
     for(Map.Entry<Integer,ClassInstance> entry : activeAchievables.entrySet())
     {
       int achievableId=entry.getKey().intValue();
@@ -142,28 +139,25 @@ public class AchievablesStatusExtractor
   private void handleActiveAchievable(AchievableStatus deedStatus, Achievable achievable, ClassInstance questData)
   {
     // Active quests (around 20) and deeds [around 500)
-    LOGGER.debug("ID: "+achievable.getIdentifier());
+    LOGGER.debug("ID: {}",achievable);
     _builder.handleAchievable(deedStatus,questData);
    }
 
   private void handleCompletedAchievables(Map<Integer,ClassInstance> completedAchievables)
   {
     int size=completedAchievables.size();
-    LOGGER.debug(NB_ENTRIES+size);
+    LOGGER.debug(NB_ENTRIES,Integer.valueOf(size));
     for(Map.Entry<Integer,ClassInstance> entry : completedAchievables.entrySet())
     {
-      int achievableId=entry.getKey().intValue();
+      Integer achievableId=entry.getKey();
       ClassInstance questData=entry.getValue();
       if (questData==null)
       {
-        LOGGER.warn("questData is null for ID: "+achievableId);
+        LOGGER.warn("questData is null for ID: {}",achievableId);
         continue;
       }
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("ID: "+achievableId);
-      }
-      handleCompletedAchievable(questData,achievableId);
+      LOGGER.debug("ID: {}",achievableId);
+      handleCompletedAchievable(questData,achievableId.intValue());
     }
   }
 
@@ -176,10 +170,7 @@ public class AchievablesStatusExtractor
       QuestDescription quest=questsMgr.getQuest(achievableId);
       if (quest!=null)
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("Quest name: "+quest.getName());
-        }
+        LOGGER.debug("Quest: {}",quest);
         AchievableStatus status=_questsStatusMgr.get(quest,true);
         status.setCompleted(true);
         status.updateInternalState();
@@ -196,7 +187,7 @@ public class AchievablesStatusExtractor
           Date date=TimeUtils.getDate(timestamp);
           if (LOGGER.isDebugEnabled())
           {
-            LOGGER.debug("Quest: "+quest+" => x"+count+", date="+date);
+            LOGGER.debug("Quest: {} => x{}, date={}",quest,count,date);
           }
         }
         done=true;
@@ -210,7 +201,7 @@ public class AchievablesStatusExtractor
       {
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Deed name: "+deed.getName());
+          LOGGER.debug("Deed: {}",deed);
         }
         AchievableStatus status=_deedsStatusMgr.get(deed,true);
         status.setCompleted(true);
@@ -220,7 +211,7 @@ public class AchievablesStatusExtractor
     }
     if ((_questsStatusMgr!=null) && (_deedsStatusMgr!=null) && (!done))
     {
-      LOGGER.warn("Deed/quest not found: "+achievableId);
+      LOGGER.warn("Deed/quest not found: {}",Integer.valueOf(achievableId));
     }
   }
 }

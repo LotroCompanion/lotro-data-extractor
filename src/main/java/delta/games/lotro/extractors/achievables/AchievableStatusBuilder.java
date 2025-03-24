@@ -40,7 +40,7 @@ public class AchievableStatusBuilder
     // questData is a QuestRecord
     if (questData==null)
     {
-      LOGGER.warn("Could not use status for achievable: "+achievable.getIdentifier());
+      LOGGER.warn("Could not use status for achievable: {}",achievable);
       return;
     }
     // State
@@ -48,7 +48,7 @@ public class AchievableStatusBuilder
     AchievableElementState state=getStateFromCode(statusCode);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Achievable state: "+achievable.getIdentifier()+" ("+achievable.getName()+") => "+state);
+      LOGGER.debug("Achievable state: {} => {}",achievable,state);
     }
     achievableStatus.setState(state);
     // Objectives
@@ -88,7 +88,7 @@ public class AchievableStatusBuilder
     Integer index=(Integer)objectiveData.getAttributeValue("125031076");
     if ((index==null) || (index.intValue()!=objective.getIndex()))
     {
-      LOGGER.warn("Objective index mismatch: expected="+objective.getIndex()+", got="+index);
+      LOGGER.warn("Objective index mismatch: expected={}, got={}",Integer.valueOf(objective.getIndex()),index);
       return;
     }
     // Status
@@ -96,8 +96,8 @@ public class AchievableStatusBuilder
     AchievableElementState state=getStateFromCode(statusCode);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("\t\tObjective #"+objective.getIndex()+": ");
-      LOGGER.debug("\t\t\tState: "+state);
+      LOGGER.debug("\t\tObjective #{}: ",index);
+      LOGGER.debug("\t\t\tState: {}",state);
     }
     objectiveStatus.setState(state);
 
@@ -105,7 +105,7 @@ public class AchievableStatusBuilder
     int nbQuestConditions=questConditions.size();
     for(int i=0;i<nbQuestConditions;i++)
     {
-      LOGGER.debug("\t\t\t- questCondition #"+i);
+      LOGGER.debug("\t\t\t- questCondition #{}",Integer.valueOf(i));
       ClassInstance questCondition=questConditions.get(i);
       handleQuestCondition(questCondition,objectiveStatus);
     }
@@ -116,7 +116,7 @@ public class AchievableStatusBuilder
     if (LOGGER.isDebugEnabled())
     {
       Integer condIndex=(Integer)questCondition.getAttributeValue("225496484");
-      LOGGER.debug("\t\t\t  questCondition index #"+condIndex);
+      LOGGER.debug("\t\t\t  questCondition index #{}",condIndex);
     }
 
     if (questCondition==null)
@@ -142,13 +142,13 @@ public class AchievableStatusBuilder
       Integer questEventId=(Integer)dynamicQuestEvent.getAttributeValue("m_questEventID");
       if ((questEventId==null) || (questEventId.intValue()<1))
       {
-        LOGGER.warn("Bad event ID: got="+questEventId);
+        LOGGER.warn("Bad event ID: got={}",questEventId);
         continue;
       }
       ObjectiveCondition condition=objective.getConditionByEventID(questEventId.intValue());
       if (condition==null)
       {
-        LOGGER.warn("Condition not found. Event ID="+questEventId);
+        LOGGER.warn("Condition not found. Event ID={}",questEventId);
         continue;
       }
       int indexToUse=condition.getIndex();
@@ -165,14 +165,14 @@ public class AchievableStatusBuilder
     conditionStatus.setState(state);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("\t\t\t\tState: "+state);
+      LOGGER.debug("\t\t\t\tState: {}",state);
     }
     Integer count=(Integer)dynamicQuestEvent.getAttributeValue("m_uCount");
     if ((count!=null) && (count.intValue()>0))
     {
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\t\t\t\tCount: "+count);
+        LOGGER.debug("\t\t\t\tCount: {}",count);
       }
       conditionStatus.setCount(count);
     }
@@ -183,7 +183,7 @@ public class AchievableStatusBuilder
     {
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("\t\t\t\tKeys: "+strings);
+        LOGGER.debug("\t\t\t\tKeys: {}",strings);
       }
       for(String key : strings)
       {
@@ -215,7 +215,7 @@ Instance of class DynamicQuestEvent:
     if (code.intValue()==0) return AchievableElementState.UNDEFINED;
     if (code.intValue()==268435456) return AchievableElementState.UNDERWAY;
     if (code.intValue()==805306368) return AchievableElementState.COMPLETED;
-    LOGGER.warn("Unmanaged status code: "+code);
+    LOGGER.warn("Unmanaged status code: {}",code);
     return null;
   }
 }

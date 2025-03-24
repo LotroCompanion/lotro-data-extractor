@@ -43,7 +43,7 @@ public class SkirmishStatsExtractor
   public void extract(Map<Integer,PropertiesSet> skirmishStatsMap)
   {
     int size=skirmishStatsMap.size();
-    LOGGER.debug("Nb entries: "+size);
+    LOGGER.debug("Nb entries: {}",Integer.valueOf(size));
     for(Map.Entry<Integer,PropertiesSet> entry : skirmishStatsMap.entrySet())
     {
       int skirmishID=entry.getKey().intValue();
@@ -118,27 +118,27 @@ public class SkirmishStatsExtractor
     Integer smGainedBossKills=(Integer)props.getProperty(getPropertyName("SM_Gained_BossKills",size,level));
     if ((smGainedBossKills!=null) && (smGainedBossKills.intValue()!=0))
     {
-      LOGGER.warn("Unused SM_Gained_BossKills: "+smGainedBossKills);
+      LOGGER.warn("Unused SM_Gained_BossKills: {}",smGainedBossKills);
     }
     Integer spGainedCp=(Integer)props.getProperty(getPropertyName("SP_Gained_CP",size,level));
     if ((spGainedCp!=null) && (spGainedCp.intValue()!=0))
     {
-      LOGGER.warn("Unused SP_Gained_CP: "+spGainedCp);
+      LOGGER.warn("Unused SP_Gained_CP: {}",spGainedCp);
     }
     Integer spGainedDefenders=(Integer)props.getProperty(getPropertyName("SP_Gained_Defenders",size,level));
     if ((spGainedDefenders!=null) && (spGainedDefenders.intValue()!=0))
     {
-      LOGGER.warn("Unused SP_Gained_Defenders: "+spGainedDefenders);
+      LOGGER.warn("Unused SP_Gained_Defenders: {}",spGainedDefenders);
     }
     Integer spGainedOptionals=(Integer)props.getProperty(getPropertyName("SP_Gained_Optionals",size,level));
     if ((spGainedOptionals!=null) && (spGainedOptionals.intValue()!=0))
     {
-      LOGGER.warn("Unused SP_Gained_Optionals: "+spGainedOptionals);
+      LOGGER.warn("Unused SP_Gained_Optionals: {}",spGainedOptionals);
     }
     Integer spGainedTokens=(Integer)props.getProperty(getPropertyName("SP_Gained_Tokens",size,level));
     if ((spGainedTokens!=null) && (spGainedTokens.intValue()!=0))
     {
-      LOGGER.warn("Unused SP_Gained_Tokens: "+spGainedTokens);
+      LOGGER.warn("Unused SP_Gained_Tokens: {}",spGainedTokens);
     }
     // Marks earned
     Integer marksEarned=(Integer)props.getProperty(getPropertyName("SP_Gained_Other",size,level));

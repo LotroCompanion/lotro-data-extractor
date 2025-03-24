@@ -53,39 +53,25 @@ public class LegendaryDataExtractor
   public LegendaryDataManager extract(ClassInstance legendaryData)
   {
     LegendaryDataManager ret=new LegendaryDataManager();
-    // Relics registry
-    HashMap<Integer,Integer> relicsCount=(HashMap<Integer,Integer>)legendaryData.getAttributeValue("135264115");
-    if (relicsCount!=null)
-    {
-      for(Map.Entry<Integer,Integer> relicEntry : relicsCount.entrySet())
-      {
-        int relicId=relicEntry.getKey().intValue();
-        int count=relicEntry.getValue().intValue();
-        Relic relic=RelicsManager.getInstance().getById(relicId);
-        if (relic!=null)
-        {
-          LOGGER.debug("Relic: "+relic.getName()+" => "+count);
-        }
-      }
-    }
+    // Relics registry: see RelicsInventoryExtractor
     // Legendary items
     HashMap<Long,ClassInstance> map=(HashMap<Long,ClassInstance>)legendaryData.getAttributeValue("262884911");
     if (map!=null)
     {
       for(Map.Entry<Long,ClassInstance> entry : map.entrySet())
       {
-        long iid=entry.getKey().longValue();
+        Long iid=entry.getKey();
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Found legendary data for IID: "+iid);
+          LOGGER.debug("Found legendary data for IID: {}",iid);
         }
         ClassInstance class2337=entry.getValue();
         LegendaryInstanceAttrs attrs=loadLegendaryAttrs(class2337);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Legendary data: "+attrs.dump());
+          LOGGER.debug("Legendary data: {}",attrs.dump());
         }
-        ret.addLegendaryData(iid,attrs);
+        ret.addLegendaryData(iid.longValue(),attrs);
       }
     }
     return ret;
@@ -130,7 +116,7 @@ public class LegendaryDataExtractor
     // LONG 121029072 = 1980000
     // Index of slot in the 'Legendary Items' panel (starting at 0 for item #1)
     Integer slotIndex=(Integer)class2337.getAttributeValue("57320212");
-    LOGGER.debug("Slot: "+slotIndex);
+    LOGGER.debug("Slot: {}",slotIndex);
     return attrs;
   }
 
@@ -171,18 +157,18 @@ public class LegendaryDataExtractor
       for(Map.Entry<Integer,Integer> slottedRelic : slottedRelics.entrySet())
       {
         int relicId=slottedRelic.getKey().intValue();
-        int slotId=slottedRelic.getValue().intValue();
+        Integer slotId=slottedRelic.getValue();
         Relic relic=relicsMgr.getById(relicId);
         if (relic!=null)
         {
-          RelicType type=getRelicTypeFromSlotId(slotId);
+          RelicType type=getRelicTypeFromSlotId(slotId.intValue());
           if (type!=null)
           {
             attrs.getRelicsSet().slotRelic(relic,type);
           }
           if (LOGGER.isDebugEnabled())
           {
-            LOGGER.debug("Found relic: "+relic.getName()+" on slot "+slotId);
+            LOGGER.debug("Found relic: {} on slot {}",relic.getName(),slotId);
           }
         }
       }
@@ -241,7 +227,7 @@ public class LegendaryDataExtractor
     }
     if (ret==null)
     {
-      LOGGER.warn("Non imbued legacy non found: "+legacyId);
+      LOGGER.warn("Non imbued legacy non found: {}",Integer.valueOf(legacyId));
     }
     return ret;
   }
