@@ -66,7 +66,7 @@ public class OutfitsExtractor
     if (visibilityBits==null)
     {
       // All slots are visible
-      for(GearSlot slot : OutfitsConstants.OUTFIT_SLOTS)
+      for(GearSlot slot : OutfitsConstants.getAll())
       {
         outfit.setSlotVisible(slot,true);
       }
