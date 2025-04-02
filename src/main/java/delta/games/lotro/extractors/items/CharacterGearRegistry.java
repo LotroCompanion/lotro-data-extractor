@@ -20,7 +20,6 @@ public class CharacterGearRegistry
   private static final Logger LOGGER=LoggerFactory.getLogger(CharacterGearRegistry.class);
 
   private Map<GearSlot,Long> _iidsMap;
-  private Map<Long,GearSlot> _slotsMap;
 
   /**
    * Constructor.
@@ -28,7 +27,6 @@ public class CharacterGearRegistry
   public CharacterGearRegistry()
   {
     _iidsMap=new HashMap<GearSlot,Long>();
-    _slotsMap=new HashMap<Long,GearSlot>();
   }
 
   /**
@@ -82,7 +80,6 @@ public class CharacterGearRegistry
     {
       Long iid=(Long)value;
       _iidsMap.put(slot,iid);
-      _slotsMap.put(iid,slot);
       LOGGER.debug("Registering "+iid+" for slot "+slot);
     }
   }
