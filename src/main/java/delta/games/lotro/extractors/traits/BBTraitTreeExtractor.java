@@ -54,7 +54,7 @@ public class BBTraitTreeExtractor
         Integer tier=(Integer)properties.getProperty(propertyName);
         if (tier!=null)
         {
-          LOGGER.debug("Trait "+trait.getName()+" => tier "+tier+" (prop="+propertyName+")");
+          LOGGER.debug("Trait {} => tier {} (prop={})",trait,tier,propertyName);
           pointsSpent+=tier.intValue();
           status.setRankForTrait(trait.getIdentifier(),tier.intValue());
         }
@@ -70,7 +70,7 @@ public class BBTraitTreeExtractor
         if (pointsSpent>=stepValue.intValue())
         {
           TraitDescription trait=progression.getTraits().get(i);
-          LOGGER.debug("Enough points for trait "+trait.getName());
+          LOGGER.debug("Enough points for trait {}",trait);
           status.setRankForTrait(trait.getIdentifier(),1);
         }
       }

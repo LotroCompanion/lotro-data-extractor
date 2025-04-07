@@ -37,13 +37,13 @@ public class RawTraitsExtractor
           Integer tier=(Integer)properties.getProperty(propertyName);
           if (tier!=null)
           {
-            LOGGER.debug("Trait "+trait.getName()+" => tier "+tier+" (prop="+propertyName+")");
+            LOGGER.debug("Trait {} => tier {} (prop={})",trait,tier,propertyName);
             ret.setTraitRank(traitID.intValue(),tier.intValue());
           }
         }
         else
         {
-          LOGGER.debug("Trait "+trait.getName()+" => tier 1");
+          LOGGER.debug("Trait {} => tier 1",trait);
           ret.setTraitRank(traitID.intValue(),1);
         }
       }

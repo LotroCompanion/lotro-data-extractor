@@ -41,21 +41,18 @@ public class TraitTreeExtractor
     ClassDescription characterClass=attrs.getCharacterClass();
     TraitTree traitTree=characterClass.getTraitTree();
     TraitTreeStatus status=extractTraitTree(traitTree,properties);
-    if (status!=null)
+    // Cost
+    Integer costValue=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalSpentPoints");
+    int expectedCost=(costValue!=null?costValue.intValue():0);
+    int actualCost=status.getCost();
+    if (actualCost!=expectedCost)
     {
-      // Cost
-      Integer costValue=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalSpentPoints");
-      int expectedCost=(costValue!=null?costValue.intValue():0);
-      int actualCost=status.getCost();
-      if (actualCost!=expectedCost)
-      {
-        LOGGER.warn("Actual cost difference: expected="+expectedCost+", actual="+actualCost);
-      }
-      // Total points
-      Integer totalPointsValue=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalPoints");
-      int totalPoints=(totalPointsValue!=null?totalPointsValue.intValue():0);
-      status.setTotalPoints(totalPoints);
+      LOGGER.warn("Actual cost difference: expected={}, actual={}",Integer.valueOf(expectedCost),Integer.valueOf(actualCost));
     }
+    // Total points
+    Integer totalPointsValue=(Integer)properties.getProperty("Trait_TraitTreeUI_TotalPoints");
+    int totalPoints=(totalPointsValue!=null?totalPointsValue.intValue():0);
+    status.setTotalPoints(totalPoints);
     // Set trait tree status
     _storage.getTraits().setTraitTreeStatus(status);
   }
@@ -81,7 +78,7 @@ public class TraitTreeExtractor
           Integer tier=(Integer)properties.getProperty(propertyName);
           if (tier!=null)
           {
-            LOGGER.debug("Trait "+trait.getName()+" => tier "+tier+" (prop="+propertyName+")");
+            LOGGER.debug("Trait {} => tier {} (prop={})",trait,tier,propertyName);
             int traitID=trait.getIdentifier();
             ret.setRankForTrait(traitID,tier.intValue());
           }

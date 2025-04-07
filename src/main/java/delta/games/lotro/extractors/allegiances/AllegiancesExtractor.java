@@ -53,7 +53,7 @@ public class AllegiancesExtractor
         Integer allegianceID=(Integer)memberProps.getProperty("Allegiance_Type_Entry");
         if (allegianceID==null)
         {
-          LOGGER.warn("Unknown allegiance: "+allegianceID);
+          LOGGER.warn("Unknown allegiance: {}",allegianceID);
           continue;
         }
         AllegianceDescription allegiance=mgr.getAllegiance(allegianceID.intValue());

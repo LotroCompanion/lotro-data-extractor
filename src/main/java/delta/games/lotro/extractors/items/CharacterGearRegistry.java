@@ -80,7 +80,7 @@ public class CharacterGearRegistry
     {
       Long iid=(Long)value;
       _iidsMap.put(slot,iid);
-      LOGGER.debug("Registering "+iid+" for slot "+slot);
+      LOGGER.debug("Registering {} for slot {}",iid,slot);
     }
   }
 

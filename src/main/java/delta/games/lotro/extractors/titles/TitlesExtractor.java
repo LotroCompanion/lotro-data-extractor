@@ -39,7 +39,7 @@ public class TitlesExtractor
   {
     _titlesStatusMgr.clear();
     int size=titlesMap.size();
-    LOGGER.debug("Nb entries: "+size);
+    LOGGER.debug("Nb entries: {}",Integer.valueOf(size));
     for(Map.Entry<Integer,ClassInstance> entry : titlesMap.entrySet())
     {
       int titleId=entry.getKey().intValue();
@@ -60,10 +60,10 @@ public class TitlesExtractor
     TitleDescription title=titlesMgr.getTitle(titleId);
     if (title==null)
     {
-      LOGGER.warn("Title not found: ID="+titleId);
+      LOGGER.warn("Title not found: ID={}",Integer.valueOf(titleId));
       return;
     }
-    LOGGER.debug("Title name: "+title.getName());
+    LOGGER.debug("Title name: {}",title.getName());
     LOGGER.debug("{}",titleAcquisitionData);
     TitleStatus titleStatus=_titlesStatusMgr.get(title,true);
     // Acquired

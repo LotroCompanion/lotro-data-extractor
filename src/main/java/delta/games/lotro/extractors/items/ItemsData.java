@@ -75,7 +75,10 @@ public class ItemsData
     }
     // Other
     ItemInstance<? extends Item> itemInstance=item.getItem();
-    LOGGER.warn("Unmanaged item location! "+slotCode+" => "+props.dump()+", item="+itemInstance.dump());
+    if (LOGGER.isWarnEnabled())
+    {
+      LOGGER.warn("Unmanaged item location! {} => {}, item={}",slotCode,props.dump(),itemInstance.dump());
+    }
     _otherItems.add(item);
   }
 

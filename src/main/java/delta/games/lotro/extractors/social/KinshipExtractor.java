@@ -80,7 +80,7 @@ public class KinshipExtractor
       String rankName=(String)rankInstance.getAttributeValue("m_siName");
       Integer levelInt=(Integer)rankInstance.getAttributeValue("m_uLevel");
       int level=(levelInt!=null)?levelInt.intValue():0;
-      LOGGER.debug("Rank "+rankId+" => level="+level+", rank="+rankName);
+      LOGGER.debug("Rank {} => level={}, rank={}",rankId,levelInt,rankName);
       if (rankId!=null)
       {
         KinshipRank rank=new KinshipRank(rankId.intValue(),level,rankName);
@@ -130,7 +130,7 @@ public class KinshipExtractor
     }
     else
     {
-      LOGGER.warn("Unknown sex: "+charName);
+      LOGGER.warn("Unknown gender: {}",charName);
       male=true;
     }
     characterSummary.setCharacterSex(male?Genders.MALE:Genders.FEMALE);

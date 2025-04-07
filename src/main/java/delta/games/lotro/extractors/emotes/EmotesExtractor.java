@@ -49,7 +49,7 @@ public class EmotesExtractor
         EmoteDescription emote=mgr.getEmote(emoteID.intValue());
         if (emote==null)
         {
-          LOGGER.warn("Unknown emote: "+emoteID);
+          LOGGER.warn("Unknown emote: {}",emoteID);
           continue;
         }
         EmoteStatus status=_emotesStatusMgr.get(emote,true);

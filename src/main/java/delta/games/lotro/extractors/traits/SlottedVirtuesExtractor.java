@@ -33,8 +33,7 @@ public class SlottedVirtuesExtractor
       if (virtueId!=null)
       {
         VirtueDescription virtue=virtuesMgr.getVirtue(virtueId.intValue());
-        String virtueName=(virtue!=null)?virtue.getName():"???";
-        LOGGER.debug("Virtue: "+virtueName);
+        LOGGER.debug("Virtue: {}",virtue);
         virtuesSet.setSelectedVirtue(virtue,index);
       }
       index++;

@@ -186,7 +186,7 @@ public class TraitsData
       }
       else
       {
-        LOGGER.warn("Unknown trait ID="+traitId);
+        LOGGER.warn("Unknown trait ID={}",traitId);
       }
     }
     is.println("Acquired traits:");

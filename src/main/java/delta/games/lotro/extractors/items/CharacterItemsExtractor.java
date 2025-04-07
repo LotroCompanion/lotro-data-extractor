@@ -40,7 +40,7 @@ public class CharacterItemsExtractor
     if (item==null)
     {
       // Sometimes we find here a data ID for NPCs, EntityDesc
-      LOGGER.debug("No match: "+did);
+      LOGGER.debug("No match: {}",Integer.valueOf(did));
       return null;
     }
     if (props==null)

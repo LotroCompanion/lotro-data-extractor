@@ -79,7 +79,7 @@ public class ItemEffectsManager
       {
         itemLevel-=offset.intValue();
       }
-      LOGGER.info("Updating the item level for item name="+itemName+", itemLevel="+itemLevel+", spellcraft="+spellCraft);
+      LOGGER.info("Updating the item level for item name={}, itemLevel={}, spellcraft={}",itemName,Integer.valueOf(itemLevel),Integer.valueOf(spellCraft));
       itemInstance.setItemLevel(Integer.valueOf(itemLevel));
       itemInstance.updateAutoStats();
     }

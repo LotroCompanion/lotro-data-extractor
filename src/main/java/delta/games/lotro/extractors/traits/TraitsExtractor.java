@@ -55,7 +55,7 @@ public class TraitsExtractor
     if (traitPools!=null)
     {
       int size=traitPools.size();
-      LOGGER.debug("Nb trait pools: "+size);
+      LOGGER.debug("Nb trait pools: {}",Integer.valueOf(size));
       for(Map.Entry<Integer,ClassInstance> entry : traitPools.entrySet())
       {
         int key=entry.getKey().intValue();
@@ -82,7 +82,7 @@ public class TraitsExtractor
     {
       return;
     }
-    LOGGER.debug("Pool: key="+key+", code="+natureCode+", nature="+nature);
+    LOGGER.debug("Pool: key={}, code={}, nature={}",Integer.valueOf(key),natureCode,nature);
     List<ClassInstance> earnedTraitInfos=(List<ClassInstance>)traitPool.getAttributeValue("m_rlTraitInfo");
     List<Integer> sortedIds2=new ArrayList<Integer>();
     for(ClassInstance earnedTraitInfo : earnedTraitInfos)
@@ -95,10 +95,9 @@ public class TraitsExtractor
       sortedIds2.add(Integer.valueOf(traitId));
       TraitsManager traitsMgr=TraitsManager.getInstance();
       TraitDescription trait=traitsMgr.getTrait(traitId);
-      String traitName=(trait!=null)?trait.getName():"???";
       int sourceType=((Integer)earnedTraitInfo.getAttributeValue("m_eSourceType")).intValue();
       String sourceName=_traitAcquisitionType.getString(sourceType);
-      LOGGER.debug("\tTrait ID="+traitId+", name: "+traitName+", source: "+sourceName);
+      LOGGER.debug("\tTrait: {}, source: {}",trait,sourceName);
     }
     // Attribute 242459635 contains a list of earned trait identifiers
     // We check that is has the same contents as the previous list
@@ -112,7 +111,7 @@ public class TraitsExtractor
     Collections.sort(sortedIds2);
     if (!sortedIds1.equals(sortedIds2))
     {
-      LOGGER.warn("Size: "+ids.size()+", "+earnedTraitInfos.size());
+      LOGGER.warn("Size: {}, {}",Integer.valueOf(ids.size()),Integer.valueOf(earnedTraitInfos.size()));
     }
     for(Integer id : ids)
     {
@@ -151,7 +150,7 @@ public class TraitsExtractor
     int size=slotted.size();
     if (size>1)
     {
-      LOGGER.warn("More than one traits list: "+slotted);
+      LOGGER.warn("More than one traits list: {}",slotted);
     }
     return slotted.get(0);
   }

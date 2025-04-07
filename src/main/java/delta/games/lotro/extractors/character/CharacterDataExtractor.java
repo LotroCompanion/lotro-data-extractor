@@ -164,7 +164,7 @@ public class CharacterDataExtractor
     Professions professions=craftingData.getProfessionsRegistry();
     for(Profession profession : professions.getAll())
     {
-      LOGGER.debug("\tProfession: "+profession.getName());
+      LOGGER.debug("\tProfession: {}",profession);
       String enabledProperty=profession.getEnabledPropertyName();
       Integer enabledInt=(Integer)props.getProperty(enabledProperty);
       boolean disabled=((enabledInt==null) || (enabledInt.intValue()==0));
@@ -184,14 +184,14 @@ public class CharacterDataExtractor
       Integer masteryLevel=(Integer)props.getProperty(masteryLevelProperty);
       String masteryXpProperty=profession.getMasteryXpPropertyName();
       Integer masteryXp=(Integer)props.getProperty(masteryXpProperty);
-      LOGGER.debug("\t\tMastery: level="+masteryLevel+", XP="+masteryXp);
+      LOGGER.debug("\t\tMastery: level={}, XP={}",masteryLevel,masteryXp);
       updateProfession(professionStatus,masteryLevel,masteryXp,true);
       // Proficiency
       String proficiencyLevelProperty=profession.getProficiencyLevelPropertyName();
       Integer proficiencyLevel=(Integer)props.getProperty(proficiencyLevelProperty);
       String proficiencyXpProperty=profession.getProficiencyXpPropertyName();
       Integer proficiencyXp=(Integer)props.getProperty(proficiencyXpProperty);
-      LOGGER.debug("\t\tProficiency: level="+proficiencyLevel+", XP="+proficiencyXp);
+      LOGGER.debug("\t\tProficiency: level={}, XP={}",proficiencyLevel,proficiencyXp);
       updateProfession(professionStatus,proficiencyLevel,proficiencyXp,false);
       // Extra recipes
       KnownRecipes knownRecipes=professionStatus.getKnownRecipes();

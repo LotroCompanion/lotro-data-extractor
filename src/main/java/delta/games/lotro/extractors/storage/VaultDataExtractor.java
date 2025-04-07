@@ -89,7 +89,7 @@ public class VaultDataExtractor
     PropertiesSet vaultProps=vaultItem.getProps();
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Vault item props: "+vaultProps.dump());
+      LOGGER.debug("Vault item props: {}",vaultProps.dump());
     }
     // Find item
     Integer itemId=(Integer)vaultProps.getProperty("Bank_Repository_ItemDataID");
@@ -97,7 +97,7 @@ public class VaultDataExtractor
     Item item=itemsMgr.getItem(itemId.intValue());
     if (item==null)
     {
-      LOGGER.warn("Item not found: ID="+itemId);
+      LOGGER.warn("Item not found: ID={}",itemId);
       return null;
     }
     PropertiesSet tooltipProps=getTooltipProps(vaultItem);
@@ -107,8 +107,8 @@ public class VaultDataExtractor
       LOGGER.warn("Item instance could not be build!'");
       return null;
     }
-    long itemIID=vaultItem.getItemIID();
-    itemInstance.setInstanceId(new InternalGameId(itemIID));
+    InternalGameId itemIID=new InternalGameId(vaultItem.getItemIID());
+    itemInstance.setInstanceId(itemIID);
 
     // Quantity
     // Vault quantity is always present, while inventory quantity is sometimes missing (mean 1), and sometimes 1.
@@ -118,7 +118,7 @@ public class VaultDataExtractor
     int quantity=(quantityValue!=null)?quantityValue.intValue():1;
     if (quantity!=vaultQuantityValue)
     {
-      LOGGER.warn("Quantities differ: vault="+vaultQuantityValue+", inventory="+quantity+" for IID="+itemIID);
+      LOGGER.warn("Quantities differ: vault={}, inventory={} for {}",Integer.valueOf(vaultQuantityValue),Integer.valueOf(quantity),itemIID);
     }
 
     // Binding data

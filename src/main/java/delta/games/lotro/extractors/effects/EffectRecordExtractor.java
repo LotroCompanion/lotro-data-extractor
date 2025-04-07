@@ -30,6 +30,9 @@ public class EffectRecordExtractor
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(EffectRecordExtractor.class);
 
+  private static final String M_F_SPELLCRAFT="m_fSpellcraft";
+  private static final String M_IID_FROM_ITEM="m_iidFromItem";
+
   private DataFacade _facade;
 
   /**
@@ -57,7 +60,7 @@ public class EffectRecordExtractor
     {
       showEffectRecord(effectRecord);
     }
-    Long itemIid=(Long)effectRecord.getAttributeValue("m_iidFromItem");
+    Long itemIid=(Long)effectRecord.getAttributeValue(M_IID_FROM_ITEM);
     if ((itemIid!=null) && (itemIid.longValue()!=0))
     {
       ItemEffectData itemEffect=extract(effectRecord);
@@ -95,7 +98,7 @@ public class EffectRecordExtractor
 
     EffectInstance ret=new EffectInstance(effect);
     // Spellcraft
-    Float spellCraft=(Float)effectRecord.getAttributeValue("m_fSpellcraft");
+    Float spellCraft=(Float)effectRecord.getAttributeValue(M_F_SPELLCRAFT);
     ret.setSpellcraft(spellCraft);
     // Cast time
     Integer realTimeCast=(Integer)effectRecord.getAttributeValue("m_uRealTimeCast");
@@ -124,7 +127,7 @@ public class EffectRecordExtractor
     LOGGER.debug("Effect record:");
     Integer effectDID=(Integer)effectRecord.getAttributeValue("m_didEffect");
     LOGGER.debug("Effect DID: {}",effectDID);
-    Float spellCraft=(Float)effectRecord.getAttributeValue("m_fSpellcraft");
+    Float spellCraft=(Float)effectRecord.getAttributeValue(M_F_SPELLCRAFT);
     LOGGER.debug("\tSpellcraft: {}",spellCraft);
     EffectsManager mgr=EffectsManager.getInstance();
     Effect effect=mgr.getEffectById(effectDID.intValue());
@@ -147,7 +150,7 @@ public class EffectRecordExtractor
     {
       LOGGER.debug("Unknown effect!");
     }
-    Long itemIid=(Long)effectRecord.getAttributeValue("m_iidFromItem");
+    Long itemIid=(Long)effectRecord.getAttributeValue(M_IID_FROM_ITEM);
     LOGGER.debug("\tItem IID: {}",itemIid);
     Integer flags=(Integer)effectRecord.getAttributeValue("m_flags");
     LOGGER.debug("\tFlags: {}",flags);
@@ -181,8 +184,8 @@ public class EffectRecordExtractor
    */
   private ItemEffectData extract(ClassInstance effectRecord)
   {
-    Long itemIid=(Long)effectRecord.getAttributeValue("m_iidFromItem");
-    Float spellCraft=(Float)effectRecord.getAttributeValue("m_fSpellcraft");
+    Long itemIid=(Long)effectRecord.getAttributeValue(M_IID_FROM_ITEM);
+    Float spellCraft=(Float)effectRecord.getAttributeValue(M_F_SPELLCRAFT);
     ClassInstance scratchPad=(ClassInstance)effectRecord.getAttributeValue("m_ScratchPad");
     BasicStatsSet stats=extractStats(scratchPad);
     ItemEffectData ret=new ItemEffectData(itemIid,spellCraft.floatValue(),stats);
