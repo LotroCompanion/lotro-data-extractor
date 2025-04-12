@@ -15,12 +15,12 @@ import delta.games.lotro.lore.items.ItemInstance;
 import delta.games.lotro.utils.dat.DatEnumsUtils;
 
 /**
- * Extractor for gear data using items loaded from memory.
+ * Extractor for equipment data using items loaded from memory.
  * @author DAM
  */
-public class GearExtractor
+public class EquipmentExtractor
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(GearExtractor.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(EquipmentExtractor.class);
 
   private ItemsData _itemsData;
 
@@ -28,7 +28,7 @@ public class GearExtractor
    * Constructor.
    * @param itemsData Loaded items manager.
    */
-  public GearExtractor(ItemsData itemsData)
+  public EquipmentExtractor(ItemsData itemsData)
   {
     _itemsData=itemsData;
   }
