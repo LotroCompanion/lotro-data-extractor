@@ -1,9 +1,6 @@
 package delta.games.lotro.extractors.effects;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,46 +10,35 @@ import delta.games.lotro.lore.items.Item;
 import delta.games.lotro.lore.items.ItemInstance;
 
 /**
- * Items effects manager for a character.
+ * Merge effects into items.
  * @author DAM
  */
-public class ItemEffectsManager
+public class ItemsAndEffectsMerge
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(ItemEffectsManager.class);
-
-  private Map<Long,List<ItemEffectData>> _mapItemIIDToEffects;
-
-  /**
-   * Constructor.
-   */
-  public ItemEffectsManager()
-  {
-    _mapItemIIDToEffects=new HashMap<Long,List<ItemEffectData>>();
-  }
+  private static final Logger LOGGER=LoggerFactory.getLogger(ItemsAndEffectsMerge.class);
 
   /**
    * Merge effects data on item instances.
+   * @param effects Effects.
    * @param itemsMgr Items to use.
    */
-  public void mergeEffects(ItemsData itemsMgr)
+  public void mergeEffects(EffectsData effects, ItemsData itemsMgr)
   {
-    for(Long itemIid : _mapItemIIDToEffects.keySet())
+    List<Long> itemIids=effects.getKnownItems();
+    for(Long itemIid : itemIids)
     {
       ItemInstance<? extends Item> itemInstance=itemsMgr.findItemByIid(itemIid.longValue());
       if (itemInstance!=null)
       {
-        mergeItemEffect(itemIid,itemInstance);
+        List<SingleEffectData> itemEffects=effects.getEffectsForItem(itemIid.longValue());
+        mergeItemEffect(itemEffects,itemInstance);
+        effects.consumeItemEffects(itemIid);
       }
     }
   }
 
-  private void mergeItemEffect(Long itemIid, ItemInstance<? extends Item> itemInstance)
+  private void mergeItemEffect(List<SingleEffectData> effects, ItemInstance<? extends Item> itemInstance)
   {
-    List<ItemEffectData> effects=_mapItemIIDToEffects.get(itemIid);
-    if (effects==null)
-    {
-      return;
-    }
     // Ignore items with multiple effects
     int nbEffects=effects.size();
     if (nbEffects!=1)
@@ -62,7 +48,7 @@ public class ItemEffectsManager
     mergeItemAndEffect(itemInstance,effects.get(0));
   }
 
-  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, ItemEffectData effect)
+  private void mergeItemAndEffect(ItemInstance<? extends Item> itemInstance, SingleEffectData effect)
   {
     String itemName=itemInstance.getName();
     Integer defaultItemLevel=itemInstance.getItemLevelForStats();
@@ -83,21 +69,5 @@ public class ItemEffectsManager
       itemInstance.setItemLevel(Integer.valueOf(itemLevel));
       itemInstance.updateAutoStats();
     }
-  }
-
-  /**
-   * Add an item effect.
-   * @param effect Effect to add.
-   */
-  public void addEffect(ItemEffectData effect)
-  {
-    Long itemIid=effect.getItemIid();
-    List<ItemEffectData> effects=_mapItemIIDToEffects.get(itemIid);
-    if (effects==null)
-    {
-      effects=new ArrayList<ItemEffectData>();
-      _mapItemIIDToEffects.put(itemIid,effects);
-    }
-    effects.add(effect);
   }
 }

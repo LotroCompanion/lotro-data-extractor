@@ -60,20 +60,8 @@ public class EffectRecordExtractor
     {
       showEffectRecord(effectRecord);
     }
-    Long itemIid=(Long)effectRecord.getAttributeValue(M_IID_FROM_ITEM);
-    if ((itemIid!=null) && (itemIid.longValue()!=0))
-    {
-      ItemEffectData itemEffect=extract(effectRecord);
-      effects.addItemEffect(itemEffect);
-    }
-    else
-    {
-      EffectInstance effectInstance=buildEffectInstance(effectRecord);
-      if (effectInstance!=null)
-      {
-        effects.addEffect(effectInstance);
-      }
-    }
+    SingleEffectData effectData=extract(effectRecord);
+    effects.addEffect(effectData);
   }
 
   private EffectInstance buildEffectInstance(ClassInstance effectRecord)
@@ -182,13 +170,14 @@ public class EffectRecordExtractor
    * @param effectRecord Source data.
    * @return An item effect or <code>null</code>.
    */
-  private ItemEffectData extract(ClassInstance effectRecord)
+  private SingleEffectData extract(ClassInstance effectRecord)
   {
+    EffectInstance effectInstance=buildEffectInstance(effectRecord);
     Long itemIid=(Long)effectRecord.getAttributeValue(M_IID_FROM_ITEM);
     Float spellCraft=(Float)effectRecord.getAttributeValue(M_F_SPELLCRAFT);
     ClassInstance scratchPad=(ClassInstance)effectRecord.getAttributeValue("m_ScratchPad");
     BasicStatsSet stats=extractStats(scratchPad);
-    ItemEffectData ret=new ItemEffectData(itemIid,spellCraft.floatValue(),stats);
+    SingleEffectData ret=new SingleEffectData(itemIid,spellCraft.floatValue(),effectInstance,stats);
     return ret;
   }
 
@@ -228,7 +217,7 @@ public class EffectRecordExtractor
         }
         else
         {
-          LOGGER.warn("Unmanaged value type: {} for property: {}",value,propDefinition.getName());
+          LOGGER.debug("Unmanaged value type: {} for property: {}",value,propDefinition.getName());
         }
       }
     }
