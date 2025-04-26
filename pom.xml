@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>delta-lotro-data-extractor</artifactId>
   <packaging>jar</packaging>
-  <version>5.22</version>
+  <version>5.23</version>
   <name>lotro-data-extractor</name>
   <parent>
     <groupId>com.dam.delta4j</groupId>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-lotro-core</artifactId>
-      <version>24.0.1</version>
+      <version>24.1</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
