@@ -61,7 +61,10 @@ public class EffectRecordExtractor
       showEffectRecord(effectRecord);
     }
     SingleEffectData effectData=extract(effectRecord);
-    effects.addEffect(effectData);
+    if (effectData!=null)
+    {
+      effects.addEffect(effectData);
+    }
   }
 
   private EffectInstance buildEffectInstance(ClassInstance effectRecord)
@@ -81,6 +84,12 @@ public class EffectRecordExtractor
     if (effect==null)
     {
       LOGGER.warn("Unknown effect: {}",effectDID);
+      return null;
+    }
+    Integer flags=(Integer)effectRecord.getAttributeValue("m_flags");
+    if ((flags!=null) && ((flags.intValue()&0x100)==0))
+    {
+      LOGGER.info("Removing non-expressed effect: {}", effect);
       return null;
     }
 
@@ -142,6 +151,11 @@ public class EffectRecordExtractor
     LOGGER.debug("\tItem IID: {}",itemIid);
     Integer flags=(Integer)effectRecord.getAttributeValue("m_flags");
     LOGGER.debug("\tFlags: {}",flags);
+    if (flags!=null)
+    {
+      String meaning=EffectRecordUtils.getEffectRecordFlags(flags.intValue());
+      LOGGER.debug(" => {}",meaning);
+    }
     Integer casterType=(Integer)effectRecord.getAttributeValue("m_eCasterType");
     LOGGER.debug("\tCaster Type: {}",casterType);
     Integer casterLevel=(Integer)effectRecord.getAttributeValue("m_uiCasterLevel");
@@ -168,11 +182,15 @@ public class EffectRecordExtractor
   /**
    * Extract effect data.
    * @param effectRecord Source data.
-   * @return An item effect or <code>null</code>.
+   * @return An effect data or <code>null</code>.
    */
   private SingleEffectData extract(ClassInstance effectRecord)
   {
     EffectInstance effectInstance=buildEffectInstance(effectRecord);
+    if (effectInstance==null)
+    {
+      return null;
+    }
     Long itemIid=(Long)effectRecord.getAttributeValue(M_IID_FROM_ITEM);
     Float spellCraft=(Float)effectRecord.getAttributeValue(M_F_SPELLCRAFT);
     ClassInstance scratchPad=(ClassInstance)effectRecord.getAttributeValue("m_ScratchPad");
