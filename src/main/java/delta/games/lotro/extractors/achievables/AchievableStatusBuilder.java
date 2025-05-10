@@ -163,17 +163,11 @@ public class AchievableStatusBuilder
     Integer stateCode=(Integer)dynamicQuestEvent.getAttributeValue(STATUS_CODE_ATTR);
     AchievableElementState state=getStateFromCode(stateCode);
     conditionStatus.setState(state);
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("\t\t\t\tState: {}",state);
-    }
+    LOGGER.debug("\t\t\t\tState: {}",state);
     Integer count=(Integer)dynamicQuestEvent.getAttributeValue("m_uCount");
     if ((count!=null) && (count.intValue()>0))
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("\t\t\t\tCount: {}",count);
-      }
+      LOGGER.debug("\t\t\t\tCount: {}",count);
       conditionStatus.setCount(count);
     }
     conditionStatus.clearKeys();
@@ -181,10 +175,7 @@ public class AchievableStatusBuilder
     List<String> strings=(List<String>)dynamicQuestEvent.getAttributeValue("m_rRuntimeStringList");
     if (strings!=null)
     {
-      if (LOGGER.isDebugEnabled())
-      {
-        LOGGER.debug("\t\t\t\tKeys: {}",strings);
-      }
+      LOGGER.debug("\t\t\t\tKeys: {}",strings);
       for(String key : strings)
       {
         conditionStatus.addKey(key);
