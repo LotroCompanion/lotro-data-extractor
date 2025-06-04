@@ -90,6 +90,14 @@ public class CharacterDataExtractor
       Long timeStamp=Long.valueOf(lastLogout.longValue()*1000);
       details.setLastLogoutDate(timeStamp);
     }
+    // No purchase required
+    Integer noPurchaseRequiredInt=(Integer)props.getProperty("Trait_No_Purchase_Required");
+    Boolean noPurchaseRequired=null;
+    if (noPurchaseRequiredInt!=null)
+    {
+      noPurchaseRequired=(noPurchaseRequiredInt.intValue()==1)?Boolean.TRUE:Boolean.FALSE;
+    }
+    details.setNoPurchaseRequired(noPurchaseRequired);
     toon.saveDetails(details);
     CharacterEvent event=new CharacterEvent(CharacterEventType.CHARACTER_DETAILS_UPDATED,toon,null);
     EventsManager.invokeEvent(event);
