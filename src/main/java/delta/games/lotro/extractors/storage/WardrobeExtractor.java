@@ -1,5 +1,8 @@
 package delta.games.lotro.extractors.storage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.games.lotro.character.storage.wardrobe.Wardrobe;
 import delta.games.lotro.character.storage.wardrobe.WardrobeItem;
 import delta.games.lotro.common.colors.ColorDescription;
@@ -14,6 +17,8 @@ import delta.games.lotro.lore.items.ItemsManager;
  */
 public class WardrobeExtractor
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(WardrobeExtractor.class);
+
   /**
    * Extract wardrobe data.
    * @param playerProps Player properties.
@@ -50,6 +55,7 @@ public class WardrobeExtractor
     Item item=ItemsManager.getInstance().getItem(itemId.intValue());
     if (item==null)
     {
+      LOGGER.warn("Item not found: ID={}",itemId);
       return null;
     }
     WardrobeItem ret=new WardrobeItem(item);
