@@ -50,13 +50,16 @@ public class QuestsStatusExtractor extends AchievablesStatusExtractor
     AchievableStatus status=_statusMgr.get(quest,true);
     status.setCompleted(true);
     status.updateInternalState();
-    // Completion count
-    Integer count=(Integer)questData.getAttributeValue("240034292");
-    if (count!=null)
+    if (questData!=null)
     {
-      if (count.intValue()>1)
+      // Completion count
+      Integer count=(Integer)questData.getAttributeValue("240034292");
+      if (count!=null)
       {
-        status.setCompletionCount(count);
+        if (count.intValue()>1)
+        {
+          status.setCompletionCount(count);
+        }
       }
       // Date: of first or last? completion
       Integer timestamp=(Integer)questData.getAttributeValue("212351221");

@@ -76,7 +76,6 @@ public abstract class AchievablesStatusExtractor
       if (questData==null)
       {
         LOGGER.warn("questData is null for ID: {}",achievableId);
-        continue;
       }
       LOGGER.debug("ID: {}",achievableId);
       handleCompletedAchievable(achievableId.intValue(),questData);
