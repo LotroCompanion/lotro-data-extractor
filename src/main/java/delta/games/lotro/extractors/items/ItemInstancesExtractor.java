@@ -43,6 +43,17 @@ public class ItemInstancesExtractor
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(ItemInstancesExtractor.class);
 
+  private double _currentGameTime;
+
+  /**
+   * Set the current game time.
+   * @param currentGameTime Current game time to set.
+   */
+  public void setCurrentGameTime(double currentGameTime)
+  {
+    _currentGameTime=currentGameTime;
+  }
+
   /**
    * Build an item instance from the given properties.
    * @param props Properties to use.
@@ -156,6 +167,16 @@ public class ItemInstancesExtractor
     {
       WeaponInstance<?> weaponInstance=(WeaponInstance<?>)itemInstance;
       decodeWeaponSpecifics(props,weaponInstance);
+    }
+
+    // Decay
+    Double decayBegin=(Double)props.getProperty("ItemDecay_Begin");
+    if (decayBegin!=null)
+    {
+      double delta=_currentGameTime-decayBegin.doubleValue();
+      long now=System.currentTimeMillis();
+      long decayBeginTime=now-(long)(delta*1000);
+      itemInstance.setDecayBeginTime(Long.valueOf(decayBeginTime));
     }
   }
 

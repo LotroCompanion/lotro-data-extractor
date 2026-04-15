@@ -28,6 +28,15 @@ public class CharacterItemsExtractor
   }
 
   /**
+   * Set the current game time.
+   * @param currentGameTime Current game time to set.
+   */
+  public void setCurrentGameTime(double currentGameTime)
+  {
+    _itemExtractor.setCurrentGameTime(currentGameTime);
+  }
+
+  /**
    * Extract an item instance from an entity.
    * @param did Item DID.
    * @param iid Instance identifier.
