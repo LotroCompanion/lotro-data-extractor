@@ -15,10 +15,10 @@ import delta.games.lotro.dat.data.PropertiesSet;
 import delta.games.lotro.dat.data.PropertyDefinition;
 import delta.games.lotro.dat.data.PropertyType;
 import delta.games.lotro.dat.data.PropertyValue;
-import delta.games.lotro.dat.wlib.AttributeDefinition;
-import delta.games.lotro.dat.wlib.ClassDefinition;
 import delta.games.lotro.dat.wlib.ClassInstance;
 import delta.games.lotro.dat.wlib.ValueType;
+import delta.games.lotro.dat.wlib.classes.AttributeDefinition;
+import delta.games.lotro.dat.wlib.classes.ClassDefinition;
 
 /**
  * Outfits data extractor.
