@@ -48,7 +48,10 @@ public class SkirmishStatsExtractor
     {
       int skirmishID=entry.getKey().intValue();
       PropertiesSet skirmishProps=entry.getValue();
-      handleSkirmishProps(skirmishID,skirmishProps);
+      if (skirmishProps!=null)
+      {
+        handleSkirmishProps(skirmishID,skirmishProps);
+      }
     }
   }
 
