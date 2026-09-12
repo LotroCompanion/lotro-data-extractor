@@ -51,12 +51,13 @@ public class HouseContentsExtractor
 
   /**
    * Handle a housing entity.
+   * @param itemIID Item instance ID.
    * @param position Entity position.
    * @param did DID.
    * @param props Properties.
    * @return the loaded item, or <code>null</code>.
    */
-  public HousingItem handleEntity(int did, Position position, PropertiesSet props)
+  public HousingItem handleEntity(long itemIID, int did, Position position, PropertiesSet props)
   {
     // Hook ID
     Integer hookIDCode=(Integer)props.getProperty("HousingSystem_DecorationItem_HookID");
@@ -70,7 +71,8 @@ public class HouseContentsExtractor
     {
       return null;
     }
-    HousingItem ret=new HousingItem(item,position,hookID);
+    InternalGameId id=(itemIID!=0)?new InternalGameId(itemIID):null;
+    HousingItem ret=new HousingItem(id,item,position,hookID);
     Float hookRotation=(Float)props.getProperty("HousingDecoration_HookRotation");
     if (hookRotation!=null)
     {
