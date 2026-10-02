@@ -168,7 +168,7 @@ public class ItemInstancesExtractor
       WeaponInstance<?> weaponInstance=(WeaponInstance<?>)itemInstance;
       decodeWeaponSpecifics(props,weaponInstance);
     }
-
+    // TODO Item_IsPurchasedWebStoreItem Integer : 1 => Purchased from Store
     // Decay
     Double decayBegin=(Double)props.getProperty("ItemDecay_Begin");
     if (decayBegin!=null)
